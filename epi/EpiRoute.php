@@ -102,7 +102,11 @@ class EpiRoute
       {
         array_shift($arguments);
         $def = $this->routes[$ind];
-        if(is_array($def['callback']) && method_exists($def['callback'][0], $def['callback'][1]))
+        if($_SERVER['REQUEST_METHOD'] != $def['httpMethod'])
+        {
+          continue;
+        }
+        else if(is_array($def['callback']) && method_exists($def['callback'][0], $def['callback'][1]))
         {
           return call_user_func_array($def['callback'], $arguments);
         }
