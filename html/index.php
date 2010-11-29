@@ -12,11 +12,13 @@ Epi::init('cache','config','database','route','session','template');
 getConfig()->load('prod.ini');
 if(getenv('CONF'))
   getConfig()->load(getenv('CONF'));
+$dbConfig = getConfig()->get('db');
+EpiDatabase::employ($dbConfig->type, $dbConfig->name, $dbConfig->host, $dbConfig->user, $dbConfig->pass);
 
 // controllers
-include_once getConfig()->get('paths')->controllers . '/CSite.php';
-include_once getConfig()->get('paths')->controllers . '/CApi.php';
-include_once getConfig()->get('paths')->libraries . '/facebook.php';
+include getConfig()->get('paths')->controllers . '/CSite.php';
+include getConfig()->get('paths')->controllers . '/CApi.php';
+include getConfig()->get('paths')->libraries . '/functions.php';
 
 // routes
 getRoute()->load('routes.ini');

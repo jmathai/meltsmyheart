@@ -29,7 +29,10 @@ class EpiDatabase
     try
     {
       $sth = $this->prepare($sql, $params);
-      return $this->dbh->exec($sql);
+      if(preg_match('/insert/i', $sql))
+        return $this->dbh->lastInsertId();
+      else
+        return $sth->rowCount();
     }
     catch(PDOException $e)
     {
@@ -140,7 +143,7 @@ class EpiDatabase
   }
 }
 
-function getDb()
+function getDatabase()
 {
   $employ = extract(EpiDatabase::employ());
   if(empty($type) || empty($name) || empty($host) || empty($user))

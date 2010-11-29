@@ -251,8 +251,10 @@ class Facebook
          . "client_secret={$this->getApiSecret()}&code={$code}";
     if(!empty($params))
       $url .= '&' . http_build_query($params);
-    $response = $this->makeRequestSync($url, array());
+    $response = $this->makeRequest($url, array());
     parse_str($response);
+    if(!isset($expires))
+      $expires = null;
     return array('access_token' => $access_token, 'expires' => $expires);
   }
   
