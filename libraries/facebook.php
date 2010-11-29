@@ -984,16 +984,3 @@ class Facebook
     return base64_decode(strtr($input, '-_', '+/'));
   }
 }
-
-function getFacebook()
-{
-  static $facebook;
-  if($facebook)
-    return $facebook;
-
-  //* - appId: the application ID
-  //* - secret: the application secret
-  $config = array('appId' => getConfig()->get('thirdparty')->fb_appId, 'secret' => getConfig()->get('thirdparty')->fb_secret);
-  $facebook = new Facebook($config);
-  return $facebook;
-}

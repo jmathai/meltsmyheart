@@ -15,3 +15,14 @@ function __autoload($className)
   
   }
 }
+
+function getFacebook()
+{
+  static $facebook;
+  if($facebook)
+    return $facebook;
+
+  $config = array('appId' => getConfig()->get('thirdparty')->fb_appId, 'secret' => getConfig()->get('thirdparty')->fb_secret);
+  $facebook = new Facebook($config);
+  return $facebook;
+}

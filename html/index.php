@@ -16,8 +16,8 @@ $dbConfig = getConfig()->get('db');
 EpiDatabase::employ($dbConfig->type, $dbConfig->name, $dbConfig->host, $dbConfig->user, $dbConfig->pass);
 
 // controllers
-include getConfig()->get('paths')->controllers . '/CSite.php';
-include getConfig()->get('paths')->controllers . '/CApi.php';
+include getConfig()->get('paths')->controllers . '/Site.php';
+include getConfig()->get('paths')->controllers . '/Api.php';
 include getConfig()->get('paths')->libraries . '/functions.php';
 
 // routes

@@ -17,3 +17,4 @@ CREATE TABLE IF NOT EXISTS `credential` (
   `c_secret` varchar(255) NOT NULL,
   PRIMARY KEY (`c_u_id`,`c_service`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE  `credential` CHANGE  `c_secret`  `c_secret` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
