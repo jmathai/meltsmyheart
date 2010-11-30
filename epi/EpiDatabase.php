@@ -73,7 +73,7 @@ class EpiDatabase
     try
     {
       $sth = $this->prepare($sql, $params);
-      return $sth->fetchAll();
+      return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
     catch(PDOException $e)
     {
@@ -88,7 +88,7 @@ class EpiDatabase
     try
     {
       $sth = $this->prepare($sql, $params);
-      return $sth->fetch();
+      return $sth->fetch(PDO::FETCH_ASSOC);
     }
     catch(PDOException $e)
     {

@@ -20,9 +20,10 @@ class Site
       $redirectUrl = getConfig()->get('urls')->base."/connect/facebook/{$childId}";
       $resp = getFacebook()->fetchAccessToken($_GET['code'], $redirectUrl);
       $token = $resp['access_token'];
-      if(empty($token))
+      $profile = getFacebook()->api('/me', 'GET', array('access_token' => $token));
+      if(empty($token) || !isset($profile['id']))
         throw new Exception('Could not get Facebook session', 500);
-      $credentialId = Credential::add(getSession()->get('userId'), Credential::serviceFacebook, $token);
+      $credentialId = Credential::add(getSession()->get('userId'), Credential::serviceFacebook, $token, null, $profile['id']);
     }
 
     if($credentialId)
@@ -67,8 +68,35 @@ class Site
     getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl));
   }
 
-  public static function photosSelect($service, $childId)
+  public static function photosSelectFacebook($childId)
   {
-    echo "Select photos from {$service} for {$childId}";
+    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
+    $albums = FacebookPhotos::getAlbums($credential['c_token'], $credential['c_uid']);
+    getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php')));
+  }
+
+  public static function proxy($type, $service, $path)
+  {
+    switch($service)
+    {
+      case Credential::serviceFacebook:
+        $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
+        $url = "https://graph.facebook.com/{$path}?access_token={$credential['c_token']}";
+        break;
+    }
+
+    if($type == 'r')
+    {
+      getRoute()->redirect($url);
+    }
+    else
+    {
+      $ch = curl_init($url);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+      curl_exec($ch);
+    }
   }
 }
