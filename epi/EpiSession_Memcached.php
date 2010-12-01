@@ -40,7 +40,12 @@ class EpiSession_Memcached implements EpiSessionInterface
       $key = array_shift($params);
 
     if(empty($key) && empty($_COOKIE[EpiSession::COOKIE]))
-       setcookie(EpiSession::COOKIE, md5(uniqid(rand(), true)), time()+1209600, '/');
+    {
+      $cookieVal = md5(uniqid(rand(), true));
+      setcookie(EpiSession::COOKIE, $cookieVal, time()+1209600, '/');
+      $_COOKIE[EpiSession::COOKIE] = $cookieVal;
+    }
+    
 
     $this->memcached = EpiCache::getInstance(EpiCache::MEMCACHED);
 

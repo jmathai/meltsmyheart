@@ -129,19 +129,20 @@ class EpiRoute
    * @method redirect
    * @static method
    */
-  public function redirect($url, $code = null)
+  public function redirect($url, $code = null, $offDomain = false)
   {
-    if($url != '')
+    $continue = !empty($url);
+    if($offDomain === false && preg_match('#^http://#', $url))
+      $continue = false;
+
+    if($continue)
     {
       if($code != null && (int)$code == $code)
         header("Status: {$code}");
       header("Location: {$url}");
       die();
     }
-    else
-    {
-      EpiException::raise(new EpiException("Redirect to {$url} failed"));
-    }
+    EpiException::raise(new EpiException("Redirect to {$url} failed"));
   }
 
   /*

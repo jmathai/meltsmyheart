@@ -26,3 +26,13 @@ function getFacebook()
   $facebook = new Facebook($config);
   return $facebook;
 }
+
+function quoteEncode($str)
+{
+  return htmlentities($str);
+}
+
+function quoteDecode($str)
+{
+  return html_entity_decode($str);
+}

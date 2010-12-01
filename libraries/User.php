@@ -19,8 +19,18 @@ class User
     return $retval;
   }
 
+  public static function getByEmailAndPassword($email, $password)
+  {
+    $retval = getDatabase()->one('SELECT * FROM user WHERE u_email=:email AND u_password=:password', array(':email' => $email, ':password' => self::generatePasswordHash($password, $email)));
+    $retval['u_prefs'] = json_decode($retval['u_prefs'], true);
+    return $retval;
+  }
+
   public static function startSession($user)
   {
+    if(!array_key_exists('u_id', $user) || !array_key_exists('u_prefs', $user))
+      return;
+
     getSession()->set('userId', $user['u_id']);
     getSession()->set('prefs', $user['u_prefs']);
   }
