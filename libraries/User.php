@@ -26,9 +26,15 @@ class User
     return $retval;
   }
 
+  public static function isLoggedIn()
+  {
+    $userId = getSession()->get('userId');
+    return !empty($userId);
+  }
+
   public static function startSession($user)
   {
-    if(!array_key_exists('u_id', $user) || !array_key_exists('u_prefs', $user))
+    if(!array_key_exists('u_id', $user) || !array_key_exists('u_prefs', $user) || empty($user['u_id']))
       return;
 
     getSession()->set('userId', $user['u_id']);

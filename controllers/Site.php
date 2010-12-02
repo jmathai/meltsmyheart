@@ -39,9 +39,41 @@ class Site
     }*/
   }
 
+  public static function connectSmugMug()
+  {
+    self::requireLogin();   
+    $credentialId = 0;
+    if(isset($_GET['oauth_token']))
+    {
+      $smugReqTok = unserialize(getSession()->get('smugReqTok'));
+      getSession()->set('smugReqTok', null);
+      getSmugMug()->setToken("id={$smugReqTok['Token']['id']}", "Secret={$smugReqTok['Token']['Secret']}");
+      $token = getSmugMug()->auth_getAccessToken();
+      if(empty($token['Token']['id']))
+        throw new Exception('Could not get SmugMug session', 500);
+      $credentialId = Credential::add(getSession()->get('userId'), Credential::serviceSmugMug, $token['Token']['id'], $token['Token']['Secret'], $token['User']['id']);
+    }
+    if($credentialId)
+    {
+      $childId = getSession()->get('currentChildId');
+      getRoute()->redirect("/photos/select/smugmug/{$childId}");
+    }
+    /* TODO else
+    {
+
+    }*/
+  }
+
   public static function home()
   {
-    getTemplate()->display('template.php', array('body' => 'home.php', 'date' => date('Y-m-d h:i:s')));
+    $template = 'splash.php';
+    $children = null;
+    if(User::isLoggedIn())
+    {
+      $template = 'home.php';
+      $children = Child::getByUserId(getSession()->get('userId'));
+    }
+    getTemplate()->display('template.php', array('body' => $template, 'children' => $children));
   }
 
   public static function join()
@@ -83,11 +115,29 @@ class Site
   public static function photosSource($childId)
   {
     self::requireLogin();
-    $fbUrl = getFacebook()->getAuthorizeUrl(
-                getConfig()->get('urls')->base."/connect/facebook/{$childId}",
-                array('scope' => 'email,offline_access,publish_stream,friends_photos,user_photos')
-              );
-    getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl));
+    getSession()->set('currentChildId', $childId);
+    $credentials = Credential::getByUserId(getSession()->get('userId'));
+    foreach($credentials as $credential)
+    {
+      if($credential['c_service'] == Credential::serviceFacebook)
+        $fbUrl = "/photos/select/facebook/{$childId}";
+      elseif($credential['c_service'] == Credential::serviceSmugMug)
+        $smugUrl = "/photos/select/smugmug/{$childId}";
+    }
+    if(!isset($fbUrl))
+    {
+      $fbUrl = getFacebook()->getAuthorizeUrl(
+                  getConfig()->get('urls')->base."/connect/facebook/{$childId}",
+                  array('scope' => 'email,offline_access,publish_stream,friends_photos,user_photos')
+                );
+    }
+    if(!isset($smugUrl))
+    {
+      $smugReqTok = getSmugMug()->auth_getRequestToken();
+      getSession()->set('smugReqTok', serialize($smugReqTok));
+      $smugUrl = getSmugMug()->authorize('Access=Full', 'Permissions=Read');
+    }
+    getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl));
   }
 
   public static function photosSelectFacebook($childId)
@@ -96,6 +146,16 @@ class Site
     $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
     $albums = FacebookPhotos::getAlbums($credential['c_token'], $credential['c_uid']);
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php')));
+  }
+
+  public static function photosSelectSmugMug($childId)
+  {
+    self::requireLogin();
+    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceSmugMug);
+    getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
+    $albums = SmugMug::getAlbums($credential['c_token'], $credential['c_secret'], $credential['c_uid']);
+    getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
       'javascript' => getTemplate()->get('javascript/photoSelect.js.php')));
   }
 
