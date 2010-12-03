@@ -95,7 +95,7 @@ class FacebookApiException extends Exception
  *
  * @author Naitik Shah <naitik@facebook.com>
  */
-class Facebook
+class FacebookGraph
 {
   /**
    * Version.

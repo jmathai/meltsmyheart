@@ -3,7 +3,7 @@ function __autoload($className)
 {
   switch($className)
   {
-    case 'Facebook':
+    case 'FacebookGraph':
       include getConfig()->get('paths')->libraries . '/facebook.php';
       break;
     case 'phpSmug':
@@ -26,7 +26,7 @@ function getFacebook()
     return $facebook;
 
   $config = array('appId' => getConfig()->get('thirdparty')->fb_appId, 'secret' => getConfig()->get('thirdparty')->fb_secret);
-  $facebook = new Facebook($config);
+  $facebook = new FacebookGraph($config);
   return $facebook;
 }
 

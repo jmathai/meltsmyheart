@@ -4,11 +4,10 @@
 </head>
 <body>
   <ul>
-    <li>Home</li>
-    <li>Children</li>
-    <li>New Child</li>
-    <li>Login</li>
-    <li>Logout</li>
+    <li><a href="/">Home</a></li>
+    <li><a href="/child/new">New Child</a></li>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/logout">Logout</a></li>
   </ul>
   <?php include $body; ?>
   <ul>

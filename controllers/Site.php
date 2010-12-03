@@ -144,7 +144,7 @@ class Site
   {
     self::requireLogin();
     $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
-    $albums = FacebookPhotos::getAlbums($credential['c_token'], $credential['c_uid']);
+    $albums = Facebook::getAlbums($credential['c_token'], $credential['c_uid']);
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
       'javascript' => getTemplate()->get('javascript/photoSelect.js.php')));
   }
@@ -161,13 +161,31 @@ class Site
 
   public static function proxy($type, $service, $path)
   {
+    $passThrough = null;
     $offDomain = false;
     switch($service)
     {
       case Credential::serviceFacebook:
-        $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
-        $url = "https://graph.facebook.com/{$path}?access_token={$credential['c_token']}";
         $offDomain = true;
+        $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
+        switch($_GET['method'])
+        {
+          case 'photos':
+            $passThrough = getTemplate()->json(Facebook::getPhotos($credential['c_token'], $_GET['id']));
+            break;
+          default:
+            $url = "https://graph.facebook.com/{$path}?access_token={$credential['c_token']}";
+            break;
+        }
+        break;
+      case Credential::serviceSmugMug:
+        $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceSmugMug);
+        switch($_GET['method'])
+        {
+          case 'photos':
+            $passThrough = getTemplate()->json(SmugMug::getPhotos($credential['c_token'], $credential['c_secret'], $_GET['AlbumID'], $_GET['AlbumKey']));
+            break;
+        }
         break;
     }
 
@@ -175,13 +193,20 @@ class Site
     {
       getRoute()->redirect($url, 301, $offDomain);
     }
-    else
+    elseif($type == 'p')
     {
-      $ch = curl_init($url);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-      curl_exec($ch);
+      if(!empty($passThrough))
+      {
+        echo $passThrough;
+      }
+      else
+      {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_exec($ch);
+      }
     }
   }
 
