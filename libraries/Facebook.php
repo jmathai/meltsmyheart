@@ -3,7 +3,8 @@ class Facebook
 {
   public static function getAlbums($token, $uid)
   {
-    $sig = 'fbga'.md5(implode('-', func_get_args()));
+    $args = func_get_args();
+    $sig = 'fbga'.md5(implode('-', $args));
     $cache = getCache()->get($sig);
     if(!empty($cache))
       return $cache;
@@ -21,7 +22,8 @@ class Facebook
 
   public static function getPhotos($token, $uid)
   {
-    $sig = 'fbgp'.md5(implode('-', func_get_args()));
+    $args = func_get_args();
+    $sig = 'fbgp'.md5(implode('-', $args));
     $cache = getCache()->get($sig);
     if(!empty($cache))
       return $cache;

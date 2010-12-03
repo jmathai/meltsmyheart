@@ -3,7 +3,8 @@ class SmugMug
 {
   public static function getAlbums($token, $secret, $uid)
   {
-    $sig = 'smga'.md5(implode('-', func_get_args()));
+    $args = func_get_args();
+    $sig = 'smga'.md5(implode('-', $args));
     $cache = getCache()->get($sig);
     if(!empty($cache))
       return $cache;
@@ -28,7 +29,8 @@ class SmugMug
 
   public static function getPhotos($token, $secret, $id, $key)
   {
-    $sig = 'smga'.md5(implode('-', func_get_args()));
+    $args = func_get_args();
+    $sig = 'smgp'.md5(implode('-', $args));
     $cache = getCache()->get($sig);
     if(!empty($cache))
       return $cache;
