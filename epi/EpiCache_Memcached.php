@@ -57,9 +57,13 @@ class EpiCache_Memcached extends EpiCache
     if(self::$connected === true)
       return true;
 
-    if(class_exists('Memcache'))
+    if(class_exists('Memcached') || class_exists('Memcache'))
     {
-      $this->memcached = new Memcache;
+      if(class_exists('Memcached'))
+        $this->memcached = new Memcached;
+      elseif(class_exists('Memcache'))
+        $this->memcached = new Memcache;
+      
       if(@$this->memcached->connect($this->host, $this->port))
         return self::$connected = true;
       else

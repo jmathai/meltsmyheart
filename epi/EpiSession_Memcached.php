@@ -46,8 +46,18 @@ class EpiSession_Memcached implements EpiSessionInterface
       $_COOKIE[EpiSession::COOKIE] = $cookieVal;
     }
     
-
-    $this->memcached = EpiCache::getInstance(EpiCache::MEMCACHED);
+    if(class_exists('Memcached') || class_exists('Memcache'))
+    {
+      if(class_exists('Memcached'))
+        $this->memcached = new Memcached;
+      elseif(class_exists('Memcache'))
+        $this->memcached = new Memcache;
+      
+      if(@$this->memcached->connect($this->host, $this->port))
+        return self::$connected = true;
+      else
+        EpiException::raise(new EpiCacheMemcacheConnectException('Could not connect to memcache server'));
+    }
 
     $this->key = empty($key) ? $_COOKIE[EpiSession::COOKIE] : $key;
     $this->store = $this->getAll();
