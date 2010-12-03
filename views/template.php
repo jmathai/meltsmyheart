@@ -6,7 +6,7 @@
   <ul>
     <li><a href="/">Home</a></li>
     <li><a href="/child/new">New Child</a></li>
-    <li><a href="/login">Login</a></li>
+    <li><a href="/login">Login</a> or <a href="/join">join</a></li>
     <li><a href="/logout">Logout</a></li>
   </ul>
   <?php include $body; ?>

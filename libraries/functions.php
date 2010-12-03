@@ -1,22 +1,8 @@
 <?php
 function __autoload($className)
 {
-  switch($className)
-  {
-    case 'FacebookGraph':
-      include getConfig()->get('paths')->libraries . '/facebook.php';
-      break;
-    case 'phpSmug':
-      include getConfig()->get('paths')->libraries . '/phpSmug.php';
-      break;
-    default:
-      if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
-      {
-        include $filename;
-      }
-      break;
-  
-  }
+  if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
+    include $filename;
 }
 
 function getFacebook()

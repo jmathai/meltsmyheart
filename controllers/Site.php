@@ -168,7 +168,8 @@ class Site
       case Credential::serviceFacebook:
         $offDomain = true;
         $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
-        switch($_GET['method'])
+        $method = isset($_GET['method']) ? $_GET['method'] : null;
+        switch($method)
         {
           case 'photos':
             $passThrough = getTemplate()->json(Facebook::getPhotos($credential['c_token'], $_GET['id']));

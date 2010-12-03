@@ -15,6 +15,7 @@ if(getenv('CONF'))
 $dbConfig = getConfig()->get('db');
 EpiDatabase::employ($dbConfig->type, $dbConfig->name, $dbConfig->host, $dbConfig->user, $dbConfig->pass);
 EpiSession::employ(EpiSession::PHP);
+EpiCache::employ(EpiCache::MEMCACHED);
 
 // controllers
 include getConfig()->get('paths')->controllers . '/Site.php';
