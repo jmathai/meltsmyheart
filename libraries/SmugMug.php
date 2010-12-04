@@ -27,7 +27,7 @@ class SmugMug
     return $retval;
   }
 
-  public static function getPhotos($token, $secret, $id, $key)
+  public static function getPhotos($userId, $token, $secret, $id, $key)
   {
     $args = func_get_args();
     $sig = 'smgp'.md5(implode('-', $args));
@@ -40,8 +40,11 @@ class SmugMug
     $photos = getSmugMug()->images_get('Heavy=True', "AlbumID={$id}", "AlbumKey={$key}");	
     foreach($photos['Images'] as $photo)
     {
+      $cacheKey = Credential::serviceSmugMug."-{$photo['id']}";
+      $internalId = Photo::add($userId, $cacheKey, $photo);
       $retval[] = new Photo(
         $photo['id'], 
+        $internalId,
         $photo['ThumbURL'],
         $photo['MediumURL'],
         $photo['OriginalURL'],

@@ -112,6 +112,30 @@ class Site
     getRoute()->redirect($redirectUrl);
   }
 
+  public static function photoSelectAdd($childId)
+  {
+    
+  }
+
+  public static function photosSelectFacebook($childId)
+  {
+    self::requireLogin();
+    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
+    $albums = Facebook::getAlbums($credential['c_token'], $credential['c_uid']);
+    getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId))));
+  }
+
+  public static function photosSelectSmugMug($childId)
+  {
+    self::requireLogin();
+    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceSmugMug);
+    getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
+    $albums = SmugMug::getAlbums($credential['c_token'], $credential['c_secret'], $credential['c_uid']);
+    getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId))));
+  }
+
   public static function photosSource($childId)
   {
     self::requireLogin();
@@ -121,7 +145,7 @@ class Site
     {
       if($credential['c_service'] == Credential::serviceFacebook)
         $fbUrl = "/photos/select/facebook/{$childId}";
-      elseif($credential['c_service'] == Credential::serviceSmugMug)
+      if($credential['c_service'] == Credential::serviceSmugMug)
         $smugUrl = "/photos/select/smugmug/{$childId}";
     }
     if(!isset($fbUrl))
@@ -140,39 +164,21 @@ class Site
     getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl));
   }
 
-  public static function photosSelectFacebook($childId)
-  {
-    self::requireLogin();
-    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
-    $albums = Facebook::getAlbums($credential['c_token'], $credential['c_uid']);
-    getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/photoSelect.js.php')));
-  }
-
-  public static function photosSelectSmugMug($childId)
-  {
-    self::requireLogin();
-    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceSmugMug);
-    getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
-    $albums = SmugMug::getAlbums($credential['c_token'], $credential['c_secret'], $credential['c_uid']);
-    getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/photoSelect.js.php')));
-  }
-
   public static function proxy($type, $service, $path)
   {
+    $userId = getSession()->get('userId');
     $passThrough = null;
     $offDomain = false;
     switch($service)
     {
       case Credential::serviceFacebook:
         $offDomain = true;
-        $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
+        $credential = Credential::getByService($userId, Credential::serviceFacebook);
         $method = isset($_GET['method']) ? $_GET['method'] : null;
         switch($method)
         {
           case 'photos':
-            $passThrough = getTemplate()->json(Facebook::getPhotos($credential['c_token'], $_GET['id']));
+            $passThrough = getTemplate()->json(Facebook::getPhotos($userId, $credential['c_token'], $_GET['id']));
             break;
           default:
             $url = "https://graph.facebook.com/{$path}?access_token={$credential['c_token']}";
@@ -180,11 +186,11 @@ class Site
         }
         break;
       case Credential::serviceSmugMug:
-        $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceSmugMug);
+        $credential = Credential::getByService($userId, Credential::serviceSmugMug);
         switch($_GET['method'])
         {
           case 'photos':
-            $passThrough = getTemplate()->json(SmugMug::getPhotos($credential['c_token'], $credential['c_secret'], $_GET['AlbumID'], $_GET['AlbumKey']));
+            $passThrough = getTemplate()->json(SmugMug::getPhotos($userId, $credential['c_token'], $credential['c_secret'], $_GET['AlbumID'], $_GET['AlbumKey']));
             break;
         }
         break;

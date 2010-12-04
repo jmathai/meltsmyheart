@@ -20,7 +20,7 @@ class Facebook
     return $retval;
   }
 
-  public static function getPhotos($token, $uid)
+  public static function getPhotos($userId, $token, $uid)
   {
     $args = func_get_args();
     $sig = 'fbgp'.md5(implode('-', $args));
@@ -32,8 +32,11 @@ class Facebook
     $photos = getFacebook()->api("/{$uid}/photos", 'GET', array('access_token' => $token));
     foreach($photos['data'] as $photo)
     {
+      $cacheKey = Credential::serviceFacebook."-{$photo['id']}";
+      $internalId = Photo::add($userId, $cacheKey, $photo);
       $retval[] = new Photo(
         $photo['id'], 
+        $internalId,
         $photo['picture'],
         null, // medium url TODO calculate medium url
         $photo['source'],
