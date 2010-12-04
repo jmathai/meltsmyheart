@@ -40,9 +40,15 @@ class SmugMug
     $photos = getSmugMug()->images_get('Heavy=True', "AlbumID={$id}", "AlbumKey={$key}");	
     foreach($photos['Images'] as $photo)
     {
-      $retval[] = array('id' => $photo['id'], 'title' => $photo['Caption'], 
-        'thumbUrl' => $photo['ThumbURL'], 'mediumUrl' => $photo['MediumURL'],
-        'originalUrl' => $photo['OriginalURL']);
+      $retval[] = new Photo(
+        $photo['id'], 
+        $photo['ThumbURL'],
+        $photo['MediumURL'],
+        $photo['OriginalURL'],
+        null, // date taken
+        $photo['Date'], // date created TODO strtotime
+        $photo['Caption']
+      );
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
