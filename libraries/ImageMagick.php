@@ -23,8 +23,6 @@ class ImageMagick
   *******************************************************************************************/
   function scale($width = false, $height = false, $dest = false, $larger = false)
   {
-    file_put_contents('/tmp/jm', 'in scale', FILE_APPEND);
-    file_put_contents('/tmp/jm', "$width $height $dest $larger", FILE_APPEND);
     $proceed = true;
 
     if($larger === false)
@@ -54,7 +52,6 @@ class ImageMagick
         $command = "convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" {$this->image} {$dest}";
       }
       //echo "<br/>$command<br/>";
-      file_put_contents('/tmp/jm', $command, FILE_APPEND);
       exec($command);
       return true;
     }
