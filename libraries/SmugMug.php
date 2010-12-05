@@ -40,20 +40,24 @@ class SmugMug
     $photos = getSmugMug()->images_get('Heavy=True', "AlbumID={$id}", "AlbumKey={$key}");	
     foreach($photos['Images'] as $photo)
     {
-      $cacheKey = Credential::serviceSmugMug."-{$photo['id']}";
+      $cacheKey = self::cacheKey($photo['id']);
       $internalId = Photo::add($userId, $cacheKey, $photo);
       $retval[] = new Photo(
         $photo['id'], 
         $internalId,
         $photo['ThumbURL'],
-        $photo['MediumURL'],
         $photo['OriginalURL'],
         null, // date taken
-        $photo['Date'], // date created TODO strtotime
+        strtotime($photo['Date']),
         $photo['Caption']
       );
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
+  }
+
+  public static function cacheKey($id)
+  {
+    return Credential::serviceSmugMug."-{$id}";
   }
 }

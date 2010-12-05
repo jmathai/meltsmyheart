@@ -1,0 +1,3 @@
+[submodule "libraries/php-resque"]
+	path = libraries/php-resque
+	url = https://github.com/chrisboulton/php-resque.git

@@ -32,13 +32,12 @@ class Facebook
     $photos = getFacebook()->api("/{$uid}/photos", 'GET', array('access_token' => $token));
     foreach($photos['data'] as $photo)
     {
-      $cacheKey = Credential::serviceFacebook."-{$photo['id']}";
+      $cacheKey = self::cacheKey($photo['id']);
       $internalId = Photo::add($userId, $cacheKey, $photo);
       $retval[] = new Photo(
         $photo['id'], 
         $internalId,
         $photo['picture'],
-        null, // medium url TODO calculate medium url
         $photo['source'],
         null, // date taken
         strtotime($photo['created_time']), // date created
@@ -47,5 +46,10 @@ class Facebook
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
- }
+  }
+
+  public static function cacheKey($id)
+  {
+    return Credential::serviceFacebook."-{$id}";
+  }
 }

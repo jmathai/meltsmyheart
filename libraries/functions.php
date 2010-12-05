@@ -1,8 +1,16 @@
 <?php
 function __autoload($className)
 {
-  if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
-    include $filename;
+  switch($className)
+  {
+    case 'Resque':
+      include getConfig()->get('paths')->libraries . "/php-resque/lib/Resque.php";
+      break;
+    default:
+      if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
+        include $filename;
+      break;
+  }
 }
 
 function getFacebook()

@@ -1,13 +1,12 @@
 <?php
 class Photo
 {
-  public $id, $internalId, $thumbUrl, $mediumUrl, $originalUrl, $dateCreated, $dateTaken, $title;
-  public function __construct($id, $internalId, $thumbUrl, $mediumUrl, $originalUrl, $dateCreated, $dateTaken, $title)
+  public $id, $internalId, $thumbUrl, $originalUrl, $dateCreated, $dateTaken, $title;
+  public function __construct($id, $internalId, $thumbUrl, $originalUrl, $dateCreated, $dateTaken, $title)
   {
     $this->id = $id;
     $this->internalId = $internalId;
     $this->thumbUrl = $thumbUrl;
-    $this->mediumUrl = $mediumUrl;
     $this->originalUrl = $originalUrl;
     $this->dateCreated = $dateCreated;
     $this->dateTaken = $dateTaken;
@@ -16,8 +15,8 @@ class Photo
 
   public static function add($userId, $key, $value)
   {
-    $id = getDatabase()->execute('INSERT INTO photo(p_u_id, p_key, p_meta, p_dateCreated) VALUES(:userId, :key, :meta, NOW()) ON DUPLICATE KEY UPDATE p_meta=:meta',
-      array(':userId' => $userId, ':key' => $key, ':meta' => json_encode($value)));
+    $id = getDatabase()->execute('INSERT INTO photo(p_u_id, p_key, p_meta, p_dateCreated) VALUES(:userId, :key, :meta, :time) ON DUPLICATE KEY UPDATE p_meta=:meta, p_dateCreated=:time',
+      array(':userId' => $userId, ':key' => $key, ':meta' => json_encode($value), ':time' => time()));
     if(!$id)
     {
       $photo = self::one($userId, $key);
@@ -44,6 +43,14 @@ class Photo
   public static function deleteAll($userId, $key)
   {
 
+  }
+
+  public static function getById($userId, $id)
+  {
+    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_u_id=:userId AND p_id=:id', 
+      array(':userId' => $userId, ':id' => $id));
+    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    return $retval;
   }
 
   public static function one($userId, $key)

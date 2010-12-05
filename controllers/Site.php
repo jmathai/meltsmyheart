@@ -70,8 +70,14 @@ class Site
     $children = null;
     if(User::isLoggedIn())
     {
+      $userId = getSession()->get('userId');
       $template = 'home.php';
-      $children = Child::getByUserId(getSession()->get('userId'));
+      $children = Child::getByUserId($userId);
+      // TODO remove this crap
+      foreach($children as $key => $value)
+      {
+        $children[$key]['photos'] = Entry::getByChild($userId, $value['c_id']);
+      }
     }
     getTemplate()->display('template.php', array('body' => $template, 'children' => $children));
   }
@@ -112,9 +118,23 @@ class Site
     getRoute()->redirect($redirectUrl);
   }
 
-  public static function photoSelectAdd($childId)
+  public static function photoSelectAdd($childId, $internalPhotoId)
   {
-    
+    $userId = getSession()->get('userId');
+    $internal = Photo::getById($userId, $internalPhotoId);
+    if(stristr($internal['p_key'], Credential::serviceSmugMug))
+    {
+      $photo = new Photo($internal['p_meta']['id'], $internal['p_id'], $internal['p_meta']['ThumbURL'], 
+        $internal['p_meta']['OriginalURL'], strtotime($internal['p_meta']['Date']), null, $internal['p_meta']['Caption']);
+    }
+
+    if($photo)
+    {
+      $entryId = Entry::add($userId, $childId, null, null, null);
+      $args = array('userId' => $userId, 'childId' => $childId, 'entryId' => $entryId, 'photo' => $photo);
+      Resque::enqueue('mmh_fetch', 'Fetcher', $args);
+      echo json_encode("booyah");
+    }
   }
 
   public static function photosSelectFacebook($childId)

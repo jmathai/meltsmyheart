@@ -8,8 +8,17 @@ $("a.album").click(function(e) {
         html += '<?php echo str_replace("\n", "", getTemplate()->get('photosSelectItem.php', array('childId' => $childId, 'included' => false))); ?>';
       else
         html += '<?php echo str_replace("\n", "", getTemplate()->get('photosSelectItem.php', array('childId' => $childId, 'included' => true))); ?>';
+
       if(i == (response.length-1))
+      {
         $("#preview").html(html+'</ul>');
+        $("a.photo-select-item").click(function(e) {
+          e.preventDefault();
+          $.get(this.href, function(response) {
+            alert(response.toSource());
+          }, 'json');
+        });
+      }
     });
   }, 'json');
 });
