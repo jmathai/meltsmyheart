@@ -16,7 +16,7 @@ class Entry
 
   public static function update($userId, $entryId, $thumbPath, $basePath, $originalPath)
   {
-    return getDatabase()->all('UPDATE entry SET e_thumbPath=:thumbPath, e_basePath=:basePath, e_originalPath=:originalPath WHERE e_id=:entryId AND e_u_id=:userId',
+    return getDatabase()->execute('UPDATE entry SET e_thumbPath=:thumbPath, e_basePath=:basePath, e_originalPath=:originalPath WHERE e_id=:entryId AND e_u_id=:userId',
       array(':entryId' => $entryId, ':userId' => $userId, ':thumbPath' => $thumbPath, ':basePath' => $basePath, ':originalPath' => $originalPath));
   }
 }
