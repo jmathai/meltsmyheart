@@ -118,6 +118,20 @@ class Site
     getRoute()->redirect($redirectUrl);
   }
 
+  public static function photoCustom($datePart, $fileName)
+  {
+    $photoPath = Photo::generatePhoto($datePart, $fileName);
+    if(!$photoPath)
+    {
+      echo "404";
+    }
+    else
+    {
+      header('Content-Type: image/jpeg');
+      readfile(getConfig()->get('paths')->photos . $photoPath);
+    }
+  }
+
   public static function photoSelectAdd($childId, $internalPhotoId)
   {
     $userId = getSession()->get('userId');
