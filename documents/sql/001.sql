@@ -21,11 +21,25 @@ CREATE TABLE IF NOT EXISTS `credential` (
 CREATE TABLE IF NOT EXISTS `photo` (
   `p_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `p_u_id` int(10) unsigned NOT NULL,
-  `p_key` varchar(255) NOT NULL,
-  `p_meta` text NOT NULL,
+  `p_c_id` int(10) unsigned NOT NULL,
+  `p_thumbPath` varchar(255) DEFAULT NULL,
+  `p_basePath` varchar(255) DEFAULT NULL,
+  `p_originalPath` varchar(255) DEFAULT NULL,
+  `p_caption` varchar(255) DEFAULT NULL,
   `p_dateCreated` int(10) unsigned NOT NULL,
   PRIMARY KEY (`p_id`),
-  UNIQUE KEY `userId_key` (`p_u_id`,`p_key`)
+  UNIQUE KEY `e_basePath` (`p_basePath`),
+  KEY `user_child` (`p_u_id`,`p_c_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `photo_cache` (
+  `pc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pc_u_id` int(10) unsigned NOT NULL,
+  `pc_key` varchar(255) NOT NULL,
+  `pc_meta` text NOT NULL,
+  `pc_dateCreated` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`pc_id`),
+  UNIQUE KEY `userId_key` (`pc_u_id`,`pc_key`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -39,3 +53,4 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`u_id`),
   UNIQUE KEY `u_email` (`u_email`,`u_password`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
