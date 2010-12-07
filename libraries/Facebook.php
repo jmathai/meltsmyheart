@@ -33,16 +33,16 @@ class Facebook
     foreach($photos['data'] as $photo)
     {
       $cacheKey = self::cacheKey($photo['id']);
-      $internalId = Photo::add($userId, $cacheKey, $photo);
-      $retval[] = new Photo(
+      $internalPhoto = new Photo(
         $photo['id'], 
-        $internalId,
         $photo['picture'],
         $photo['source'],
         null, // date taken
         strtotime($photo['created_time']), // date created
         isset($photo['name']) ? $photo['name'] : ''
       );
+      $internalPhoto->internalId = Photo::add($userId, $cacheKey, $internalPhoto);
+      $retval[] = $internalPhoto;
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;

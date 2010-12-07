@@ -1,11 +1,10 @@
 <?php
 class Photo
 {
-  public $id, $internalId, $thumbUrl, $originalUrl, $dateCreated, $dateTaken, $title;
-  public function __construct($id, $internalId, $thumbUrl, $originalUrl, $dateCreated, $dateTaken, $title)
+  public $id, $thumbUrl, $originalUrl, $dateCreated, $dateTaken, $title, $internalId;
+  public function __construct($id, $thumbUrl, $originalUrl, $dateCreated, $dateTaken, $title)
   {
     $this->id = $id;
-    $this->internalId = $internalId;
     $this->thumbUrl = $thumbUrl;
     $this->originalUrl = $originalUrl;
     $this->dateCreated = $dateCreated;
@@ -30,7 +29,10 @@ class Photo
     $retval = getDatabase()->all('SELECT * FROM photo WHERE p_u_id=:userId AND p_key=:key', 
       array(':userId' => $userId, ':key' => $key));
     foreach($retval as $key => $value)
+    {
       $retval[$key]['p_meta'] = json_decode($value['p_meta'], 1);
+      $retval[$key]['p_meta']['internalId'] = $value['p_id'];
+    }
 
     return $retval;
   }
@@ -50,6 +52,7 @@ class Photo
     $retval = getDatabase()->one('SELECT * FROM photo WHERE p_u_id=:userId AND p_id=:id', 
       array(':userId' => $userId, ':id' => $id));
     $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    $retval['p_meta']['internalId'] = $retval['p_id'];
     return $retval;
   }
 
@@ -58,6 +61,7 @@ class Photo
     $retval = getDatabase()->one('SELECT * FROM photo WHERE p_u_id=:userId AND p_key=:key', 
       array(':userId' => $userId, ':key' => $key));
     $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    $retval['p_meta']['internalId'] = $retval['p_id'];
     return $retval;
   }
 

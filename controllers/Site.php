@@ -122,17 +122,8 @@ class Site
   {
     $userId = getSession()->get('userId');
     $internal = Photo::getById($userId, $internalPhotoId);
-    if(stristr($internal['p_key'], Credential::serviceSmugMug))
-    {
-      $photo = new Photo($internal['p_meta']['id'], $internal['p_id'], $internal['p_meta']['ThumbURL'], 
-        $internal['p_meta']['OriginalURL'], strtotime($internal['p_meta']['Date']), null, $internal['p_meta']['Caption']);
-    }
-    elseif(stristr($internal['p_key'], Credential::serviceFacebook))
-    {
-      $photo = new Photo($internal['p_meta']['id'], $internal['p_id'], $internal['p_meta']['picture'], 
-        $internal['p_meta']['source'], strtotime($internal['p_meta']['created_time']), null, $internal['p_meta']['name']);
-    }
-
+    $photo = $internal['p_meta'];
+error_log(var_export($photo, 1));
     if($photo)
     {
       $entryId = Entry::add($userId, $childId, null, null, null);
