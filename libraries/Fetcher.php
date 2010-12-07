@@ -41,7 +41,7 @@ class Fetcher
     $basePath =  str_replace($systemPath, '', $baseFile);
     $originalPath =  str_replace($systemPath, '', $this->photoFile);
 
-    Entry::update($this->args['userId'], $this->args['entryId'], $thumbPath, $basePath, $originalPath);
+    Photo::update($this->args['userId'], $this->args['entryId'], $thumbPath, $basePath, $originalPath);
   }
 
   public function tearDown() { }

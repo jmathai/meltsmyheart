@@ -76,7 +76,7 @@ class Site
       // TODO remove this crap
       foreach($children as $key => $value)
       {
-        $children[$key]['photos'] = Entry::getByChild($userId, $value['c_id']);
+        $children[$key]['photos'] = Photo::getByChild($userId, $value['c_id']);
       }
     }
     getTemplate()->display('template.php', array('body' => $template, 'children' => $children));
@@ -121,12 +121,11 @@ class Site
   public static function photoSelectAdd($childId, $internalPhotoId)
   {
     $userId = getSession()->get('userId');
-    $internal = Photo::getById($userId, $internalPhotoId);
+    $internal = PhotoCache::getById($userId, $internalPhotoId);
     $photo = $internal['p_meta'];
-error_log(var_export($photo, 1));
     if($photo)
     {
-      $entryId = Entry::add($userId, $childId, null, null, null);
+      $entryId = Photo::add($userId, $childId, null, null, null);
       $args = array('userId' => $userId, 'childId' => $childId, 'entryId' => $entryId, 'photo' => $photo);
       Resque::enqueue('mmh_fetch', 'Fetcher', $args);
       echo json_encode("booyah");

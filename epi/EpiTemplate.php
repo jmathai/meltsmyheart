@@ -1,7 +1,6 @@
 <?php
 class EpiTemplate
 {
-  public $foo = 'bar';
   /**
    * EpiRoute::display('/path/to/template.php', $array);
    * @name  display
