@@ -139,7 +139,7 @@ class Site
   {
     $userId = getSession()->get('userId');
     $internal = PhotoCache::getById($userId, $internalPhotoId);
-    $photo = $internal['p_meta'];
+    $photo = $internal['pc_meta'];
     if($photo)
     {
       $entryId = Photo::add($userId, $childId, null, null, null);
