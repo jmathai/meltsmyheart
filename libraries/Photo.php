@@ -1,6 +1,8 @@
 <?php
 class Photo
 {
+  const greyscale = 'bw';
+  const sepia = 'sp';
   public static function add($userId, $childId, $thumbPath, $basePath, $originalPath)
   {
     return getDatabase()->execute('INSERT INTO photo(p_u_id, p_c_id, p_thumbPath, p_basePath, p_originalPath, p_dateCreated)
@@ -27,29 +29,70 @@ class Photo
     if(!Photo::validateHash($options, $hash))
       return false;
 
-    $width = (int)array_shift($options);
-    $height = (int)array_shift($options);
+    $width = array_shift($options);
+    if($width == '*')
+      $width = PHP_INT_MAX;
+    else
+      $width = (int)$width;
 
-    if(empty($width) || empty($height))
+    $height = array_shift($options);
+    if($height == '*')
+      $height = PHP_INT_MAX;
+    else
+      $height = (int)$height;
+
+    if(empty($width) || empty($height) || ($width.$height) == '**')
       return false;
 
     // valid request
-    echo "resize photo to $width x $height<br>";
+    $pathExe = getConfig()->get('paths')->exe;
+    $basePath = "/base/{$datePart}/" . self::getBaseNameFromCustomName($fileName);
+    $fullBasePath = getConfig()->get('paths')->photos . $basePath;
+    $customPath = "/custom/{$datePart}/{$fileName}";
+    $fullCustomPath = getConfig()->get('paths')->photos . $customPath;
+    $im = new ImageMagick($fullBasePath, $pathExe);
+    $im->scale($width, $height, $fullCustomPath, true);   
+
     if(count($options) > 0)
     {
       foreach($options as $option)
       {
         switch($option)
         {
-          case 'bw':
-            echo "make photo black and white<br>";
+          case self::greyscale:
+            $im = new ImageMagick($fullCustomPath, $pathExe);
+            $im->desaturate();
             break;
-          case 'sp':
-            echo "make photo sepia<br>";
+          case self::sepia:
+            $im = new ImageMagick($fullCustomPath, $pathExe);
+            $im->sepia();
             break;
         }
       }
     }
+    $basePhoto = Photo::getByBasePath($basePath);
+    Photo::addCustom($basePhoto['p_u_id'], $basePhoto['p_id'], $customPath, $basePath);
+    return $fullCustomPath;
+  }
+
+  public static function generateUrl($basePath, $width, $height, $options = array())
+  {
+    $customPath = preg_replace('#^/base/#', '/custom/', $basePath);
+    $params = '{'.intval($width).','.intval($height); // {1,2
+    if(!empty($options))
+    {
+      sort($options);
+      $params .= ','.implode(',', $options);
+    }
+    $hash = self::generateHash(array_merge(array($width, $height), $options));
+    $params .= ",{$hash}}";
+    $fileParts = pathinfo($customPath);
+    return "{$fileParts['dirname']}/{$fileParts['filename']}{$params}.{$fileParts['extension']}";
+  }
+
+  public static function getByBasePath($basePath)
+  {
+    return getDatabase()->one('SELECT * FROM photo WHERE p_basePath=:basePath', array(':basePath' => $basePath));
   }
 
   public static function getByChild($userId, $childId)
@@ -69,6 +112,17 @@ class Photo
     if(is_array($options))
       $options = implode(',', $options);
     return (self::saltedHash($options) == $hash);
+  }
+
+  private static function addCustom($userId, $photoId, $path, $basePath)
+  {
+    return getDatabase()->execute('INSERT INTO custom(c_u_id, c_p_id, c_path, c_basePath, c_dateCreated) VALUES(:userId, :photoId, :path, :basePath, :time)',
+      array(':userId' => $userId, ':photoId' => $photoId, ':path' => $path, ':basePath' => $basePath, ':time' => time()));
+  }
+
+  private static function getBaseNameFromCustomName($customPath)
+  {
+    return preg_replace('/\{.*\}/', '', $customPath);
   }
 
   private static function saltedHash($string)

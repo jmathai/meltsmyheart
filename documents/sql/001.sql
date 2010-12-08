@@ -7,6 +7,12 @@ CREATE TABLE IF NOT EXISTS `child` (
   KEY `c_u_id` (`c_u_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `credential`
+--
+
 CREATE TABLE IF NOT EXISTS `credential` (
   `c_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `c_u_id` int(10) unsigned NOT NULL,
@@ -17,6 +23,28 @@ CREATE TABLE IF NOT EXISTS `credential` (
   PRIMARY KEY (`c_id`),
   UNIQUE KEY `userToService` (`c_u_id`,`c_service`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `custom`
+--
+
+CREATE TABLE IF NOT EXISTS `custom` (
+  `c_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_u_id` int(10) unsigned NOT NULL,
+  `c_p_id` int(10) unsigned NOT NULL,
+  `c_path` varchar(255) NOT NULL,
+  `c_basePath` varchar(255) NOT NULL,
+  `c_dateCreated` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`c_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photo`
+--
 
 CREATE TABLE IF NOT EXISTS `photo` (
   `p_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -30,7 +58,13 @@ CREATE TABLE IF NOT EXISTS `photo` (
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `e_basePath` (`p_basePath`),
   KEY `user_child` (`p_u_id`,`p_c_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photo_cache`
+--
 
 CREATE TABLE IF NOT EXISTS `photo_cache` (
   `pc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -41,6 +75,12 @@ CREATE TABLE IF NOT EXISTS `photo_cache` (
   PRIMARY KEY (`pc_id`),
   UNIQUE KEY `userId_key` (`pc_u_id`,`pc_key`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
 
 CREATE TABLE IF NOT EXISTS `user` (
   `u_id` int(11) unsigned NOT NULL AUTO_INCREMENT,

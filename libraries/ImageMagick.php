@@ -9,6 +9,7 @@
   *******************************************************************************************/
 class ImageMagick
 {
+  private $image, $pathExe;
   /*******************************************************************************************
   * Description
   *   scales an image
@@ -45,13 +46,12 @@ class ImageMagick
       $quality = 90; // vree said so
       if($dest === false)
       {
-        $command = "convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" {$this->image} {$this->image}";
+        $command = "{$this->pathExe}convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" \"{$this->image}\" \"{$this->image}\"";
       }
       else
       {
-        $command = "convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" {$this->image} {$dest}";
+        $command = "{$this->pathExe}convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" \"{$this->image}\" \"{$dest}\"";
       }
-      //echo "<br/>$command<br/>";
       exec($command);
       return true;
     }
@@ -59,6 +59,19 @@ class ImageMagick
     {
       return false;
     }
+  }
+ /*******************************************************************************************
+  * Description
+  *   Convert the loaded image to black and white
+  *
+  * Output
+  *   boolean
+  *******************************************************************************************/
+  function desaturate($dest = false) {
+    if(!$dest)
+      $dest = $this->image;
+    $command = "{$this->pathExe}convert -colorspace GRAY \"{$this->image}\" \"{$dest}\"";
+    exec($command);
   }
   
   /*******************************************************************************************
@@ -93,11 +106,11 @@ class ImageMagick
     
     if($dest === false)
     {
-      $cmd    = "mogrify -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->image}";
+      $cmd    = "{$this->pathExe}mogrify -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->image}";
     }
     else
     {
-      $cmd    = "convert -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->image} {$dest}";
+      $cmd    = "{$this->pathExe}convert -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->image} {$dest}";
     }
 
     exec($cmd); // perform initial crop maintaining source size
@@ -136,7 +149,6 @@ class ImageMagick
     if($continue === true)
     {
       $images   = implode(' ', $arr_src);
-      //$command  = "composite -geometry +{$x_offset}+{$y_offset} {$images} {$dest}";
       $command  = "composite -geometry +{$x_offset}+{$y_offset} {$images} {$dest}";
       exec($command);
     }
@@ -164,8 +176,7 @@ class ImageMagick
     if($imageInfo !== false)
     {
       $floor  = min($imageInfo[0], $imageInfo[1]);
-      $cmd    = "convert -gravity Center -crop {$floor}x{$floor}+0+0 {$src} {$dest}";
-      //$cmd    = "convert -gravity Center -crop {$floor}x{$floor}+0+0 {$src} {$dest}";
+      $cmd    = "{$this->pathExe}convert -gravity Center -crop {$floor}x{$floor}+0+0 {$src} {$dest}";
       exec($cmd);
     }
   }
@@ -173,28 +184,41 @@ class ImageMagick
 
   function rotate($src, $dest, $degrees)
   {
-    //$cmd = "{$this->_path_exe}/convert -rotate {$degrees} {$src} {$dest}";
-    $cmd = "convert -rotate {$degrees} {$src} {$dest}";
+    //$cmd = "{$this->pathExe}convert -rotate {$degrees} {$src} {$dest}";
+    $cmd = "{$this->pathExe}convert -rotate {$degrees} {$src} {$dest}";
     exec($cmd);
+  }
+
+ /*******************************************************************************************
+  * Description
+  *   Convert the loaded image to sepia tone
+  *
+  * Output
+  *   boolean
+  *******************************************************************************************/
+  function sepia($dest) {
+    $this->desaturate($dest);
+    if(!$dest)
+      $dest = $this->image;
+    $command = "{$this->pathExe}convert -colorize 0/14/47 \"{$this->image}\" \"{$dest}\"";
+    exec($command);
   }
 
   function convert($src, $dest, $extras = false)
   {
-    //$cmd = "{$this->_path_exe}/convert {$src} {$dest}";
-    $cmd = "convert {$src} {$dest}";
+    $cmd = "{$this->pathExe}convert {$src} {$dest}";
     exec($cmd);
   }
   
   function exiftran($src = false, $dest = false)
   {
-    //$cmd = "{$this->_path_exe}/convert {$src} {$dest}";
     if($dest === false)
     {
       $cmd = "exiftran -ai {$src}";
     }
     else
     {
-      $cmd = "{$this->_path_exe}/exiftran -a {$src} -o {$dest}";
+      $cmd = "exiftran -a {$src} -o {$dest}";
     }
     exec($cmd);
   }
@@ -220,9 +244,9 @@ class ImageMagick
   * Output
   *   boolean
   *******************************************************************************************/
-  function ImageMagick($imageSrc)
+  function ImageMagick($imageSrc, $pathExe = '')
   {
     $this->image = $imageSrc;
+    $this->pathExe = $pathExe;
   }
 }
-?>

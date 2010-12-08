@@ -33,7 +33,7 @@ class Fetcher
 
     // thumb 150x150
     $thumbFile = "{$this->dirDestThumb}/{$this->photoSafeName}";
-    $im = new ImageMagick($baseFile);
+    $im = new ImageMagick($baseFile, getConfig()->get('paths')->exe);
     $im->scale(150, 150, $thumbFile, true);
 
     $systemPath = getConfig()->get('paths')->photos;

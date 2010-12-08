@@ -64,6 +64,12 @@ class Site
     }*/
   }
 
+  public static function error404()
+  {
+    echo "404"; // TODO proper 404 response
+    die();
+  }
+
   public static function home()
   {
     $template = 'splash.php';
@@ -120,16 +126,13 @@ class Site
 
   public static function photoCustom($datePart, $fileName)
   {
-    $photoPath = Photo::generatePhoto($datePart, $fileName);
-    if(!$photoPath)
-    {
-      echo "404";
-    }
-    else
-    {
-      header('Content-Type: image/jpeg');
-      readfile(getConfig()->get('paths')->photos . $photoPath);
-    }
+    if($datePart && $fileName)
+      $photoPath = Photo::generatePhoto($datePart, $fileName);
+    if(!isset($photoPath) || empty($photoPath))
+      getRoute()->run('/error/404'); 
+
+    header('Content-Type: image/jpeg');
+    readfile($photoPath);
   }
 
   public static function photoSelectAdd($childId, $internalPhotoId)
