@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS `child` (
   `c_u_id` int(10) unsigned NOT NULL,
   `c_name` varchar(255) NOT NULL,
   `c_birthdate` bigint(20) unsigned NOT NULL,
+  `c_domain` varchar(255) NOT NULL,
   PRIMARY KEY (`c_id`),
+  UNIQUE KEY `c_domain` (`c_domain`),
   KEY `c_u_id` (`c_u_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 

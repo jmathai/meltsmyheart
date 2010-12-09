@@ -19,12 +19,14 @@ class Fetcher
 
   public function perform()
   {
+    // file pointer and curl
     $fp = fopen($this->photoFile, 'w');
     $ch = curl_init($this->photoUrl);
     curl_setopt($ch, CURLOPT_FILE, $fp);
     $data = curl_exec($ch);
     curl_close($ch);
     fclose($fp);
+
     $im = new ImageMagick($this->photoFile);
     // base 1024x1024
     $baseFile = "{$this->dirDestBase}/{$this->photoSafeName}";

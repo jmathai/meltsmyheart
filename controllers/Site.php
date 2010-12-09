@@ -7,10 +7,15 @@ class Site
     getTemplate()->display('template.php', array('body' => 'childNew.php'));
   }
 
+  public static function childPage($name)
+  {
+
+  }
+
   public static function childNewPost()
   {
     self::requireLogin();
-    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $_POST['childBirthDate']);
+    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $_POST['childBirthDate'], $_POST['childDomain']);
     getRoute()->redirect("/photos/source/{$childId}");
   }
 

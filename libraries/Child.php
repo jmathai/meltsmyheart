@@ -1,11 +1,11 @@
 <?php
 class Child
 {
-  public static function add($userId, $name, $birthdate)
+  public static function add($userId, $name, $birthdate, $domain)
   {
-    $params = array(':userId' => $userId, ':name' => $name, ':birthdate' => $birthdate);
-    return getDatabase()->execute('INSERT INTO child(c_u_id, c_name, c_birthdate)
-      VALUES(:userId, :name, :birthdate)', $params);
+    $params = array(':userId' => $userId, ':name' => $name, ':birthdate' => $birthdate, ':domain' => $domain);
+    return getDatabase()->execute('INSERT INTO child(c_u_id, c_name, c_birthdate, c_domain)
+      VALUES(:userId, :name, :birthdate, :domain)', $params);
   }
 
   public static function getByUserId($userId)
