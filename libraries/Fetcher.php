@@ -54,6 +54,6 @@ class Fetcher
 
   private function safeName($url)
   {
-    return preg_replace('/[^a-zA-Z0-9-.]/', '_', basename($url));
+    return rand(0,1000).'_'.time().'_'.preg_replace('/[^a-zA-Z0-9-.]/', '_', basename($url));
   }
 }
