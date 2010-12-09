@@ -1,3 +1,16 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `meltsmyheart`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `child`
+--
+
+DROP TABLE IF EXISTS `child`;
 CREATE TABLE IF NOT EXISTS `child` (
   `c_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `c_u_id` int(10) unsigned NOT NULL,
@@ -13,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `child` (
 -- Table structure for table `credential`
 --
 
+DROP TABLE IF EXISTS `credential`;
 CREATE TABLE IF NOT EXISTS `credential` (
   `c_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `c_u_id` int(10) unsigned NOT NULL,
@@ -30,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `credential` (
 -- Table structure for table `custom`
 --
 
+DROP TABLE IF EXISTS `custom`;
 CREATE TABLE IF NOT EXISTS `custom` (
   `c_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `c_u_id` int(10) unsigned NOT NULL,
@@ -46,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `custom` (
 -- Table structure for table `photo`
 --
 
+DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `p_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `p_u_id` int(10) unsigned NOT NULL,
@@ -54,9 +70,11 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `p_basePath` varchar(255) DEFAULT NULL,
   `p_originalPath` varchar(255) DEFAULT NULL,
   `p_caption` varchar(255) DEFAULT NULL,
+  `p_exif` varchar(255) DEFAULT NULL,
+  `p_dateTaken` int(10) unsigned NOT NULL,
   `p_dateCreated` int(10) unsigned NOT NULL,
   PRIMARY KEY (`p_id`),
-  UNIQUE KEY `e_basePath` (`p_basePath`),
+  UNIQUE KEY `p_basePath` (`p_basePath`),
   KEY `user_child` (`p_u_id`,`p_c_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -66,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
 -- Table structure for table `photo_cache`
 --
 
+DROP TABLE IF EXISTS `photo_cache`;
 CREATE TABLE IF NOT EXISTS `photo_cache` (
   `pc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pc_u_id` int(10) unsigned NOT NULL,
@@ -82,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `photo_cache` (
 -- Table structure for table `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `u_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `u_key` char(32) NOT NULL,

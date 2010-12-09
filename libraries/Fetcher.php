@@ -41,7 +41,13 @@ class Fetcher
     $basePath =  str_replace($systemPath, '', $baseFile);
     $originalPath =  str_replace($systemPath, '', $this->photoFile);
 
-    Photo::update($this->args['userId'], $this->args['entryId'], $thumbPath, $basePath, $originalPath);
+    //exif
+    $dateTaken = time();
+    $photoData = Photo::exif($this->photoFile);
+    if($photoData)
+      $dateTaken = $photoData['dateTaken'];
+    $exif = json_encode($photoData);
+    Photo::update($this->args['userId'], $this->args['entryId'], $thumbPath, $basePath, $originalPath, $exif, $dateTaken);
   }
 
   public function tearDown() { }
