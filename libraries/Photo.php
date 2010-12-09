@@ -26,7 +26,7 @@ class Photo
       $dateTaken = @mktime($time[0], $time[1], $time[2], $date[1], $date[2], $date[0]);
     }
 
-    return array('dateTaken' => $photoData['FileDateTime'], 'width' => $size[0], 'height' => $size[1],
+    return array('dateTaken' => $dateTaken, 'width' => $size[0], 'height' => $size[1],
       'cameraModel' => $photoData['Model'], 'cameraMake' => $photoData['Make']);
   }
 
