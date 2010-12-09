@@ -8,6 +8,12 @@ class Child
       VALUES(:userId, :name, :birthdate, :domain)', $params);
   }
 
+  public static function getByDomain($domain)
+  {
+    $params = array(':domain' => $domain);
+    return getDatabase()->one('SELECT * FROM child WHERE c_domain=:domain', $params);
+  }
+
   public static function getByUserId($userId)
   {
     $params = array(':userId' => $userId);

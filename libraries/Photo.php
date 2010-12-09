@@ -17,6 +17,15 @@ class Photo
       return null;
 
     $size = getimagesize($photoFile);
+    $dateTaken = $photoData['FileDateTime'];
+    if(array_key_exists('DateTime', $photoData))
+    {
+      $dateTime = explode(' ', $photoData['DateTime']);
+      $date = explode(':', $dateTime[0]);
+      $time = explode(':', $dateTime[1]);
+      $dateTaken = @mktime($time[0], $time[1], $time[2], $date[1], $date[2], $date[0]);
+    }
+
     return array('dateTaken' => $photoData['FileDateTime'], 'width' => $size[0], 'height' => $size[1],
       'cameraModel' => $photoData['Model'], 'cameraMake' => $photoData['Make']);
   }
@@ -110,12 +119,36 @@ class Photo
 
   public static function getByChild($userId, $childId)
   {
-    $photos = getDatabase()->all('SELECT * FROM photo WHERE p_u_id=:userId AND p_c_id=:childId',
+    $photos = getDatabase()->all('SELECT * FROM photo WHERE p_u_id=:userId AND p_c_id=:childId ORDER BY p_dateTaken',
       array(':userId' => $userId, ':childId' => $childId));
     foreach($photos as $key => $value)
       $photos[$key]['p_exif'] = json_decode($value['p_exif'], 1);
 
     return $photos;
+  }
+
+  public static function photosByGroup($birthDate, $photos)
+  {
+    $retval = array();
+    $current = (int)$birthDate;
+    $now = (int)time();
+    $week = 1;
+    while($current < $now)
+    {
+      $next = $current + 604800;
+      foreach($photos as $key => $photo)
+      {
+        if($current > $photo['p_dateTaken'] || $next < $photo['p_dateTaken'])
+          break;
+
+        $retval[$week][] = $photo;
+        unset($photos[$key]);
+      }
+      $week++;
+      $current += 604800;
+    }
+
+    return $retval;
   }
 
   public static function update($userId, $entryId, $thumbPath, $basePath, $originalPath, $exif, $dateTaken)
