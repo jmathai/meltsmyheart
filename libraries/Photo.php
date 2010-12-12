@@ -10,6 +10,12 @@ class Photo
       array(':userId' => $userId, ':childId' => $childId, ':thumbPath' => $thumbPath, ':basePath' => $basePath, ':originalPath' => $originalPath, ':time' => time()));
   }
 
+  public static function addMeta($userId, $childId, $key, $meta)
+  {
+    return getDatabase()->execute('INSERT INTO photo(p_u_id, p_c_id, p_key, p_meta, p_dateCreated) VALUES(:userId, :childId, :key, :meta, :time)',
+      array(':userId' => $userId, ':childId' => $childId, ':key' => $key, ':meta' => json_encode($meta), ':time' => time()));
+  }
+
   public static function exif($photoFile)
   {
     $photoData = exif_read_data($photoFile);
@@ -28,6 +34,15 @@ class Photo
 
     return array('dateTaken' => $dateTaken, 'width' => $size[0], 'height' => $size[1],
       'cameraModel' => $photoData['Model'], 'cameraMake' => $photoData['Make']);
+  }
+
+  public static function extractIds($photos)
+  {
+    $retval = array();
+    foreach($photos as $v)
+      $retval[$v['p_id']] = true;
+
+    return $retval;
   }
 
   public static function generateHash($options)
@@ -114,18 +129,50 @@ class Photo
   {
     $retval = getDatabase()->one('SELECT * FROM photo WHERE p_basePath=:basePath', array(':basePath' => $basePath));
     $retval['p_exif'] = json_decode($retval['p_exif'], 1);
+    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
     return $retval;
   }
 
   public static function getByChild($userId, $childId)
   {
-    $photos = getDatabase()->all('SELECT * FROM photo WHERE p_u_id=:userId AND p_c_id=:childId ORDER BY p_dateTaken',
+    $photos = getDatabase()->all('SELECT * FROM photo WHERE p_u_id=:userId AND p_c_id=:childId AND p_use=1 ORDER BY p_dateTaken',
       array(':userId' => $userId, ':childId' => $childId));
     foreach($photos as $key => $value)
+    {
       $photos[$key]['p_exif'] = json_decode($value['p_exif'], 1);
+      $photos[$key]['p_meta'] = json_decode($value['p_meta'], 1);
+    }
 
     return $photos;
   }
+
+  /*public static function getById($userId, $photoId)
+  {
+    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_basePath=:basePath', array(':basePath' => $basePath));
+    $retval['p_exif'] = json_decode($retval['p_exif'], 1);
+    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    return $retval;
+  }*/
+
+  public static function getById($userId, $photoId)
+  {
+    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_id=:photoId AND p_u_id=:userId', array(':photoId' => $photoId, ':userId' => $userId));
+    $retval['p_exif'] = json_decode($retval['p_exif'], 1);
+    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    return $retval;
+  }
+
+  /*public static function getByKey($userId, $childId, $key)
+  {
+    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_c_id=:childId AND p_key=:key AND p_u_id=:userId', 
+      array(':userId' => $userId, ':childId' => $childId, ':key' => $key));
+    if($retval)
+    {
+      $retval['p_exif'] = json_decode($retval['p_exif'], 1);
+      $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    }
+    return $retval;
+  }*/
 
   public static function photosByGroup($birthDate, $photos)
   {
@@ -151,11 +198,18 @@ class Photo
     return $retval;
   }
 
-  public static function update($userId, $entryId, $thumbPath, $basePath, $originalPath, $exif, $dateTaken)
+  public static function setUse($userId, $photoId, $use)
+  {
+    return getDatabase()->execute('UPDATE photo SET p_use=:use WHERE p_id=:photoId AND p_u_id=:userId',
+      array(':photoId' => $photoId, ':userId' => $userId, ':use' => $use));
+
+  }
+
+  public static function update($userId, $photoId, $thumbPath, $basePath, $originalPath, $exif, $dateTaken)
   {
     return getDatabase()->execute('UPDATE photo SET p_thumbPath=:thumbPath, p_basePath=:basePath, 
-      p_originalPath=:originalPath, p_exif=:exif, p_dateTaken=:dateTaken WHERE p_id=:entryId AND p_u_id=:userId',
-      array(':entryId' => $entryId, ':userId' => $userId, ':thumbPath' => $thumbPath, ':basePath' => $basePath, 
+      p_originalPath=:originalPath, p_exif=:exif, p_dateTaken=:dateTaken WHERE p_id=:photoId AND p_u_id=:userId',
+      array(':photoId' => $photoId, ':userId' => $userId, ':thumbPath' => $thumbPath, ':basePath' => $basePath, 
         ':originalPath' => $originalPath, ':exif' => $exif, ':dateTaken' => $dateTaken));
   }
 

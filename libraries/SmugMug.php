@@ -1,7 +1,7 @@
 <?php
 class SmugMug
 {
-  public static function getAlbums($token, $secret, $uid)
+  public static function getAlbums($childId, $token, $secret, $uid)
   {
     $args = func_get_args();
     $sig = 'smga'.md5(implode('-', $args));
@@ -21,13 +21,13 @@ class SmugMug
         $cover = $coverPhoto['ThumbURL'];
       }
       $retval[] = array('id' => $album['id'], 'name' => $album['Title'], 'cover' => $cover,
-        'link' => '/proxy/p/'.Credential::serviceSmugMug."?method=photos&AlbumID={$album['id']}&AlbumKey={$album['Key']}");
+        'link' => '/proxy/p/'.Credential::serviceSmugMug."/{$childId}/?method=photos&AlbumID={$album['id']}&AlbumKey={$album['Key']}");
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
   }
 
-  public static function getPhotos($userId, $token, $secret, $id, $key)
+  public static function getPhotos($userId, $childId, $token, $secret, $id, $key)
   {
     $args = func_get_args();
     $sig = 'smgp'.md5(implode('-', $args));
@@ -40,8 +40,8 @@ class SmugMug
     $photos = getSmugMug()->images_get('Heavy=True', "AlbumID={$id}", "AlbumKey={$key}");	
     foreach($photos['Images'] as $photo)
     {
-      $cacheKey = self::cacheKey($photo['id']);
-      $internalPhoto = new PhotoCache(
+      $cacheKey = self::key($photo['id']);
+      $meta = new PhotoCache(
         $photo['id'], 
         $photo['ThumbURL'],
         $photo['OriginalURL'],
@@ -49,14 +49,14 @@ class SmugMug
         strtotime($photo['Date']),
         $photo['Caption']
       );
-      $internalPhoto->internalId = PhotoCache::add($userId, $cacheKey, $internalPhoto);
-      $retval[] = $internalPhoto;
+      $meta->internalId = Photo::addMeta($userId, $childId, $cacheKey, $meta);
+      $retval[] = $meta;
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
   }
 
-  public static function cacheKey($id)
+  public static function key($id)
   {
     return Credential::serviceSmugMug."-{$id}";
   }

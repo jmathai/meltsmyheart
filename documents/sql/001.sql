@@ -66,35 +66,22 @@ CREATE TABLE IF NOT EXISTS `custom` (
 DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `p_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `p_key` varchar(255) NOT NULL,
   `p_u_id` int(10) unsigned NOT NULL,
-  `p_c_id` int(10) unsigned NOT NULL,
+  `p_c_id` int(10) unsigned DEFAULT NULL,
   `p_thumbPath` varchar(255) DEFAULT NULL,
   `p_basePath` varchar(255) DEFAULT NULL,
   `p_originalPath` varchar(255) DEFAULT NULL,
   `p_caption` varchar(255) DEFAULT NULL,
   `p_exif` varchar(255) DEFAULT NULL,
-  `p_dateTaken` int(10) unsigned NOT NULL,
+  `p_meta` text,
+  `p_use` tinyint(1) NOT NULL,
+  `p_dateTaken` int(10) unsigned DEFAULT NULL,
   `p_dateCreated` int(10) unsigned NOT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_basePath` (`p_basePath`),
+  UNIQUE KEY `key_child` (`p_key`,`p_c_id`),
   KEY `user_child` (`p_u_id`,`p_c_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `photo_cache`
---
-
-DROP TABLE IF EXISTS `photo_cache`;
-CREATE TABLE IF NOT EXISTS `photo_cache` (
-  `pc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `pc_u_id` int(10) unsigned NOT NULL,
-  `pc_key` varchar(255) NOT NULL,
-  `pc_meta` text NOT NULL,
-  `pc_dateCreated` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`pc_id`),
-  UNIQUE KEY `userId_key` (`pc_u_id`,`pc_key`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

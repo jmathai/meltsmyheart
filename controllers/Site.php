@@ -143,15 +143,15 @@ class Site
     readfile($photoPath);
   }
 
-  public static function photoSelectAdd($childId, $internalPhotoId)
+  public static function photoSelectAdd($childId, $photoId)
   {
     $userId = getSession()->get('userId');
-    $internal = PhotoCache::getById($userId, $internalPhotoId);
-    $photo = $internal['pc_meta'];
+    $internal = Photo::getById($userId, $photoId);
+    Photo::setUse($userId, $photoId, 1);
+    $photo = $internal['p_meta'];
     if($photo)
     {
-      $entryId = Photo::add($userId, $childId, null, null, null);
-      $args = array('userId' => $userId, 'childId' => $childId, 'entryId' => $entryId, 'photo' => $photo);
+      $args = array('userId' => $userId, 'childId' => $childId, 'entryId' => $internal['p_id'], 'photo' => $photo);
       Resque::enqueue('mmh_fetch', 'Fetcher', $args);
       echo json_encode("booyah");
     }
@@ -160,8 +160,8 @@ class Site
   public static function photosSelectFacebook($childId)
   {
     self::requireLogin();
-    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
-    $albums = Facebook::getAlbums($credential['c_token'], $credential['c_uid']);
+    $credential = Credential::aetByService(getSession()->get('userId'), Credential::serviceFacebook);
+    $albums = Facebook::getAlbums($childId, $credential['c_token'], $credential['c_uid']);
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
       'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId))));
   }
@@ -169,11 +169,13 @@ class Site
   public static function photosSelectSmugMug($childId)
   {
     self::requireLogin();
-    $credential = Credential::getByService(getSession()->get('userId'), Credential::serviceSmugMug);
+    $userId = getSession()->get('userId');
+    $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
-    $albums = SmugMug::getAlbums($credential['c_token'], $credential['c_secret'], $credential['c_uid']);
+    $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
+    $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId))));
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('service' => Credential::serviceSmugMug, 'childId' => $childId, 'ids' => $ids))));
   }
 
   public static function photosSource($childId)
@@ -204,7 +206,7 @@ class Site
     getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl));
   }
 
-  public static function proxy($type, $service, $path)
+  public static function proxy($type, $service, $childId, $path)
   {
     $userId = getSession()->get('userId');
     $passThrough = null;
@@ -218,7 +220,7 @@ class Site
         switch($method)
         {
           case 'photos':
-            $passThrough = getTemplate()->json(Facebook::getPhotos($userId, $credential['c_token'], $_GET['id']));
+            $passThrough = getTemplate()->json(Facebook::getPhotos($userId, $childId, $credential['c_token'], $_GET['id']));
             break;
           default:
             $url = "https://graph.facebook.com/{$path}?access_token={$credential['c_token']}";
@@ -230,7 +232,7 @@ class Site
         switch($_GET['method'])
         {
           case 'photos':
-            $passThrough = getTemplate()->json(SmugMug::getPhotos($userId, $credential['c_token'], $credential['c_secret'], $_GET['AlbumID'], $_GET['AlbumKey']));
+            $passThrough = getTemplate()->json(SmugMug::getPhotos($userId, $childId, $credential['c_token'], $credential['c_secret'], $_GET['AlbumID'], $_GET['AlbumKey']));
             break;
         }
         break;
