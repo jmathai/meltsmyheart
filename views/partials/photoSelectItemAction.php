@@ -1,1 +1,7 @@
-<a href="/photo/select/<?php echo $action; ?>/<?php echo $childId; ?>/'+el.internalId+'" class="photo-select-item"><?php echo $label; ?></a>
+<a href="/photo/select/<?php echo $action; ?>/<?php echo $childId; ?>/<?php echo $photoId; ?>" class="photo-select-item">
+  <?php if($action == 'add') { ?>
+    Add this photo
+  <?php } else { ?>
+    Remove this photo
+  <?php } ?>
+</a>

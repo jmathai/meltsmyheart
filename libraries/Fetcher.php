@@ -44,7 +44,7 @@ class Fetcher
     $originalPath =  str_replace($systemPath, '', $this->photoFile);
 
     //exif
-    $dateTaken = time();
+    $dateTaken = !empty($this->args['photo']['dateTaken']) ? $this->args['photo']['dateTaken'] : time();
     $photoData = Photo::exif($this->photoFile);
     if($photoData)
       $dateTaken = $photoData['dateTaken'];

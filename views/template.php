@@ -14,6 +14,7 @@
     <li>Footer goes here</li.
   </ul>
   <script src="/js/jquery.js"></script>
+  <script src="/js/javascript.js"></script>
   <?php if(isset($javascript)) { ?>
     <script>
       <?php echo $javascript; ?>

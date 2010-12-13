@@ -3,17 +3,17 @@ class Photo
 {
   const greyscale = 'bw';
   const sepia = 'sp';
-  public static function add($userId, $childId, $thumbPath, $basePath, $originalPath)
+  public static function add($userId, $childId, $key, $thumbPath, $basePath, $originalPath)
   {
-    return getDatabase()->execute('INSERT INTO photo(p_u_id, p_c_id, p_thumbPath, p_basePath, p_originalPath, p_dateCreated)
-      VALUES(:userId, :childId, :thumbPath, :basePath, :originalPath, :time)',
-      array(':userId' => $userId, ':childId' => $childId, ':thumbPath' => $thumbPath, ':basePath' => $basePath, ':originalPath' => $originalPath, ':time' => time()));
+    return getDatabase()->execute('INSERT INTO photo(p_key, p_u_id, p_c_id, p_thumbPath, p_basePath, p_originalPath, p_dateCreated)
+      VALUES(:key, :userId, :childId, :thumbPath, :basePath, :originalPath, :time) ON DUPLICATE KEY UPDATE p_u_id=:userId',
+      array(':key' => $key, ':userId' => $userId, ':childId' => $childId, ':thumbPath' => $thumbPath, ':basePath' => $basePath, ':originalPath' => $originalPath, ':time' => time()));
   }
 
-  public static function addMeta($userId, $childId, $key, $meta)
+  public static function addMeta($userId, $photoId, $meta)
   {
-    return getDatabase()->execute('INSERT INTO photo(p_u_id, p_c_id, p_key, p_meta, p_dateCreated) VALUES(:userId, :childId, :key, :meta, :time)',
-      array(':userId' => $userId, ':childId' => $childId, ':key' => $key, ':meta' => json_encode($meta), ':time' => time()));
+    return getDatabase()->execute('UPDATE photo SET p_meta=:meta WHERE p_id=:photoId AND p_u_id=:userId',
+      array(':userId' => $userId, ':photoId' => $photoId, ':meta' => json_encode($meta)));
   }
 
   public static function exif($photoFile)
@@ -162,7 +162,7 @@ class Photo
     return $retval;
   }
 
-  /*public static function getByKey($userId, $childId, $key)
+  public static function getByKey($userId, $childId, $key)
   {
     $retval = getDatabase()->one('SELECT * FROM photo WHERE p_c_id=:childId AND p_key=:key AND p_u_id=:userId', 
       array(':userId' => $userId, ':childId' => $childId, ':key' => $key));
@@ -172,7 +172,7 @@ class Photo
       $retval['p_meta'] = json_decode($retval['p_meta'], 1);
     }
     return $retval;
-  }*/
+  }
 
   public static function photosByGroup($birthDate, $photos)
   {

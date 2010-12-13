@@ -14,7 +14,7 @@ class Facebook
     foreach($albums['data'] as $album)
     {
       $retval[] = array('id' => $album['id'], 'name' => $album['name'], 'cover' => '/proxy/r/'.Credential::serviceFacebook."/{$childId}/{$album['id']}/picture",
-        'link' => '/proxy/p/'.Credential::serviceFacebook."/{$childId}/?id={$album['id']}&method=photos");
+        'link' => '/album/photos/'.Credential::serviceFacebook."/{$childId}/{$album['id']}");
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
@@ -33,15 +33,29 @@ class Facebook
     foreach($photos['data'] as $photo)
     {
       $cacheKey = self::key($photo['id']);
-      $meta = new PhotoCache(
-        $photo['id'], 
-        $photo['picture'],
-        $photo['source'],
-        null, // date taken
-        strtotime($photo['created_time']), // date created
-        isset($photo['name']) ? $photo['name'] : ''
-      );
-      $meta->internalId = Photo::addMeta($userId, $childId, $cacheKey, $meta);
+      $exists = Photo::getByKey($userId, $childId, $cacheKey);
+      if(!$exists)
+      {
+        $meta = new PhotoCache(
+          $photo['id'], 
+          $photo['picture'],
+          $photo['source'],
+          null, // date taken
+          strtotime($photo['created_time']), // date created
+          isset($photo['name']) ? $photo['name'] : ''
+        );
+        $photoId = Photo::add($userId, $childId, $cacheKey, null, null, null);
+        if(!$photoId)
+          return false;
+
+        $meta->internalId = $photoId;
+        Photo::addMeta($userId, $photoId, $meta);
+      }
+      else
+      {
+        $meta = $exists['p_meta'];
+      }
+
       $retval[] = $meta;
     }
     getCache()->set($sig, $retval, time()+3600);

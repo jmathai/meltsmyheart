@@ -21,7 +21,7 @@ class SmugMug
         $cover = $coverPhoto['ThumbURL'];
       }
       $retval[] = array('id' => $album['id'], 'name' => $album['Title'], 'cover' => $cover,
-        'link' => '/proxy/p/'.Credential::serviceSmugMug."/{$childId}/?method=photos&AlbumID={$album['id']}&AlbumKey={$album['Key']}");
+        'link' => '/album/photos/'.Credential::serviceSmugMug."/{$childId}/{$album['id']}/{$album['Key']}");
     }
     getCache()->set($sig, $retval, time()+3600);
     return $retval;
@@ -41,15 +41,29 @@ class SmugMug
     foreach($photos['Images'] as $photo)
     {
       $cacheKey = self::key($photo['id']);
-      $meta = new PhotoCache(
-        $photo['id'], 
-        $photo['ThumbURL'],
-        $photo['OriginalURL'],
-        null, // date taken
-        strtotime($photo['Date']),
-        $photo['Caption']
-      );
-      $meta->internalId = Photo::addMeta($userId, $childId, $cacheKey, $meta);
+      $exists = Photo::getByKey($userId, $childId, $cacheKey);
+      if(!$exists)
+      {
+        $meta = new PhotoCache(
+          $photo['id'], 
+          $photo['ThumbURL'],
+          $photo['OriginalURL'],
+          null, // date taken
+          strtotime($photo['Date']),
+          $photo['Caption']
+        );
+        $photoId = Photo::add($userId, $childId, $cacheKey, null, null, null);
+        if(!$photoId)
+          return false;
+
+        $meta->internalId = $photoId;
+        Photo::addMeta($userId, $photoId, $meta);
+      }
+      else
+      {
+        $meta = $exists['p_meta'];
+      }
+
       $retval[] = $meta;
     }
     getCache()->set($sig, $retval, time()+3600);
