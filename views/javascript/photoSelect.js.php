@@ -7,9 +7,9 @@ $("a.album").click(function(e) {
     $(response).each(function(i, el) {
 console.log(el.p_id);
       if(__ids[el.p_id])
-        html += '<?php echo str_replace("\n", "", getTemplate()->get('partials/photoSelectItem.php', array('service' => $service, 'childId' => $childId, 'included' => true))); ?>';
+        html += '<?php echo str_replace("\n", "", getTemplate()->get('partials/photoSelectItem.php', array('childId' => $childId, 'included' => true))); ?>';
       else
-        html += '<?php echo str_replace("\n", "", getTemplate()->get('partials/photoSelectItem.php', array('service' => $service, 'childId' => $childId, 'included' => false))); ?>';
+        html += '<?php echo str_replace("\n", "", getTemplate()->get('partials/photoSelectItem.php', array('childId' => $childId, 'included' => false))); ?>';
 
       if(i == (response.length-1))
       {

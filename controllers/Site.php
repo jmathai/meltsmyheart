@@ -160,10 +160,12 @@ class Site
   public static function photosSelectFacebook($childId)
   {
     self::requireLogin();
-    $credential = Credential::aetByService(getSession()->get('userId'), Credential::serviceFacebook);
+    $userId = getSession()->get('userId');
+    $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $albums = Facebook::getAlbums($childId, $credential['c_token'], $credential['c_uid']);
+    $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId))));
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function photosSelectSmugMug($childId)
@@ -175,7 +177,7 @@ class Site
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('service' => Credential::serviceSmugMug, 'childId' => $childId, 'ids' => $ids))));
+      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function photosSource($childId)
