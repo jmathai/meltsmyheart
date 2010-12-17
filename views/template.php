@@ -1,9 +1,10 @@
 <html lang="en">
 <head>
   <title></title>
+  <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
-  <ul>
+  <ul id="navigation">
     <li><a href="/">Home</a></li>
     <li><a href="/child/new">New Child</a></li>
     <li><a href="/login">Login</a> or <a href="/join">join</a></li>

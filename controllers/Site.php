@@ -58,7 +58,7 @@ class Site
   public static function childNewPost()
   {
     self::requireLogin();
-    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $_POST['childBirthDate'], $_POST['childDomain']);
+    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], strtotime($_POST['childBirthDate']), $_POST['childDomain']);
     getRoute()->redirect("/photos/source/{$childId}");
   }
 

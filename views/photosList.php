@@ -1,5 +1,5 @@
 <?php if(!empty($photos)) { ?>
-  <ul>
+  <ul id="photo-list">
     <?php foreach($photos as $photo) { ?>
       <li>
         <div>

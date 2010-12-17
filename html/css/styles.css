@@ -1,0 +1,12 @@
+body {font-family:georgia,serif; font-size:1.25em; color:#000;}
+
+ul#navigation{height:50px; margin:0; padding:0;}
+ul#navigation li{margin:0; padding:0 20px; list-style:none; float:left;}
+
+ul#album-list{width:150px; float:left;}
+ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}
+ul#album-list li img{width:125px;}
+
+ul#photo-list{}
+ul#photo-list li{margin:0; padding:10px; list-style:none; float:left; height:125px; width:100px; text-align:center; font-size:.5em;}
+ul#photo-list li img{max-height:100px; max-width:100px;}
