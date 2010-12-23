@@ -112,9 +112,22 @@ class Site
     }*/
   }
 
-  public static function error404()
+  public static function error404($ajax = null)
   {
-    echo "404"; // TODO proper 404 response
+    header('HTTP/1.0 404 Not Found');
+    header('Status: 404 Not Found');
+    var_dump($_SERVER);
+    if($ajax == 'ajax')
+      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REDIRECT_URL'])));
+    else
+      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REDIRECT_URL']));
+
+    die();
+  }
+
+  public static function errorGeneral($ajax = false)
+  {
+    $body = getTemplate()->get('errorGeneral.php', array('page' => $_SERVER['REDIRECT_URL']));
     die();
   }
 
