@@ -7,7 +7,8 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Facebook::getPhotos($userId, $childId, $credential['c_token'], $albumId);
-    echo getTemplate()->json(getTemplate()->get('photosList.php', array('childId' => $childId, 'photos' => $photos, 'ids' => $ids)));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'photos' => $photos, 'ids' => $ids));
+    Api::success($markup);
   }
 
   public static function albumPhotosSmugMug($childId, $albumId, $albumKey)
@@ -16,7 +17,8 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = SmugMug::getPhotos($userId, $childId, $credential['c_token'], $credential['c_secret'], $albumId, $albumKey);
-    echo getTemplate()->json(getTemplate()->get('photosList.php', array('childId' => $childId, 'photos' => $photos, 'ids' => $ids)));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'photos' => $photos, 'ids' => $ids));
+    Api::success($markup);
   }
 
   public static function albumsListFacebook($childId)
@@ -116,12 +118,10 @@ class Site
   {
     header('HTTP/1.0 404 Not Found');
     header('Status: 404 Not Found');
-    var_dump($_SERVER);
     if($ajax == 'ajax')
       Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REDIRECT_URL'])));
     else
       getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REDIRECT_URL']));
-
     die();
   }
 
@@ -201,7 +201,7 @@ class Site
     $userId = getSession()->get('userId');
     $internal = Photo::getById($userId, $photoId);
     if(!$internal)
-      getRoute()->run('/error/404');
+      Api::error('There was a problem adding your photo. Please try again.');
 
     Photo::setUse($userId, $photoId, 1);
     $photo = $internal['p_meta'];
@@ -213,9 +213,8 @@ class Site
       Resque::enqueue('mmh_fetch', 'Fetcher', $args);
     }
     // return the opposite state (if adding return remove)
-    echo getTemplate()->json(getTemplate()->get('partials/photoSelectItemAction.php', array(
-      'action' => 'remove', 'childId' => $childId, 'photoId' => $photoId
-    )));
+    $markup = getTemplate()->get('partials/photoSelectItemAction.php', array('action' => 'remove', 'childId' => $childId, 'photoId' => $photoId));
+    Api::success($markup);
   }
 
   public static function photoSelectRemove($childId, $photoId)
@@ -223,13 +222,12 @@ class Site
     $userId = getSession()->get('userId');
     $internal = Photo::getById($userId, $photoId);
     if(!$internal)
-      getRoute()->run('/error/404');
+      Api::error('There was a problem removing your photo. Please try again.');
 
     Photo::setUse($userId, $photoId, 0);
     // return the opposite state (if removing return add)
-    echo getTemplate()->json(getTemplate()->get('partials/photoSelectItemAction.php', array(
-      'action' => 'add', 'childId' => $childId, 'photoId' => $photoId
-    )));
+    $markup = getTemplate()->get('partials/photoSelectItemAction.php', array('action' => 'add', 'childId' => $childId, 'photoId' => $photoId));
+    Api::success($markup);
   }
 
   public static function photosSelectSmugMug($childId)
