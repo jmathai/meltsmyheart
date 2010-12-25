@@ -3,6 +3,8 @@ class Photo
 {
   const greyscale = 'bw';
   const sepia = 'sp';
+  private static $ranges = array('day1' => 86400, 'week1' => 604800, 'week2' => 1209600, 'month1' => 2419200, 'month3' => 7257600, 
+    'month6' => 14515200, 'year1' => 31556926, 'year2' => 63113852, 'year3' => 94670778, 'year3plus' => PHP_INT_MAX);
   public static function add($userId, $childId, $key, $thumbPath, $basePath, $originalPath)
   {
     return getDatabase()->execute('INSERT INTO photo(p_key, p_u_id, p_c_id, p_thumbPath, p_basePath, p_originalPath, p_dateCreated)
@@ -177,24 +179,37 @@ class Photo
   public static function photosByGroup($birthDate, $photos)
   {
     $retval = array();
-    $current = (int)$birthDate;
     $now = (int)time();
     $week = 1;
-    while($current < $now)
+    foreach($photos as $photo)
     {
-      $next = $current + 604800;
-      foreach($photos as $key => $photo)
+      $thisAge = intval($photo['p_dateTaken'] - $birthDate);
+      foreach(self::$ranges as $name => $range)
       {
-        if($current > $photo['p_dateTaken'] || $next < $photo['p_dateTaken'])
+        if($thisAge < $range)
+        {
+          $retval[$name][] = $photo;
           break;
-
-        $retval[$week][] = $photo;
-        unset($photos[$key]);
+        }
       }
-      $week++;
-      $current += 604800;
     }
 
+    $joinWithNext = false;
+    foreach($retval as $key => $group)
+    {
+      if($joinWithNext)
+      {
+        $retval[$key] = array_merge($group, $joinWithNext);
+        unset($retval[$joinKey]);
+        $joinWithNext = $joinKey = false;
+      }
+
+      if(count($retval[$key]) < 3)
+      {
+        $joinWithNext = $group;
+        $joinKey = $key;
+      }
+    }
     return $retval;
   }
 
