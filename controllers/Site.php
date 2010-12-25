@@ -11,6 +11,16 @@ class Site
     Api::success($markup);
   }
 
+  public static function albumPhotosPhotagious($childId, $tag)
+  {
+    $userId = getSession()->get('userId');
+    $credential = Credential::getByService($userId, Credential::servicePhotagious);
+    $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
+    $photos = Photagious::getPhotos($userId, $childId, $credential['c_token'], $tag);
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'photos' => $photos, 'ids' => $ids));
+    Api::success($markup);
+  }
+
   public static function albumPhotosSmugMug($childId, $albumId, $albumKey)
   {
     $userId = getSession()->get('userId');
@@ -27,6 +37,17 @@ class Site
     $userId = getSession()->get('userId');
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $albums = Facebook::getAlbums($childId, $credential['c_token'], $credential['c_uid']);
+    $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
+    getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
+      'javascript' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+  }
+
+  public static function albumsListPhotagious($childId)
+  {
+    self::requireLogin();
+    $userId = getSession()->get('userId');
+    $credential = Credential::getByService($userId, Credential::servicePhotagious);
+    $albums = Photagious::getAlbums($childId, $credential['c_token']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
       'javascript' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
@@ -82,6 +103,26 @@ class Site
     if($credentialId)
     {
       getRoute()->redirect("/albums/list/facebook/{$childId}");
+    }
+    /* TODO else
+    {
+
+    }*/
+  }
+
+  public static function connectPhotagious()
+  {
+    self::requireLogin();   
+    $credentialId = 0;
+    if(isset($_GET['key']))
+    {
+      $credentialId = Credential::add(getSession()->get('userId'), Credential::servicePhotagious, $_GET['key']);
+    }
+
+    if($credentialId)
+    {
+      $childId = getSession()->get('currentChildId');
+      getRoute()->redirect("/albums/list/photagious/{$childId}");
     }
     /* TODO else
     {
@@ -253,6 +294,8 @@ class Site
         $fbUrl = "/albums/list/facebook/{$childId}";
       if($credential['c_service'] == Credential::serviceSmugMug)
         $smugUrl = "/albums/list/smugmug/{$childId}";
+      if($credential['c_service'] == Credential::servicePhotagious)
+        $ptgUrl = "/albums/list/photagious/{$childId}";
     }
     if(!isset($fbUrl))
     {
@@ -267,7 +310,11 @@ class Site
       getSession()->set('smugReqTok', serialize($smugReqTok));
       $smugUrl = getSmugMug()->authorize('Access=Full', 'Permissions=Read');
     }
-    getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl));
+    if(!isset($ptgUrl))
+    {
+      $ptgUrl = getConfig()->get('thirdparty')->ptg_host . '/?action=account.auth.act&callbackurl=' . urlencode(getConfig()->get('urls')->base . "/connect/photagious/{$childId}");
+    }
+    getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl, 'ptgUrl' => $ptgUrl));
   }
 
   public static function proxy($type, $service, $childId, $path)

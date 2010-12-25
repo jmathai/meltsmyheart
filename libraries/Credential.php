@@ -2,6 +2,7 @@
 class Credential
 {
   const serviceFacebook = 'facebook';
+  const servicePhotagious = 'photagious';
   const serviceSmugMug = 'smugmug';
   public static function add($userId, $service, $token, $secret=null, $uid=null)
   {

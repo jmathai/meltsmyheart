@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS `credential`;
 CREATE TABLE IF NOT EXISTS `credential` (
   `c_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `c_u_id` int(10) unsigned NOT NULL,
-  `c_service` enum('facebook','smugmug') NOT NULL,
+  `c_service` enum('facebook','photagious','smugmug') NOT NULL,
   `c_token` varchar(255) NOT NULL,
   `c_secret` varchar(255) DEFAULT NULL,
   `c_uid` varchar(255) DEFAULT NULL,
@@ -102,4 +102,3 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`u_id`),
   UNIQUE KEY `u_email` (`u_email`,`u_password`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
