@@ -4,6 +4,7 @@ class Credential
   const serviceFacebook = 'facebook';
   const servicePhotagious = 'photagious';
   const serviceSmugMug = 'smugmug';
+  const serviceSelf = 'self';
   public static function add($userId, $service, $token, $secret=null, $uid=null)
   {
     $params = array(':userId' => $userId, ':service' => $service, ':token' => $token, ':secret' => $secret, ':uid' => $uid);

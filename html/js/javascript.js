@@ -36,7 +36,43 @@ var mmh = (function() {
             }
           }, 'json');
         }
-      }
+      },
+      swfHandlers: {
+        complete: function() {
+                    console.log('complete');
+        },
+        debug: function() {
+                 console.log('debug');
+        },
+        dialog: function(numSelected, numQueued, totalQueued) {
+                  console.log('dialog');
+                  console.log(arguments);
+                  this.startUpload();
+                  return true;
+        },
+        error: function(fileObj, code, message) {
+                 console.log('error: ' + code + ' - ' + message);
+        },
+        loaded: function() {
+                  console.log('loaded');
+        },
+        progress: function() {
+                    console.log('progress');
+        },
+        queued: function(file) {
+                  console.log('queued');
+                  var queueItem = '<div id="photo-'+file.id+'" class="photo-queue-item"></div>';
+                  $("#upload-queue").prepend(queueItem);
+                  return true;
+        },
+        start: function() {
+                 console.log('start');
+                 return true;
+        },
+        success: function() {
+                   console.log('success');
+        }
+      },
     };
   }
 )();

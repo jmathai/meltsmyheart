@@ -10,3 +10,17 @@ ul#album-list li img{width:125px;}
 ul#photo-list{}
 ul#photo-list li{margin:0; padding:10px; list-style:none; float:left; height:125px; width:100px; text-align:center; font-size:.5em;}
 ul#photo-list li img{max-height:100px; max-width:100px;}
+
+button, .swfupload {
+  font-family:georgia,serif; font-size:1.25em; color:#000;
+  padding:5px;
+  background-color:gray;
+  border:solid 1px black;
+}
+
+div.photo-queue-item {
+  height:40px;
+  width:200px;
+  background-color:yellow;
+  border:solid 1px #000;
+}

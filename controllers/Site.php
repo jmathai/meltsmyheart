@@ -317,6 +317,30 @@ class Site
     getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl, 'ptgUrl' => $ptgUrl));
   }
 
+  public static function photosAdd($childId)
+  {
+    self::requireLogin();
+    $js = getTemplate()->get('javascript/photosAdd.js.php', array('userId' => getSession()->get('userId'), 'childId' => $childId));
+    getTemplate()->display('template.php', array('body' => 'photosAdd.php', 'javascript' => $js));
+  }
+
+  public static function photosAddPost($childId)
+  {
+    // swfupload doesn't send proper cookies
+    // self::requireLogin();
+    $userId = User::postHash($_POST['usrhsh']);
+    if(!$userId)
+      Api::forbidden('Could not authenticate user');
+    
+    $destPath = getConfig()->get('paths')->photos.'/original/'.date('Ym');
+    $destName = Uploader::safeName($_FILES['photo']['name']);
+    move_uploaded_file($_FILES['photo']['tmp_name'], "{$destPath}/{$destName}");
+    $args = array('userId' => $userId, 'childId' => $childId, 'photoPath' => "{$destPath}/{$destName}");
+    Resque::enqueue('mmh_fetch', 'Uploader', $args);
+    error_log(var_export($args, 1));
+    Api::success('Photo uploaded successfully', $args);
+  }
+
   public static function proxy($type, $service, $childId, $path)
   {
     $userId = getSession()->get('userId');

@@ -32,6 +32,20 @@ class User
     return !empty($userId);
   }
 
+  public static function postHash($check = null)
+  {
+    $userId = getSession()->get('userId');
+    $hash = md5('usrhsh'.$_SERVER['REMOTE_ADDR']);
+    if($check === null && $userId)
+      return "{$userId},{$hash}";
+    
+    $parts = explode(',', $check);
+    if(count($parts) == 2 && $parts[1] == $hash)
+      return $parts[0];
+    else
+      return false;
+  }
+
   public static function startSession($user)
   {
     if(!array_key_exists('u_id', $user) || !array_key_exists('u_prefs', $user) || empty($user['u_id']))

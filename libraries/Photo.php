@@ -3,9 +3,18 @@ class Photo
 {
   const greyscale = 'bw';
   const sepia = 'sp';
-  private static $ranges = array('day1' => 86400, 'week1' => 604800, 'week2' => 1209600, 'month1' => 2419200, 'month3' => 7257600, 
-    'month6' => 14515200, 'year1' => 31556926, 'year2' => 63113852, 'year3' => 94670778, 'year3plus' => PHP_INT_MAX);
-  public static function add($userId, $childId, $key, $thumbPath, $basePath, $originalPath)
+  private static $ranges = array(
+    'day1' => 86400, 
+    'week1' => 604800, 
+    'week2' => 1209600, 
+    'month1' => 3024000,  // 2419200+604800, 
+    'month3' => 8467200,  // (7257600+604800*2), 
+    'month6' => 16934400, // (14515200+2419200), 
+    'year1' => 24192000,  //(16934400+7257600), 
+    'year2' => 77629052,  // (63113852+14515200), 
+    'year3' => 109185978, //(94670778+14515200), 
+    'year3plus' => PHP_INT_MAX);
+  public static function add($userId, $childId, $key, $thumbPath=null, $basePath=null, $originalPath=null)
   {
     return getDatabase()->execute('INSERT INTO photo(p_key, p_u_id, p_c_id, p_thumbPath, p_basePath, p_originalPath, p_dateCreated)
       VALUES(:key, :userId, :childId, :thumbPath, :basePath, :originalPath, :time) ON DUPLICATE KEY UPDATE p_u_id=:userId',
@@ -147,14 +156,6 @@ class Photo
 
     return $photos;
   }
-
-  /*public static function getById($userId, $photoId)
-  {
-    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_basePath=:basePath', array(':basePath' => $basePath));
-    $retval['p_exif'] = json_decode($retval['p_exif'], 1);
-    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
-    return $retval;
-  }*/
 
   public static function getById($userId, $photoId)
   {
