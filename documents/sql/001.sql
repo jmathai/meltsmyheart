@@ -87,6 +87,18 @@ CREATE TABLE IF NOT EXISTS `photo` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `token`
+--
+
+DROP TABLE IF EXISTS `token`;
+CREATE TABLE IF NOT EXISTS `token` (
+  `t_token` varchar(255) NOT NULL,
+  UNIQUE KEY `t_token` (`t_token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 

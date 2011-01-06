@@ -166,10 +166,26 @@ class Site
     die();
   }
 
-  public static function errorGeneral($ajax = false)
+  /*public static function errorGeneral($ajax = false)
   {
     $body = getTemplate()->get('errorGeneral.php', array('page' => $_SERVER['REDIRECT_URL']));
     die();
+  }*/
+
+  public static function forgot($confirm = null)
+  {
+    getTemplate()->display('template.php', array('body' => 'forgot.php', 'confirm' => $confirm));
+  }
+
+  public static function forgotPost()
+  {
+    $user = User::getByEmailAndPassword($_POST['email'], false);
+    if(!$user)
+      getRoute()->redirect('/forgot?emaildne=1');
+
+    $token = md5(str_repeat($_POST['email'], 2));
+    Resque::enqueue('mmh_email', 'Email', array('email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
+    getRoute()->redirect('/forgot/confirm');
   }
 
   public static function home()
@@ -204,6 +220,8 @@ class Site
       $user = User::getById($userId);
       User::startSession($user);
       $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/';
+      $args = array('email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
+      Resque::enqueue('mmh_email', 'Email', $args);
     }
     getRoute()->redirect($redirectUrl);
   }
@@ -380,6 +398,30 @@ class Site
         curl_exec($ch);
       }
     }
+  }
+
+  public static function reset($email, $token)
+  {
+    if($token != md5(str_repeat($email, 2)))
+      getRoute()->run('/error/404');
+
+    getTemplate()->display('template.php', array('body' => 'reset.php', 'email' => $email, 'token' => $token));
+  }
+
+  public static function resetPost($email, $token)
+  {
+    if($_POST['password'] !== $_POST['confirmpassword'])
+      getRoute()->redirect("/reset/{$email}/{$token}?passwordmismatch=1");
+    if($token != md5(str_repeat($email, 2)))
+      getRoute()->run('/error/404');
+
+    $user = User::getByEmailAndPassword($email, false);
+    if(!$user)
+      getRoute()->run('/error/404');
+
+    User::password($user['u_id'], $user['u_email'], $_POST['password']);
+    User::startSession($user);
+    getRoute()->redirect('/');
   }
 
   private static function requireLogin()

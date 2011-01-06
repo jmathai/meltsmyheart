@@ -7,21 +7,36 @@ class User
   public static function add($email, $password, $type=self::accountTypeFree)
   {
     $params = array(':email' => $email, ':password' => self::generatePasswordHash($password, $email),
-                    ':accountType' => $type, ':key' => md5($email), ':dateCreated' => time());
+                    ':accountType' => $type, ':key' => md5(str_repeat($email, 2)), ':dateCreated' => time());
     return getDatabase()->execute('INSERT INTO `user`(u_key, u_email, u_password, u_accountType, u_dateCreated)
       VALUES(:key, :email, :password, :accountType, :dateCreated)', $params);
+  }
+
+  public static function password($userId, $email, $password)
+  {
+    $params = array(':userId' => $userId, ':password' => self::generatePasswordHash($password, $email));
+    return getDatabase()->execute('UPDATE `user` SET u_password=:password WHERE u_id=:userId', $params);
   }
 
   public static function getById($userId)
   {
     $retval = getDatabase()->one('SELECT * FROM user WHERE u_id=:userId', array(':userId' => $userId));
+    if(!$retval)
+      return false;
     $retval['u_prefs'] = json_decode($retval['u_prefs'], true);
     return $retval;
   }
 
   public static function getByEmailAndPassword($email, $password)
   {
-    $retval = getDatabase()->one('SELECT * FROM user WHERE u_email=:email AND u_password=:password', array(':email' => $email, ':password' => self::generatePasswordHash($password, $email)));
+    if($password === false)
+      $retval = getDatabase()->one('SELECT * FROM user WHERE u_email=:email', array(':email' => $email));
+    else
+      $retval = getDatabase()->one('SELECT * FROM user WHERE u_email=:email AND u_password=:password', array(':email' => $email, ':password' => self::generatePasswordHash($password, $email)));
+
+    if(!$retval)
+      return false;
+
     $retval['u_prefs'] = json_decode($retval['u_prefs'], true);
     return $retval;
   }
@@ -32,6 +47,7 @@ class User
     return !empty($userId);
   }
 
+  // cookieless authentication (i.e. photo uploads)
   public static function postHash($check = null)
   {
     $userId = getSession()->get('userId');
