@@ -1,4 +1,10 @@
+<!--html-->
+<b>
+<!--/html-->
 Someone (hopefully you) requested a link to reset your password. To do so you can click the link below.
+<!--html-->
+</b>
+<!--/html-->
 
 <?php echo getConfig()->get('urls')->base; ?>/reset/<?php echo $email; ?>/<?php echo $token; ?>
 

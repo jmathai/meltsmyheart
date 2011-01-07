@@ -1,3 +1,6 @@
 [submodule "libraries/php-resque"]
 	path = libraries/php-resque
 	url = https://github.com/chrisboulton/php-resque.git
+[submodule "libraries/swiftmailer"]
+	path = libraries/swiftmailer
+	url = https://github.com/swiftmailer/swiftmailer.git

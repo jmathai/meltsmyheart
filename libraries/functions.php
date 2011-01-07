@@ -1,15 +1,19 @@
 <?php
 function __autoload($className)
 {
-  switch($className)
+  if($className == 'Resque')
   {
-    case 'Resque':
-      include getConfig()->get('paths')->libraries . "/php-resque/lib/Resque.php";
-      break;
-    default:
-      if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
-        include $filename;
-      break;
+    include getConfig()->get('paths')->libraries . '/php-resque/lib/Resque.php';
+  }
+  elseif(preg_match('/^Swift/', $className))
+  {
+    $path = str_replace('_', '/', $className);
+    include getConfig()->get('paths')->libraries . "/swiftmailer/lib/classes/{$path}.php";
+  }
+  else
+  {
+    if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
+      include $filename;
   }
 }
 
