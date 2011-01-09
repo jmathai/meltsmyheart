@@ -71,6 +71,11 @@ class User
     getSession()->set('prefs', $user['u_prefs']);
   }
 
+  public static function upgrade($userId)
+  {
+    return getDatabase()->execute('UPDATE `user` SET u_accountType=:type WHERE u_id=:userId', array(':type' => self::accountTypePaid, ':userId' => $userId));
+  }
+
   private static function generatePasswordHash($password, $email)
   {
     return self::hash($password, md5($email));

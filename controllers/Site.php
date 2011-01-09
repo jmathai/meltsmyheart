@@ -424,6 +424,20 @@ class Site
     getRoute()->redirect('/');
   }
 
+  public static function upgrade($action)
+  {
+    self::requireLogin();
+    switch($action)
+    {
+      case 'cancel':
+        break;
+      case 'success':
+        User::upgrade(getSession()->get('userId'));
+        getRoute()->redirect('/?m=upgraded');
+        break;
+    }
+  }
+
   private static function requireLogin()
   {
     if(!getSession()->get('userId'))
