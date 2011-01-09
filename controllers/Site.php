@@ -67,6 +67,10 @@ class Site
   public static function childNew()
   {
     self::requireLogin();
+    $children = Child::getByUserId(getSession()->get('userId'));
+    if(count($children) >= Child::limitFree)
+      self::requireUpgrade();
+
     getTemplate()->display('template.php', array('body' => 'childNew.php'));
   }
 
@@ -424,16 +428,23 @@ class Site
     getRoute()->redirect('/');
   }
 
-  public static function upgrade($action)
+  public static function upgrade($action = null)
   {
     self::requireLogin();
     switch($action)
     {
-      case 'cancel':
+      case 'cancel': // TODO: cancel view
+        getTemplate()->display('template.php', array('body' => 'cancel.php'));
         break;
       case 'success':
-        User::upgrade(getSession()->get('userId'));
+        $userId = getSession()->get('userId');
+        User::upgrade($userId);
+        $user = User::getById($userId);
+        User::startSession($user);
         getRoute()->redirect('/?m=upgraded');
+        break;
+      default:
+        getTemplate()->display('template.php', array('body' => 'upgrade.php'));
         break;
     }
   }
@@ -447,6 +458,16 @@ class Site
       else
         $url = '/login';
       getRoute()->redirect($url);
+    }
+  }
+
+  private static function requireUpgrade()
+  {
+    self::requireLogin();
+    if(getSession()->get('accountType') != User::accountTypePaid)
+    {
+      getRoute()->run('/upgrade');
+      die();
     }
   }
 }

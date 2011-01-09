@@ -1,6 +1,7 @@
 <?php
 class Child
 {
+  const limitFree = 1;
   public static function add($userId, $name, $birthdate, $domain)
   {
     $params = array(':userId' => $userId, ':name' => $name, ':birthdate' => $birthdate, ':domain' => $domain);

@@ -68,6 +68,7 @@ class User
       return;
 
     getSession()->set('userId', $user['u_id']);
+    getSession()->set('accountType', $user['u_accountType']);
     getSession()->set('prefs', $user['u_prefs']);
   }
 
