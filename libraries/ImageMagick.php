@@ -46,11 +46,12 @@ class ImageMagick
       $quality = 90; // vree said so
       if($dest === false)
       {
-        $command = "{$this->pathExe}convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" \"{$this->image}\" \"{$this->image}\"";
+        $command = "{$this->pathExe}convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" {$this->imageEscaped} {$this->imageEscaped}";
       }
       else
       {
-        $command = "{$this->pathExe}convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" \"{$this->image}\" \"{$dest}\"";
+        $dest = escapeshellarg($dest);
+        $command = "{$this->pathExe}convert -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" {$this->imageEscaped} {$dest}";
       }
       exec($command);
       return true;
@@ -69,8 +70,20 @@ class ImageMagick
   *******************************************************************************************/
   function desaturate($dest = false) {
     if(!$dest)
-      $dest = $this->image;
-    $command = "{$this->pathExe}convert -colorspace GRAY \"{$this->image}\" \"{$dest}\"";
+      $dest = $this->imageEscaped;
+    else
+      $dest = escapeshellarg($dest);
+    $command = "{$this->pathExe}convert -colorspace GRAY {$this->imageEscaped} {$dest}";
+    exec($command);
+  }
+
+  public function contrast($dest = false)
+  {
+    if(!$dest)
+      $dest = $this->imageEscaped;
+    else
+      $dest = escapeshellarg($dest);
+    $command = "{$this->pathExe}convert {$this->imageEscaped} -fx \"(1.0/(1.0+exp(10.0*(0.5-u)))-0.006693)*1.0092503\" {$dest}";
     exec($command);
   }
   
@@ -106,16 +119,17 @@ class ImageMagick
     
     if($dest === false)
     {
-      $cmd    = "{$this->pathExe}mogrify -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->image}";
+      $cmd    = "{$this->pathExe}mogrify -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->imageEscaped}";
     }
     else
     {
-      $cmd    = "{$this->pathExe}convert -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->image} {$dest}";
+      $dest = escapeshellarg($dest);
+      $cmd    = "{$this->pathExe}convert -gravity Center -crop {$dWidth}x{$dHeight}+0+0 {$this->imageEscaped} {$dest}";
     }
 
     exec($cmd); // perform initial crop maintaining source size
     
-    $finalSrc = $dest === false ? $this->image : $dest;
+    $finalSrc = $dest === false ? $this->imageEscaped : $dest;
     $command = "mogrify -size {$width}x{$height} -filter Lanczos -quality {$quality} +profile \"*\" -resize \"{$width}x{$height}>\" {$finalSrc}";
     exec($command); // perform resize to make image destination size
   }
@@ -136,6 +150,7 @@ class ImageMagick
   function composite($arr_src, $dest, $x_offset, $y_offset)
   {
     $continue = true;
+    $dest = escapeshellarg($dest);
     if(count($arr_src) == 2)
     {
       $img_1_info = @getimagesize($arr_src[0]);
@@ -167,11 +182,15 @@ class ImageMagick
   * Output
   *   boolean
   *******************************************************************************************/
-  function square($src = false, $dest = false)
+  function square($dest = false)
   {
-    $dest = $dest !== false ? $dest : $src;
+    die();
+    $imageInfo = @getimagesize($dest);
 
-    $imageInfo = @getimagesize($src);
+    if(!$dest)
+      $dest = $this->imageEscaped;
+    else
+      $dest = escapeshellarg($dest);
 
     if($imageInfo !== false)
     {
@@ -198,26 +217,28 @@ class ImageMagick
   *******************************************************************************************/
   function sepia($dest) {
     $this->desaturate($dest);
-    if(!$dest)
-      $dest = $this->image;
-    $command = "{$this->pathExe}convert -colorize 0/14/47 \"{$this->image}\" \"{$dest}\"";
+    $dest = escapeshellarg($dest);
+    $command = "{$this->pathExe}convert -colorize 0/14/47 \"{$this->imageEscaped}\" \"{$dest}\"";
     exec($command);
   }
 
   function convert($src, $dest, $extras = false)
   {
+    $dest = escapeshellarg($dest);
     $cmd = "{$this->pathExe}convert {$src} {$dest}";
     exec($cmd);
   }
   
-  function exiftran($src = false, $dest = false)
+  function exiftran($src, $dest = false)
   {
+    $src = escapeshellarg($src);
     if($dest === false)
     {
       $cmd = "exiftran -ai {$src}";
     }
     else
     {
+      $dest = escapeshellarg($dest);
       $cmd = "exiftran -a {$src} -o {$dest}";
     }
     exec($cmd);
@@ -247,6 +268,7 @@ class ImageMagick
   function ImageMagick($imageSrc, $pathExe = '')
   {
     $this->image = $imageSrc;
+    $this->imageEscaped = escapeshellarg($imageSrc);
     $this->pathExe = $pathExe;
   }
 }

@@ -1,6 +1,7 @@
 <?php
 class Photo
 {
+  const contrast = 'ct';
   const greyscale = 'bw';
   const sepia = 'sp';
   private static $ranges = array(
@@ -112,6 +113,10 @@ class Photo
           case self::sepia:
             $im = new ImageMagick($fullCustomPath, $pathExe);
             $im->sepia();
+            break;
+          case self::contrast:
+            $im = new ImageMagick($fullCustomPath, $pathExe);
+            $im->contrast();
             break;
         }
       }
