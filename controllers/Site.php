@@ -89,14 +89,16 @@ class Site
     getRoute()->redirect("/photos/source/{$childId}");
   }
 
-  public static function connectFacebook($childId)
+  public static function connectFacebook($childId = null)
   {
     self::requireLogin();
     $credentialId = 0;
     if(isset($_GET['code']))
     {
-      $redirectUrl = getConfig()->get('urls')->base."/connect/facebook/{$childId}";
-      $resp = getFacebook()->fetchAccessToken($_GET['code'], $redirectUrl);
+      $fbRedirectUrl = getConfig()->get('urls')->base."/connect/facebook";
+      if($childId)
+        $fbRedirectUrl .= "/{$childId}";
+      $resp = getFacebook()->fetchAccessToken($_GET['code'], $fbRedirectUrl);
       $token = $resp['access_token'];
       $profile = getFacebook()->api('/me', 'GET', array('access_token' => $token));
       if(empty($token) || !isset($profile['id']))
@@ -106,12 +108,17 @@ class Site
 
     if($credentialId)
     {
-      getRoute()->redirect("/albums/list/facebook/{$childId}");
+      $redirectUrl = getSession()->get('redirectUrl');
+      if(empty($redirectUrl))
+        $redirectUrl = "/albums/list/facebook/{$childId}";
+      else
+        getSession()->set('redirectUrl', null); // TODO implement removal
+      getRoute()->redirect($redirectUrl);
     }
-    /* TODO else
+    else
     {
-
-    }*/
+      getRoute()->run('/error/general');
+    }
   }
 
   public static function connectPhotagious()
@@ -141,7 +148,7 @@ class Site
     if(isset($_GET['oauth_token']))
     {
       $smugReqTok = unserialize(getSession()->get('smugReqTok'));
-      getSession()->set('smugReqTok', null);
+      getSession()->set('smugReqTok', null); // TODO implement removal
       getSmugMug()->setToken("id={$smugReqTok['Token']['id']}", "Secret={$smugReqTok['Token']['Secret']}");
       $token = getSmugMug()->auth_getAccessToken();
       if(empty($token['Token']['id']))
@@ -151,12 +158,16 @@ class Site
     if($credentialId)
     {
       $childId = getSession()->get('currentChildId');
-      getRoute()->redirect("/albums/list/smugmug/{$childId}");
+      getSession()->set('currentChildId', null); // TODO implement removal
+      $redirectUrl = getSession()->get('redirectUrl');
+      if(empty($redirectUrl))
+        $redirectUrl = "/albums/list/smugmug/{$childId}";
+      getRoute()->redirect($redirectUrl);
     }
-    /* TODO else
+    else
     {
-
-    }*/
+      getRoute()->run('/error/general');
+    }
   }
 
   public static function error404($ajax = null)
@@ -170,11 +181,11 @@ class Site
     die();
   }
 
-  /*public static function errorGeneral($ajax = false)
+  public static function errorGeneral($ajax = false)
   {
     $body = getTemplate()->get('errorGeneral.php', array('page' => $_SERVER['REDIRECT_URL']));
     die();
-  }*/
+  }
 
   public static function forgot($confirm = null)
   {
@@ -323,7 +334,7 @@ class Site
     {
       $fbUrl = getFacebook()->getAuthorizeUrl(
                   getConfig()->get('urls')->base."/connect/facebook/{$childId}",
-                  array('scope' => 'email,offline_access,publish_stream,friends_photos,user_photos')
+                  array('scope' => getConfig()->get('thirdparty')->fb_perms)
                 );
     }
     if(!isset($smugUrl))
@@ -426,6 +437,35 @@ class Site
     User::password($user['u_id'], $user['u_email'], $_POST['password']);
     User::startSession($user);
     getRoute()->redirect('/');
+  }
+
+  public static function share()
+  {
+    $creds = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
+    if(!$creds)
+    {
+      getSession()->set('redirectUrl', '/share');
+      $fbUrl = getFacebook()->getAuthorizeUrl(
+                  getConfig()->get('urls')->base."/connect/facebook",
+                  array('scope' => getConfig()->get('thirdparty')->fb_perms)
+                );
+      getTemplate()->display('template.php', array('body' => 'shareConnect.php', 'fbUrl' => $fbUrl));
+    }
+    else
+    {
+      $children = Child::getByUserId(getSession()->get('userId'));
+      getTemplate()->display('template.php', array('body' => 'share.php', 'children' => $children));
+    }
+  }
+
+  public static function shareFacebook($childId)
+  {
+    // retrieve json template
+  }
+
+  public static function shareFacebookPost($childId)
+  {
+    // post to facebook
   }
 
   public static function upgrade($action = null)

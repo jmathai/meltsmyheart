@@ -24,3 +24,10 @@ div.photo-queue-item {
   background-color:yellow;
   border:solid 1px #000;
 }
+
+/* from sr */
+.fb-font{ color:#333; font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size:13px; }
+.status{ margin: 5px 40px; width:500px; }
+.status div.pic { float:left; height:70px; margin:0 10px 0 0; }
+.status p { border-left:2px solid #ccc; margin-left:60px; padding-left: 10px; color: #808080; font-size:11px; }
+.status p div { margin-top:3px; }
