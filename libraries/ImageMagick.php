@@ -184,9 +184,7 @@ class ImageMagick
   *******************************************************************************************/
   function square($dest = false)
   {
-    die();
-    $imageInfo = @getimagesize($dest);
-
+    $imageInfo = getimagesize($this->image);
     if(!$dest)
       $dest = $this->imageEscaped;
     else
@@ -195,7 +193,7 @@ class ImageMagick
     if($imageInfo !== false)
     {
       $floor  = min($imageInfo[0], $imageInfo[1]);
-      $cmd    = "{$this->pathExe}convert -gravity Center -crop {$floor}x{$floor}+0+0 {$src} {$dest}";
+      $cmd    = "{$this->pathExe}convert -gravity Center -crop {$floor}x{$floor}+0+0 {$this->imageEscaped} {$dest}";
       exec($cmd);
     }
   }
@@ -254,8 +252,9 @@ class ImageMagick
   * Output
   *   boolean
   *******************************************************************************************/
-  function image($src)
-  {
+  function image($src) {
+    $this->image = $src;
+    $this->imageEscaped = escapeshellarg($src);
   }
 
   /*******************************************************************************************
@@ -267,8 +266,7 @@ class ImageMagick
   *******************************************************************************************/
   function ImageMagick($imageSrc, $pathExe = '')
   {
-    $this->image = $imageSrc;
-    $this->imageEscaped = escapeshellarg($imageSrc);
+    $this->image($imageSrc);
     $this->pathExe = $pathExe;
   }
 }

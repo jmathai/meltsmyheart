@@ -4,6 +4,7 @@ class Photo
   const contrast = 'ct';
   const greyscale = 'bw';
   const sepia = 'sp';
+  const square = 'sq';
   private static $ranges = array(
     'day1' => 86400, 
     'week1' => 604800, 
@@ -98,6 +99,12 @@ class Photo
     $customPath = "/custom/{$datePart}/{$fileName}";
     $fullCustomPath = getConfig()->get('paths')->photos . $customPath;
     $im = new ImageMagick($fullBasePath, $pathExe);
+    if(array_search(self::square, $options) !== false)
+    {
+      $im->square($fullCustomPath);
+      $im->image($fullCustomPath);
+    }
+
     $im->scale($width, $height, $fullCustomPath, true);   
 
     if(count($options) > 0)
