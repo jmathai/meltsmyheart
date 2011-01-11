@@ -1,8 +1,11 @@
+/*
+ * #0a77aa blue
+ * #de3970 pink
+ * #8ed6c5 green
+ * #df7112 orange
+ * #f2db33 yellow
+ */
 body {font-family:"Trebuchet MS","Lucida Grande",georgia,serif; font-size:1em; color:#000; padding:0; margin:0; }
-h1{ font-size:1.4em; color:#c01f55; text-transform:capitalize; }
-h2{ font-size:1.35em; color:#327085; }
-div.container{ width:760px; margin:auto; padding:0 10px; position:relative; }
-span.child-name{ text-transform:capitalize; }
 
 /* header */
 div#header{ background:url("/img/sprite-main-aaa.png") repeat-x 0 0; height:133px; }
@@ -30,6 +33,35 @@ div#header-bar{ background:url("/img/sprite-main-aaa.png") repeat-x 0 -133px; he
 
 /* // header */
 
+/* content */
+div#content{ padding:10px 0; }
+h1, h2, h3{ margin:0; padding:0; }
+h1{ font-size:1.4em; color:#c01f55; text-transform:capitalize; }
+h2{ font-size:1.35em; color:#327085; }
+p{ margin:0; padding:0 0 15px 0; }
+button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-main-aaa.png") no-repeat 0 -240px; width:150px; height:47px; margin:5px 10px 5px 0; border:0; }
+button div{ margin-top:-7px; }
+div.container{ width:760px; margin:auto; padding:0 10px; position:relative; }
+.child-name{ text-transform:capitalize; }
+
+/* // content */
+
+/* photo */
+img.ridge-sm {
+  border-top-width: 4px;
+  border-bottom-width: 4px;
+  border-top-style: double;
+  border-bottom-style: double;
+  border-top-color: #f2db33;
+  border-bottom-color: #f2db33;
+}
+img.ridge-sm { padding: 3px 0px; margin-right:3px; }
+/* // photo */
+
+/* home */
+ul.home-photos, ul.home-photos li{ display:inline; list-style-type:none; margin:0; padding:0; }
+/* // home */
+
 ul#album-list{width:150px; float:left;}
 ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}
 ul#album-list li img{width:125px;}
@@ -38,12 +70,12 @@ ul#photo-list{}
 ul#photo-list li{margin:0; padding:10px; list-style:none; float:left; height:125px; width:100px; text-align:center; font-size:.5em;}
 ul#photo-list li img{max-height:100px; max-width:100px;}
 
-button, .swfupload {
+/*button, .swfupload {
   font-family:georgia,serif; font-size:1.25em; color:#000;
   padding:5px;
   background-color:gray;
   border:solid 1px black;
-}
+}*/
 
 div.photo-queue-item {
   height:40px;
