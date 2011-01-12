@@ -36,13 +36,23 @@ div#header-bar{ background:url("/img/sprite-main-aaa.png") repeat-x 0 -133px; he
 /* content */
 div#content{ padding:10px 0; }
 h1, h2, h3{ margin:0; padding:0; }
-h1{ font-size:1.4em; color:#c01f55; text-transform:capitalize; }
+h1{ font-size:1.4em; color:#c01f55; }
 h2{ font-size:1.35em; color:#327085; }
+h3{ font-size:1.15em; color:#404040; }
 p{ margin:0; padding:0 0 15px 0; }
 button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-main-aaa.png") no-repeat 0 -240px; width:150px; height:47px; margin:5px 10px 5px 0; border:0; }
 button div{ margin-top:-7px; }
+form{ margin:0; padding:0; display:inline; }
+label{ font-size:1.15em; color:#404040; display:block; position:relative; }
+label em{ font-size:.6em; position:relative; top:-2px; left:3px; }
+input, textarea { border:solid 1px #f2db33; font-size:1em; color:#404040; padding:4px; }
+label + input, label + textarea{ margin-bottom:20px; display:block; }
 div.container{ width:760px; margin:auto; padding:0 10px; position:relative; }
 .child-name{ text-transform:capitalize; }
+.error { height:15px; background-color:#f2db33; font-size:11px; border:1px solid #E1E16D; padding:4px 10px; color:#000; margin:0 12px; display:none; -moz-border-radius:4px; -webkit-border-radius:4px; -moz-border-radius-bottomleft:0; -moz-border-radius-topleft:0; -webkit-border-bottom-left-radius:0; -webkit-border-top-left-radius:0; -moz-box-shadow:0 0 6px #ddd; -webkit-box-shadow:0 0 6px #ddd; }
+.error em { display:block; width:0; height:0; border:10px solid; border-color:transparent #f2db33 transparent transparent; position:absolute; bottom:14px; top:2px; left:-18px; }
+div#error, div#message, div#debug {position:absolute; width:700px; margin-left:20px; padding:10px; display:none; font-size:20px;z-index:999999;}
+div#error p, div#message p, div#debug p {display:block; padding:5px 20px; font-size:12px;}
 
 /* // content */
 
@@ -61,6 +71,10 @@ img.ridge-sm { padding: 3px 0px; margin-right:3px; }
 /* home */
 ul.home-photos, ul.home-photos li{ display:inline; list-style-type:none; margin:0; padding:0; }
 /* // home */
+
+/* child new */
+
+/* // child new */
 
 ul#album-list{width:150px; float:left;}
 ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}

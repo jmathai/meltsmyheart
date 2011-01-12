@@ -20,4 +20,9 @@ class Child
     $params = array(':userId' => $userId);
     return getDatabase()->all('SELECT * FROM child WHERE c_u_id=:userId', $params);
   }
+
+  public static function getPageUrl($child)
+  {
+    return "/child/{$child['c_domain']}";
+  }
 }

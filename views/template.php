@@ -2,6 +2,7 @@
 <head>
   <title></title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
+  <link rel="stylesheet" type="text/css" href="/css/ui/jquery-ui-1.8.7.custom.css">
 </head>
 <body>
   <div id="header">
@@ -19,6 +20,10 @@
   <div id="header-bar"></div>
   <div id="content" class="container">
     <?php include $body; ?>
+    <div id="modal"></div>
+    <div id="message" class="ui-state-highlight"></div>
+    <div id="error" class="ui-state-error ui-state-error-text"></div>
+    <div id="tooltip"></div>
   </div>
   <div id="footer" class="container">
     <ul>
@@ -28,10 +33,17 @@
   <script src="/js/jquery.js"></script>
   <script src="/js/swfupload.js"></script>
   <script src="/js/plugins/swfupload.queue.js"></script>
+  <script src="/js/plugins/jquery-ui-1.8.7.custom.min.js"></script>
+  <script src="/js/plugins/jquery.tools.min.js"></script>
   <script src="/js/javascript.js"></script>
-  <?php if(isset($javascript)) { ?>
+  <?php if(isset($js)) { ?>
     <script>
-      <?php echo $javascript; ?>
+      $(document).ready(function() {
+        <?php echo $js; ?>
+        <?php if(isset($_GET['e'])) { ?>
+          mmh.displayError(<?php echo json_encode(getString($_GET['e'])); ?>);
+        <?php } ?>
+      });
     </script>
   <?php } ?>
 </body>

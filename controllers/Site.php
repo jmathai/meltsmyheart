@@ -39,7 +39,7 @@ class Site
     $albums = Facebook::getAlbums($childId, $credential['c_token'], $credential['c_uid']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function albumsListPhotagious($childId)
@@ -50,7 +50,7 @@ class Site
     $albums = Photagious::getAlbums($childId, $credential['c_token']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function albumsListSmugMug($childId)
@@ -61,7 +61,13 @@ class Site
     getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
+      'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
+  }
+
+  public static function childCheck()
+  {
+    $child = Child::getByDomain($_POST['value']);
+    Api::success(empty($child), "Checking if {$_POST['value']} exists");
   }
 
   public static function childNew()
@@ -71,7 +77,7 @@ class Site
     if(count($children) >= Child::limitFree)
       self::requireUpgrade();
 
-    getTemplate()->display('template.php', array('body' => 'childNew.php'));
+    getTemplate()->display('template.php', array('body' => 'childNew.php', 'js' => getTemplate()->get('javascript/childNew.js.php')));
   }
 
   public static function childPage($name)
@@ -85,7 +91,11 @@ class Site
   public static function childNewPost()
   {
     self::requireLogin();
-    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], strtotime($_POST['childBirthDate']), $_POST['childDomain']);
+    $date = strtotime($_POST['childBirthDate']);
+    if($date === false || empty($_POST['childName']) || empty($_POST['childDomain']))
+      getRoute()->redirect('/child/new?e=invalidFields');
+
+    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $date, $_POST['childDomain']);
     getRoute()->redirect("/photos/source/{$childId}");
   }
 
@@ -196,7 +206,7 @@ class Site
   {
     $user = User::getByEmailAndPassword($_POST['email'], false);
     if(!$user)
-      getRoute()->redirect('/forgot?emaildne=1');
+      getRoute()->redirect('/forgot?e=emaildne');
 
     $token = md5(str_repeat($_POST['email'], 2));
     Resque::enqueue('mmh_email', 'Email', array('email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
@@ -313,7 +323,7 @@ class Site
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'photosSelect.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'javascript' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'js' => getTemplate()->get('javascript/photoSelect.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function photosSource($childId)
@@ -354,7 +364,7 @@ class Site
   {
     self::requireLogin();
     $js = getTemplate()->get('javascript/photosAdd.js.php', array('userId' => getSession()->get('userId'), 'childId' => $childId));
-    getTemplate()->display('template.php', array('body' => 'photosAdd.php', 'javascript' => $js));
+    getTemplate()->display('template.php', array('body' => 'photosAdd.php', 'js' => $js));
   }
 
   public static function photosAddPost($childId)

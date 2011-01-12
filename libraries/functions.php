@@ -41,6 +41,15 @@ function getSmugMug($userToken=null, $userSecret=null)
   return $smugMug;
 }
 
+function getString($token)
+{
+  $strings = include getConfig()->get('paths')->libraries . '/strings.php';
+  if(isset($strings[$token]))
+    return $strings[$token];
+
+  return '';
+}
+
 function quoteEncode($str)
 {
   return htmlentities($str);
