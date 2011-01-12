@@ -228,7 +228,8 @@ class Site
         $children[$key]['photos'] = Photo::getByChild($userId, $value['c_id']);
       }
     }
-    getTemplate()->display('template.php', array('body' => $template, 'children' => $children, 'cntChildren' => count($children)));
+    $js = getTemplate()->get('javascript/home.js.php');
+    getTemplate()->display('template.php', array('body' => $template, 'children' => $children, 'cntChildren' => count($children), 'js' => $js));
   }
 
   public static function join()

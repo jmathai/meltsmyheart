@@ -49,8 +49,6 @@ input, textarea { border:solid 1px #f2db33; font-size:1em; color:#404040; paddin
 label + input, label + textarea{ margin-bottom:20px; display:block; }
 div.container{ width:760px; margin:auto; padding:0 10px; position:relative; }
 .child-name{ text-transform:capitalize; }
-.error { height:15px; background-color:#f2db33; font-size:11px; border:1px solid #E1E16D; padding:4px 10px; color:#000; margin:0 12px; display:none; -moz-border-radius:4px; -webkit-border-radius:4px; -moz-border-radius-bottomleft:0; -moz-border-radius-topleft:0; -webkit-border-bottom-left-radius:0; -webkit-border-top-left-radius:0; -moz-box-shadow:0 0 6px #ddd; -webkit-box-shadow:0 0 6px #ddd; }
-.error em { display:block; width:0; height:0; border:10px solid; border-color:transparent #f2db33 transparent transparent; position:absolute; bottom:14px; top:2px; left:-18px; }
 div#error, div#message, div#debug {position:absolute; width:700px; margin-left:20px; padding:10px; display:none; font-size:20px;z-index:999999;}
 div#error p, div#message p, div#debug p {display:block; padding:5px 20px; font-size:12px;}
 
@@ -104,3 +102,28 @@ div.photo-queue-item {
 .status div.pic { float:left; height:70px; margin:0 10px 0 0; }
 .status p { border-left:2px solid #ccc; margin-left:60px; padding-left: 10px; color: #808080; font-size:11px; }
 .status p div { margin-top:3px; }
+
+
+/* jquery tools */
+.error { height:15px; background-color:#f2db33; font-size:11px; border:1px solid #E1E16D; padding:4px 10px; color:#000; margin:0 12px; display:none; -moz-border-radius:4px; -webkit-border-radius:4px; -moz-border-radius-bottomleft:0; -moz-border-radius-topleft:0; -webkit-border-bottom-left-radius:0; -webkit-border-top-left-radius:0; -moz-box-shadow:0 0 6px #ddd; -webkit-box-shadow:0 0 6px #ddd; }
+.error em { display:block; width:0; height:0; border:10px solid; border-color:transparent #f2db33 transparent transparent; position:absolute; bottom:14px; top:2px; left:-18px; }
+/* tooltip styling. by default the element to be styled is .tooltip  */
+.tooltip {
+	display:none;
+	background:transparent url(/img/tooltip-container.png);
+	font-size:.75em;
+	height:45px;
+	width:199px;
+	padding:20px 5px 5px 5px;
+	color:#fff;	
+  text-align:center;
+  margin-top:10px;
+}
+.tooltip.bottom {
+	background:transparent url(/img/tooltip-container-bottom.png);
+  margin-top:-10px;
+  padding-top:33px;
+  padding-bottom:0;
+  height:37px;
+}
+/* // jquery tools */

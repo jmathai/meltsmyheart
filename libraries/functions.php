@@ -17,6 +17,11 @@ function __autoload($className)
   }
 }
 
+function displayAge($born, $taken)
+{
+  return '3 days';
+}
+
 function getFacebook()
 {
   static $facebook;
@@ -48,6 +53,11 @@ function getString($token)
     return $strings[$token];
 
   return '';
+}
+
+function safe($str)
+{
+  return strip_tags($str);
 }
 
 function quoteEncode($str)
