@@ -39,6 +39,7 @@ h1, h2, h3{ margin:0; padding:0; }
 h1{ font-size:1.4em; color:#c01f55; }
 h2{ font-size:1.35em; color:#327085; }
 h3{ font-size:1.15em; color:#404040; }
+h4{ font-size:1.1em; color:#fff; margin:0; padding:0; }
 p{ margin:0; padding:0 0 15px 0; }
 button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-main-aaa.png") no-repeat 0 -240px; width:150px; height:47px; margin:5px 10px 5px 0; border:0; }
 button div{ margin-top:-7px; }
@@ -54,6 +55,28 @@ div#error, div#message, div#debug {position:absolute; width:700px; margin-left:2
 div#error p, div#message p, div#debug p {display:block; padding:5px 20px; font-size:12px;}
 
 /* // content */
+
+/* footer */
+div#footer{
+  background-color:#daa2b5;
+  color:#fff;
+  font-size:smaller;
+  padding:0 0 10px 0;
+}
+div#footer hr {
+  border:0;
+  margin:0;
+  padding:0;
+  height:20px;
+  background-color:#ba8a9a;
+}
+div#footer div ul{ height:20px; margin:10px 0 0; padding:0;}
+div#footer div ul li{ float:left; list-style-type:none; padding:0 10px; }
+div#footer div ul li a{ font-size:.8em; color:#fff; }
+div#footer div p{ margin:20px 0 0; padding:0; }
+div#footer div p a{ color:#0a77aa; }
+
+/* // footer */
 
 /* photo */
 img.ridge-sm {
