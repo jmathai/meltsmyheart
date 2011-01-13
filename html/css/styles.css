@@ -43,6 +43,7 @@ p{ margin:0; padding:0 0 15px 0; }
 button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-main-aaa.png") no-repeat 0 -240px; width:150px; height:47px; margin:5px 10px 5px 0; border:0; }
 button div{ margin-top:-7px; }
 form{ margin:0; padding:0; display:inline; }
+form em { font-size:.75em; }
 label{ font-size:1.15em; color:#404040; display:block; position:relative; }
 label em{ font-size:.6em; position:relative; top:-2px; left:3px; }
 input, textarea { border:solid 1px #f2db33; font-size:1em; color:#404040; padding:4px; }

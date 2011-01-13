@@ -145,4 +145,8 @@ $.tools.validator.fn("[check-name]", "This name is already in use.", function(in
           });
   return ret;
 });
-
+$.tools.validator.fn("[data-equals]", "Does not match $1.", function(input) {
+	var name = input.attr("data-equals"),
+		 field = this.getInputs().filter("[name=" + name + "]"); 
+	return input.val() == field.val() ? true : [name]; 
+});

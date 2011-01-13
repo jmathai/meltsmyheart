@@ -77,7 +77,8 @@ class Site
     if(count($children) >= Child::limitFree)
       self::requireUpgrade();
 
-    getTemplate()->display('template.php', array('body' => 'childNew.php', 'js' => getTemplate()->get('javascript/childNew.js.php')));
+    $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'childNewForm'));
+    getTemplate()->display('template.php', array('body' => 'childNew.php', 'js' => $js));
   }
 
   public static function childPage($name)
@@ -216,7 +217,7 @@ class Site
   public static function home()
   {
     $template = 'splash.php';
-    $children = null;
+    $children = $js = null;
     if(User::isLoggedIn())
     {
       $userId = getSession()->get('userId');
@@ -227,20 +228,26 @@ class Site
       {
         $children[$key]['photos'] = Photo::getByChild($userId, $value['c_id']);
       }
+      $js = getTemplate()->get('javascript/home.js.php');
     }
-    $js = getTemplate()->get('javascript/home.js.php');
     getTemplate()->display('template.php', array('body' => $template, 'children' => $children, 'cntChildren' => count($children), 'js' => $js));
   }
 
   public static function join()
   {
-    getTemplate()->display('template.php', array('body' => 'join.php'));
+    $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'joinForm'));
+    getTemplate()->display('template.php', array('body' => 'join.php', 'js' => $js));
   }
  
   public static function joinPost()
   {
+    $redirectUrl = '/join?e=accountCreationError';
+    if(empty($_POST['email']) || empty($_POST['password']))
+      getRoute()->redirect($redirectUrl);
+    elseif(!User::getByEmailAndPassword($_POST['email'], $_POST['password']))
+      getRoute()->redirect('/join?e=emailAlreadyExists');
+
     $userId = User::add($_POST['email'], $_POST['password']);
-    $redirectUrl = '/join?e=couldNotCreate';
     if($userId)
     {
       $user = User::getById($userId);
@@ -255,7 +262,7 @@ class Site
   public static function login()
   {
     $r = isset($_GET['r']) ? $_GET['r'] : '/';
-    $js = getTemplate()->get('javascript/login.js.php');
+    $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'loginForm'));
     getTemplate()->display('template.php', array('body' => 'login.php', 'js' => $js, 'r' => quoteEncode($r)));
   }
 

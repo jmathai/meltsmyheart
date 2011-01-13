@@ -10,5 +10,7 @@
 
     <input type="hidden" name="r" value="<?php echo $r; ?>">
     <button type="submit">Login</button>
+    <br>
+    <em>Need an account? <a href="/join">Join here</a>.</em>
   </form>
 </p>
