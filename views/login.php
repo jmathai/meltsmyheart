@@ -1,9 +1,14 @@
-<h1>Login or something</h1>
-<form method="post">
-  Email:<br>
-  <input type="text" name="email"><br><br>
-  Password<br>
-  <input type="password" name="password"><br>
-  <input type="hidden" name="r" value="<?php echo $r; ?>">
-  <button type="submit">Login</button>
-</form>
+<h1>Login to your account</h1>
+
+<p>
+  <form method="post" id="loginForm">
+    <label for="email">Email</label>
+    <input type="email" name="email" required="required" />
+
+    <label for="password">Password</label>
+    <input type="password" name="password" required="required">
+
+    <input type="hidden" name="r" value="<?php echo $r; ?>">
+    <button type="submit">Login</button>
+  </form>
+</p>

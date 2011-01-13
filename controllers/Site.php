@@ -255,12 +255,13 @@ class Site
   public static function login()
   {
     $r = isset($_GET['r']) ? $_GET['r'] : '/';
-    getTemplate()->display('template.php', array('body' => 'login.php', 'r' => quoteEncode($r)));
+    $js = getTemplate()->get('javascript/login.js.php');
+    getTemplate()->display('template.php', array('body' => 'login.php', 'js' => $js, 'r' => quoteEncode($r)));
   }
 
   public static function loginPost()
   {
-    $redirectUrl = '/login?r=' . quoteDecode($_POST['r']);
+    $redirectUrl = '/login?e=loginFailed&r=' . quoteDecode($_POST['r']);
     $user = User::getByEmailAndPassword($_POST['email'], $_POST['password']);
     if($user)
     {
