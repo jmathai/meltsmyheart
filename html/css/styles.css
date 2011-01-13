@@ -51,7 +51,7 @@ label em{ font-size:.6em; position:relative; top:-2px; left:3px; }
 input, textarea { border:solid 1px #f2db33; font-size:1em; color:#404040; padding:4px; }
 label + input, label + textarea{ margin-bottom:20px; display:block; }
 div.container{ width:760px; margin:auto; padding:0 10px; position:relative; }
-.child-name{ text-transform:capitalize; }
+.child-name, .capitalize{ text-transform:capitalize; }
 div#error, div#message, div#debug {position:absolute; width:700px; margin-left:20px; padding:10px; display:none; font-size:20px;z-index:999999;}
 div#error p, div#message p, div#debug p {display:block; padding:5px 20px; font-size:12px;}
 /* page specific */
@@ -98,13 +98,18 @@ ul.home-photos, ul.home-photos li{ display:inline; list-style-type:none; margin:
 
 /* // child new */
 
-ul#album-list{width:150px; float:left;}
+ul#album-list li { float:left; list-style-type:none; text-align:center; width:33%; margin:10px 0; font-size:.8em; }
+ul#album-list li img{ height:125px; margin:auto; border:0; }
+
+ul#photo-list li{ float:left; list-style-type:none; text-align:center; width:25%; margin:10px 0; font-size:.7em;}
+ul#photo-list li img{ height:75px; margin:auto; border:0; }
+/*ul#album-list{width:150px; float:left;}
 ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}
 ul#album-list li img{width:125px;}
 
 ul#photo-list{}
 ul#photo-list li{margin:0; padding:10px; list-style:none; float:left; height:125px; width:100px; text-align:center; font-size:.5em;}
-ul#photo-list li img{max-height:100px; max-width:100px;}
+ul#photo-list li img{max-height:100px; max-width:100px;}*/
 
 /*button, .swfupload {
   font-family:georgia,serif; font-size:1.25em; color:#000;

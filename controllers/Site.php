@@ -3,7 +3,11 @@ class Site
 {
   public static function albumPhotosFacebook($childId, $albumId)
   {
+    self::requireLogin();
     $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(empty($child))
+      getRoute()->run('/error/404/ajax');
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Facebook::getPhotos($userId, $childId, $credential['c_token'], $albumId);
@@ -13,7 +17,11 @@ class Site
 
   public static function albumPhotosPhotagious($childId, $tag)
   {
+    self::requireLogin();
     $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(empty($child))
+      getRoute()->run('/error/404/ajax');
     $credential = Credential::getByService($userId, Credential::servicePhotagious);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Photagious::getPhotos($userId, $childId, $credential['c_token'], $tag);
@@ -23,7 +31,11 @@ class Site
 
   public static function albumPhotosSmugMug($childId, $albumId, $albumKey)
   {
+    self::requireLogin();
     $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(empty($child))
+      getRoute()->run('/error/404/ajax');
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = SmugMug::getPhotos($userId, $childId, $credential['c_token'], $credential['c_secret'], $albumId, $albumKey);
@@ -35,33 +47,42 @@ class Site
   {
     self::requireLogin();
     $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(empty($child))
+      getRoute()->run('/error/404');
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $albums = Facebook::getAlbums($childId, $credential['c_token'], $credential['c_uid']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'child' => $child, 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function albumsListPhotagious($childId)
   {
     self::requireLogin();
     $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(empty($child))
+      getRoute()->run('/error/404');
     $credential = Credential::getByService($userId, Credential::servicePhotagious);
     $albums = Photagious::getAlbums($childId, $credential['c_token']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'child' => $child, 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function albumsListSmugMug($childId)
   {
     self::requireLogin();
     $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(empty($child))
+      getRoute()->run('/error/404');
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
+      'child' => $child, 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
   }
 
   public static function childCheck()

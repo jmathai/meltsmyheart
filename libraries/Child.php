@@ -15,6 +15,12 @@ class Child
     return getDatabase()->one('SELECT * FROM child WHERE c_domain=:domain', $params);
   }
 
+  public static function getById($userId, $childId)
+  {
+    $params = array(':userId' => $userId, ':childId' => $childId);
+    return getDatabase()->one('SELECT * FROM child WHERE c_id=:childId AND c_u_id=:userId', $params);
+  }
+
   public static function getByUserId($userId)
   {
     $params = array(':userId' => $userId);

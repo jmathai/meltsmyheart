@@ -3,7 +3,7 @@
     <?php foreach($photos as $photo) { ?>
       <li>
         <div>
-          <img src="<?php echo $photo['thumbUrl']; ?>" vspace="5" hspace="5">
+          <img src="<?php echo $photo['thumbUrl']; ?>">
         </div>
         <?php if(isset($ids[$photo['internalId']])) { ?>
           <?php getTemplate()->display('partials/photoSelectItemAction.php', array('childId' => $childId, 'photoId' => $photo['internalId'], 'action' => 'remove')); ?>

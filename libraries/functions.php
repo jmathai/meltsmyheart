@@ -82,6 +82,14 @@ function plural($int)
   return $int > 1 ? 's' : '';
 }
 
+function posessive($word)
+{
+  if($word[strlen($word)-1] == 's')
+    return quoteEncode("{$word}'");
+  else
+    return quoteEncode("{$word}'s");
+}
+
 function safe($str)
 {
   return strip_tags($str);
