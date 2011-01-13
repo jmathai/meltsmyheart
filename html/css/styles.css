@@ -41,7 +41,7 @@ h2{ font-size:1.35em; color:#327085; }
 h3{ font-size:1.15em; color:#404040; }
 h4{ font-size:1.1em; color:#fff; margin:0; padding:0; }
 p{ margin:0; padding:0 0 15px 0; }
-button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-main-aaa.png") no-repeat 0 -240px; width:150px; height:47px; margin:5px 10px 5px 0; border:0; }
+button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-button-aaa.png") no-repeat 0 0; width:163px; height:44px; margin:5px 10px 5px 0; border:0; }
 button div{ margin-top:-7px; }
 form{ margin:0; padding:0; display:inline; }
 form em { font-size:.75em; }
@@ -79,15 +79,7 @@ div#footer div p a{ color:#0a77aa; }
 /* // footer */
 
 /* photo */
-img.ridge-sm {
-  border-top-width: 4px;
-  border-bottom-width: 4px;
-  border-top-style: double;
-  border-bottom-style: double;
-  border-top-color: #f2db33;
-  border-bottom-color: #f2db33;
-}
-img.ridge-sm { padding: 3px 0px; margin-right:3px; }
+img.frame-100 { background:url("/img/sprite-main-aaa.png") no-repeat 0 -243px; width:100px; height:100px; padding:7px 6px 7px 8px; }
 /* // photo */
 
 /* home */
