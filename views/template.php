@@ -35,21 +35,23 @@
         <li><a href="/make-childs-photoblog">Make a child's photo blog</a></li>
         <li><a href="/design-childs-webpage">Design child's webpage</a></li>
       </ul>
-      <p>
-        "<?php echo getConfig()->get('site')->name; ?> is my favorite way to share my baby's photos. 
-        I already upload them to Facebook so it was easy to create my child's page."
-        <em>Suja Brane - Cincinnati, OH (<a href="http://anna.meltsmyheart.com">http://anna.meltsmyheart.com</a>)</em>
-      <p>
-      <p>
-        "My favorite part of <?php echo getConfig()->get('site')->name; ?> is how great the site makes my boring photos look. 
-        The site makes me feel like a professional photographer."
-        <em>Lisa Mcfarlane - Redwood City, CA (<a href="http://jack.meltsmyheart.com">http://jack.meltsmyheart.com</a>)</em>
-      <p>
-      <p>
-        "Everyone I shared Gabriel's <?php echo getConfig()->get('site')->name; ?> webpage with loved it.
-        They kept commenting on how fast he's growing up!"
-        <em>Leeja Thomas - Houston, TX (<a href="http://gabriel.meltsmyheart.com">http://gabriel.meltsmyheart.com</a>)</em>
-      <p>
+      <?php if($_SERVER['REQUEST_URI'] == '/' && !User::isLoggedIn()) { ?>
+        <p>
+          "<?php echo getConfig()->get('site')->name; ?> is my favorite way to share my baby's photos. 
+          I already upload them to Facebook so it was easy to create my child's page."
+          <em>Suja Brane - Cincinnati, OH (<a href="http://anna.meltsmyheart.com">http://anna.meltsmyheart.com</a>)</em>
+        <p>
+        <p>
+          "My favorite part of <?php echo getConfig()->get('site')->name; ?> is how great the site makes my boring photos look. 
+          The site makes me feel like a professional photographer."
+          <em>Lisa Mcfarlane - Redwood City, CA (<a href="http://jack.meltsmyheart.com">http://jack.meltsmyheart.com</a>)</em>
+        <p>
+        <p>
+          "Everyone I shared Gabriel's <?php echo getConfig()->get('site')->name; ?> webpage with loved it.
+          They kept commenting on how fast he's growing up!"
+          <em>Leeja Thomas - Houston, TX (<a href="http://gabriel.meltsmyheart.com">http://gabriel.meltsmyheart.com</a>)</em>
+        <p>
+      <?php } ?>
     </div>
   </div>
   <script src="/js/jquery.js"></script>

@@ -366,7 +366,7 @@ class Site
     {
       $ptgUrl = getConfig()->get('thirdparty')->ptg_host . '/?action=account.auth.act&callbackurl=' . urlencode(getConfig()->get('urls')->base . "/connect/photagious/{$childId}");
     }
-    getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl, 'ptgUrl' => $ptgUrl));
+    getTemplate()->display('template.php', array('body' => 'photosSource.php', 'fbUrl' => $fbUrl, 'smugUrl' => $smugUrl, 'ptgUrl' => $ptgUrl, 'childId' => $childId));
   }
 
   public static function photosAdd($childId)
