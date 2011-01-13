@@ -19,7 +19,29 @@ function __autoload($className)
 
 function displayAge($born, $taken)
 {
-  return '3 days';
+  $seconds = intval($taken - $born);
+  $hours = intval($seconds / 3600);
+  if($hours < 0)
+    return '--';
+  elseif($hours < 1)
+    return 'a few minutes';
+  elseif($hours < 23)
+    return "{$hours} hour" . plural($hours);
+
+  $days = intval($seconds / 86400);
+  if($days <= 7)
+    return "{$days} day" . plural($days);
+
+  $weeks = intval($days / 7);
+  if($weeks <= 4)
+    return "{$weeks} week" . plural($weeks);
+
+  $months = intval($days / 30);
+  if($months < 12)
+    return "{$months} month" . plural($months);
+
+  $years = intval($days / 365);
+  return "{$years} year" . plural($years);
 }
 
 function getFacebook()
@@ -53,6 +75,11 @@ function getString($token)
     return $strings[$token];
 
   return '';
+}
+
+function plural($int)
+{
+  return $int > 1 ? 's' : '';
 }
 
 function safe($str)
