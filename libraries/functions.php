@@ -44,6 +44,11 @@ function displayAge($born, $taken)
   return "{$years} year" . plural($years);
 }
 
+function emailLink()
+{
+  return '<a href="mailto:' . getConfig()->get('email')->from_email . '">' . getConfig()->get('email')->from_email . '</a>';
+}
+
 function getFacebook()
 {
   static $facebook;
@@ -53,6 +58,13 @@ function getFacebook()
   $config = array('appId' => getConfig()->get('thirdparty')->fb_appId, 'secret' => getConfig()->get('thirdparty')->fb_secret);
   $facebook = new FacebookGraph($config);
   return $facebook;
+}
+
+function getQuote()
+{
+  $quotes = getString('quotes');
+  $quote = $quotes[array_rand($quotes)];
+  return "{$quote['quote']} - <em>{$quote['by']}</em>";
 }
 
 function getSmugMug($userToken=null, $userSecret=null)

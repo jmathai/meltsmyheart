@@ -1,15 +1,17 @@
 <h1>Getting started is easy</h1>
 
+<?php getTemplate()->display('partials/paragraphRight.php'); ?>
+
 <p>
   <form method="post" id="joinForm">
     <label for="email">Email</label>
-    <input type="email" name="email" required="required">
+    <input type="email" id="email" name="email" required="required">
 
     <label for="password">Password</label>
-    <input type="password" name="password" required="required">
+    <input type="password" id="password" name="password" required="required">
 
-    <label for="password">Confirm password</label>
-    <input type="password" name="passwordConfirm" required="required" data-equals="password">
+    <label for="passwordConfirm">Confirm password</label>
+    <input type="password" id="passwordConfirm" name="passwordConfirm" required="required" data-equals="password">
 
     <button type="submit">Join us</button>
     <br>

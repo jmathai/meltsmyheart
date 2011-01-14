@@ -34,7 +34,7 @@ div#header-bar{ background:url("/img/sprite-main-aaa.png") repeat-x 0 -133px; he
 /* // header */
 
 /* content */
-div#content{ padding:10px 0; }
+div#content{ padding:10px 0; min-height:300px; }
 h1, h2, h3{ margin:0; padding:0; }
 h1{ font-size:1.4em; color:#c01f55; }
 h2{ font-size:1.35em; color:#327085; }
@@ -61,6 +61,9 @@ a.facebook{ display:block; width:93px; height:26px; background:url("/img/sprite-
 a.smugmug{ display:block; width:110px; height:26px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat 0 -26px; }
 a.computer{ height:26px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat 0 -54px; padding-left:30px; }
 a.photagious{ display:block; width:117px; height:23px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat 0 -80px; }
+img.auto-500{ width:500px; margin:auto; display:block; }
+p.right { position:absolute; left:400px; font-size:.8em; }
+p.right span{ padding:10px 0; display:block; }
 
 /* // content */
 

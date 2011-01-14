@@ -60,20 +60,20 @@
   <script src="/js/plugins/jquery-ui-1.8.7.custom.min.js"></script>
   <script src="/js/plugins/jquery.tools.min.js"></script>
   <script src="/js/javascript.js"></script>
-  <?php if(isset($js)) { ?>
-    <script>
-      var _gaq = _gaq || [];
-      $(document).ready(function() {
-        $("#modal").dialog({autoOpen:false, modal:true, show:"scale", hide:"scale"});
-        $(document).scroll(function() {
-            $("#modal").dialog("option", "position", "center");
-        });
-        <?php if(isset($_GET['e'])) { ?>
-          mmh.displayError(<?php echo json_encode(getString($_GET['e'])); ?>);
-        <?php } ?>
-        <?php echo $js; ?>
+  <script>
+    var _gaq = _gaq || [];
+    $(document).ready(function() {
+      $("#modal").dialog({autoOpen:false, modal:true, show:"scale", hide:"scale"});
+      $(document).scroll(function() {
+          $("#modal").dialog("option", "position", "center");
       });
-    </script>
-  <?php } ?>
+      <?php if(isset($_GET['e'])) { ?>
+        mmh.displayError(<?php echo json_encode(getString($_GET['e'])); ?>);
+      <?php } ?>
+      <?php if(isset($js)) { ?>
+        <?php echo $js; ?>
+      <?php } ?>
+    });
+  </script>
 </body>
 </html>

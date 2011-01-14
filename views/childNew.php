@@ -1,5 +1,7 @@
 <h1>Create a new page for your child</h1>
 
+<?php getTemplate()->display('partials/paragraphRight.php'); ?>
+
 <p>
   <form method="post" action="/child/new" id="childNewForm">
     <label for="childName">Child's name</label>
@@ -14,3 +16,4 @@
     <button class="yellow" type="submit"><div>Submit</div></button>
   </form>
 </p>
+

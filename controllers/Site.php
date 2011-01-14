@@ -221,14 +221,15 @@ class Site
 
   public static function forgot($confirm = null)
   {
-    getTemplate()->display('template.php', array('body' => 'forgot.php', 'confirm' => $confirm));
+    $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'forgotForm'));
+    getTemplate()->display('template.php', array('body' => 'forgot.php', 'confirm' => $confirm, 'js' => $js));
   }
 
   public static function forgotPost()
   {
     $user = User::getByEmailAndPassword($_POST['email'], false);
     if(!$user)
-      getRoute()->redirect('/forgot?e=emaildne');
+      getRoute()->redirect('/forgot?e=emailDoesNotExist');
 
     $token = md5(str_repeat($_POST['email'], 2));
     Resque::enqueue('mmh_email', 'Email', array('email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
