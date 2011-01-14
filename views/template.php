@@ -20,7 +20,7 @@
   <div id="header-bar"></div>
   <div id="content" class="container">
     <?php include $body; ?>
-    <div id="modal"></div>
+    <div id="modal" class="apple_overlay"></div>
     <div id="message" class="ui-state-highlight"></div>
     <div id="error" class="ui-state-error ui-state-error-text"></div>
     <div id="tooltip"></div>
@@ -63,10 +63,10 @@
   <script>
     var _gaq = _gaq || [];
     $(document).ready(function() {
-      $("#modal").dialog({autoOpen:false, modal:true, show:"scale", hide:"scale"});
-      $(document).scroll(function() {
-          $("#modal").dialog("option", "position", "center");
-      });
+      //$("#modal").dialog({autoOpen:false, modal:true, show:"scale", hide:"scale"});
+    //$(document).scroll(function() {
+    //    $("#modal").dialog("option", "position", "center");
+    //});
       <?php if(isset($_GET['e'])) { ?>
         mmh.displayError(<?php echo json_encode(getString($_GET['e'])); ?>);
       <?php } ?>

@@ -79,21 +79,23 @@ var mmh = (function() {
         var params = {}, opts = {}, width = null;
         if(arguments.length > 1)
           params = arguments[1];
-        if(arguments.length > 2)
-          opts = arguments[2];
-          if(opts['width'] === undefined)
-            opts['width'] = 700;
-          opts['position'] = [(parseInt(760-parseInt(opts['width']))/2), parseInt(/*info.scrollPos.y*/0+100)];
+//      if(arguments.length > 2)
+//        opts = arguments[2];
+//        if(opts['width'] === undefined)
+//          opts['width'] = 700;
+//        opts['position'] = [(parseInt(760-parseInt(opts['width']))/2), parseInt(/*info.scrollPos.y*/0+100)];
 
-          opts['title'] = 'Please wait...';
-          for(i in opts)
-            $('#modal').dialog('option', i, opts[i]);
+//        opts['title'] = 'Please wait...';
+//        for(i in opts)
+//          $('#modal').dialog('option', i, opts[i]);
 
-          $('#modal').bind('dialogclose', function(e, ui){ $(".loader-anim").hide(); });
-          $.post(url, params, function(response) {
+//        $('#modal').bind('dialogclose', function(e, ui){ $(".loader-anim").hide(); });
+          //$.post(url, params, function(response) {
+          $.get(url, params, function(response) {
             if(mmh.ajax.isSuccess(response)) {
               _gaq.push(["_trackEvent", "dialog", "load", url]);
-              $('#modal').dialog('open').html(response.message);
+              //$('#modal').dialog('open').html(response.message);
+              $('#modal').html(response.message).append('<button class="close"><div>Close</div></button>');
             } else {
               mmh.displayError("Sorry, there was a problem loading the page you requested.");
             }

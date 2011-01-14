@@ -482,6 +482,7 @@ class Site
 
   public static function share()
   {
+    self::requireLogin();
     $creds = Credential::getByService(getSession()->get('userId'), Credential::serviceFacebook);
     if(!$creds)
     {
@@ -495,12 +496,14 @@ class Site
     else
     {
       $children = Child::getByUserId(getSession()->get('userId'));
-      getTemplate()->display('template.php', array('body' => 'share.php', 'children' => $children));
+      $js = getTemplate()->get('javascript/overlay.js.php');
+      getTemplate()->display('template.php', array('body' => 'share.php', 'children' => $children, 'js' => $js));
     }
   }
 
   public static function shareFacebook($childId)
   {
+    Api::success("foobar {$childId}");
     // retrieve json template
   }
 
