@@ -509,8 +509,15 @@ class Site
 
   public static function shareFacebook($childId)
   {
-    Api::success("foobar {$childId} <br><br>hello world");
-    // retrieve json template
+    $userId = getSession()->get('userId');
+    if(!$userId || !$childId)
+      getRoute()->run('/error/404/ajax');
+    $credential = Credential::getByService($userId, Credential::serviceFacebook);
+    if(!array_key_exists('c_uid', $credential) || empty($credential['c_uid']))
+      getRoute()->run('/error/404/ajax');
+
+    $photoUrl = getFacebookPhoto($credential['c_token']);
+    Api::success(getTemplate()->get('shareFacebook.php', array('childId' => $childId, 'photoUrl' => $photoUrl)));
   }
 
   public static function shareFacebookPost($childId)

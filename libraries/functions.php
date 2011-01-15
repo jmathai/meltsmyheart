@@ -60,6 +60,23 @@ function getFacebook()
   return $facebook;
 }
 
+function getFacebookPhoto($token)
+{
+  $ch = curl_init("https://graph.facebook.com/me/picture?access_token={$token}");
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_HTTPGET, 1);
+  curl_setopt($ch, CURLOPT_HEADER, 1);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  $result = curl_exec($ch);
+  $headers = explode("\r\n", $result);
+  foreach($headers as $header)
+  {
+    if(preg_match('/^Location: +(.*)?/', $header, $matches))
+      return $matches[1];
+  }
+  return '/img/facebook-profile-pic.jpg';
+}
+
 function getQuote()
 {
   $quotes = getString('quotes');
