@@ -288,6 +288,12 @@ class Site
     getTemplate()->display('template.php', array('body' => 'login.php', 'js' => $js, 'r' => quoteEncode($r)));
   }
 
+  public static function logout()
+  {
+    User::endSession();
+    getRoute()->redirect('/');
+  }
+
   public static function loginPost()
   {
     $redirectUrl = '/login?e=loginFailed&r=' . quoteDecode($_POST['r']);

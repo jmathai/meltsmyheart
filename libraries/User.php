@@ -12,10 +12,9 @@ class User
       VALUES(:key, :email, :password, :accountType, :dateCreated)', $params);
   }
 
-  public static function password($userId, $email, $password)
+  public static function endSession()
   {
-    $params = array(':userId' => $userId, ':password' => self::generatePasswordHash($password, $email));
-    return getDatabase()->execute('UPDATE `user` SET u_password=:password WHERE u_id=:userId', $params);
+    getSession()->end();
   }
 
   public static function getById($userId)
@@ -47,6 +46,12 @@ class User
     return !empty($userId);
   }
 
+  public static function password($userId, $email, $password)
+  {
+    $params = array(':userId' => $userId, ':password' => self::generatePasswordHash($password, $email));
+    return getDatabase()->execute('UPDATE `user` SET u_password=:password WHERE u_id=:userId', $params);
+  }
+
   // cookieless authentication (i.e. photo uploads)
   public static function postHash($check = null)
   {
@@ -68,6 +73,7 @@ class User
       return;
 
     getSession()->set('userId', $user['u_id']);
+    getSession()->set('email', $user['u_email']);
     getSession()->set('accountType', $user['u_accountType']);
     getSession()->set('prefs', $user['u_prefs']);
   }

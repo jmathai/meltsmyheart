@@ -10,6 +10,9 @@ body {font-family:"Trebuchet MS","Lucida Grande",georgia,serif; font-size:1em; c
 /* header */
 div#header{ background:url("/img/sprite-main-aaa.png") repeat-x 0 0; height:133px; }
 div#header img#logo{ width:166px; height:83px; border:0; position:absolute; top:0; left:30px; }
+div#header div.loginlogout{ position:absolute; top:2px; width:100%; text-align:right; font-size:.9em; color:#eee; }
+div#header div.loginlogout a{ color:#eee; }
+div#header div.quote{ color:#0a77aa; position:absolute; left:225px; top:35px; font-size:.9em; }
 ul#navigation{ position:absolute; top:60px; left:230px; height:50px; }
 ul#navigation, ul#navigation li{ list-style-type:none; margin:0; padding:0; }
 ul#navigation li{
@@ -64,7 +67,7 @@ a.photagious{ display:block; width:117px; height:23px; background:url("/img/spri
 img.auto-500{ width:500px; margin:auto; display:block; }
 p.right { position:absolute; left:400px; font-size:.8em; }
 p.right span{ padding:10px 0; display:block; }
-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix {display: inline-block;}
 
 /* // content */

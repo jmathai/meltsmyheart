@@ -1,4 +1,4 @@
-<h1>One of our children must have deleted the page you were looking for</h1>
+<h1>One of our children must have deleted the page you were looking for.</h1>
 
 <p>
   <img src="/img/creative/polaroid-3-500-1.jpg" class="auto-500">
