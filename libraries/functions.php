@@ -97,8 +97,9 @@ function getSmugMug($userToken=null, $userSecret=null)
   return $smugMug;
 }
 
-function getString($token)
-{
+function getString($token, $params = array())
+{ // do not make $strings static because of extract
+  extract($params);
   $strings = include getConfig()->get('paths')->libraries . '/strings.php';
   if(isset($strings[$token]))
     return $strings[$token];

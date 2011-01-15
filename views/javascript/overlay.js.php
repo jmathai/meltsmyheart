@@ -12,7 +12,7 @@ $(".overlay_target").each(function(i, el) {
       mmh.loadDialog(this.getTrigger().attr("href"));
     },
     onLoad: function() {
-      $('#modal button.close').click(function(){ $(el).data("overlay").close(); });
+      $('#modal .close').click(function(e){ e.preventDefault(); $(el).data("overlay").close();});
     }
   });
 });

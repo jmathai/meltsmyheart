@@ -1,10 +1,17 @@
 <?php
+/* defaults */
+if(!isset($c_name))
+  $c_name = 'my children';
 $strings = array();
 $strings['invalidFields'] = 'There were invalid fields found in the form.';
 $strings['loginFailed'] = 'We couldn\'t log you in with that email address and password.';
 $strings['accountCreationError'] = 'There was a problem creating your account.';
 $strings['emailAlreadyExists'] = 'An account with that email address already exists.';
 $strings['emailDoesNotExist'] = 'We couldn\'t find an account with that email address.';
+$strings['facebookStatus'] = "See photos of {$c_name} on " . getConfig()->get('site')->name . '.';
+$strings['facebookCaption'] = getConfig()->get('site')->name . ' is the fastest and most beautiful way to share photos of your children.';
+$strings['facebookDescription'] = "Experience {$c_name} growing up through photos on " . getConfig()->get('site')->name . '.';
+
 
 $strings['quotes'] = array();
 $strings['quotes'][] = array('quote' => 'You can learn many things from children.  How much patience you have, for instance.', 'by' => 'Franklin P. Jones');

@@ -95,7 +95,7 @@ var mmh = (function() {
             if(mmh.ajax.isSuccess(response)) {
               _gaq.push(["_trackEvent", "dialog", "load", url]);
               //$('#modal').dialog('open').html(response.message);
-              $('#modal').html(response.message).append('<button class="close"><div>Close</div></button>');
+              $('#modal').html(response.message);
             } else {
               mmh.displayError("Sorry, there was a problem loading the page you requested.");
             }

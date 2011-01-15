@@ -497,7 +497,7 @@ class Site
                   getConfig()->get('urls')->base."/connect/facebook",
                   array('scope' => getConfig()->get('thirdparty')->fb_perms)
                 );
-      getTemplate()->display('template.php', array('body' => 'shareConnect.php', 'fbUrl' => $fbUrl));
+      getTemplate()->display('template.php', array('body' => 'shareConnect.php', 'js' => getTemplate()->get('javascript/shareConnect.php', array('fbUrl' => $fbUrl))));
     }
     else
     {
@@ -508,21 +508,44 @@ class Site
   }
 
   public static function shareFacebook($childId)
-  {
+  { // require login simulated by 404 checks
     $userId = getSession()->get('userId');
     if(!$userId || !$childId)
-      getRoute()->run('/error/404/ajax');
+      Api::error('No user or child specified');
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     if(!array_key_exists('c_uid', $credential) || empty($credential['c_uid']))
-      getRoute()->run('/error/404/ajax');
+      Api::error('Could not find a credential');
 
+    $child = Child::getById($userId, $childId);
     $photoUrl = getFacebookPhoto($credential['c_token']);
-    Api::success(getTemplate()->get('shareFacebook.php', array('childId' => $childId, 'photoUrl' => $photoUrl)));
+    Api::success(getTemplate()->get('shareFacebook.php', array('childId' => $childId, 'child' => $child, 'photoUrl' => $photoUrl)));
   }
 
   public static function shareFacebookPost($childId)
-  {
-    // post to facebook
+  { // require login simulated by 404 checks
+    $userId = getSession()->get('userId');
+    if(!$userId || !$childId)
+      Api::error('No user or child specified');
+    $credential = Credential::getByService($userId, Credential::serviceFacebook);
+    if(!array_key_exists('c_uid', $credential) || empty($credential['c_uid']))
+      Api::error('Could not find a credential');
+
+    $fb = getFacebook();
+    $child = Child::getById($userId, $childId);
+    $credential = Credential::getByService($userId, Credential::serviceFacebook);
+    try
+    {
+      $resp = $fb->api('/me/feed', 'POST', array('access_token' => $credential['c_token'], 'message' => getString('facebookStatus', $child), 
+        'link' => getConfig()->get('urls')->base.Child::getPageUrl($child), 'name' => posessive($child['c_name']).' page on '.getConfig()->get('site')->name, 
+        'caption' => getstring('facebookCaption'), 'description' => getstring('facebookDescription', $child), 'picture' => getConfig()->get('urls')->base.'/img/logo-square.png'));
+      Api::success('Status updated successfully');
+    }
+    catch (FacebookApiException $e)
+    {
+      //getLogger()->warn($e->getMessage()); TODO
+      error_log($e->getMessage());
+      Api::error('Failed to update facebook status');
+    }
   }
 
   public static function upgrade($action = null)
