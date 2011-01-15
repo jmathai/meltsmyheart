@@ -3,6 +3,10 @@
   <title></title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
   <link rel="stylesheet" type="text/css" href="/css/ui/jquery-ui-1.8.7.custom.css">
+  <!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="/css/ie.css">
+  <![endif]-->
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <div id="header">

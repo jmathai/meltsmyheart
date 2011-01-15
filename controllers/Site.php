@@ -503,7 +503,7 @@ class Site
 
   public static function shareFacebook($childId)
   {
-    Api::success("foobar {$childId}");
+    Api::success("foobar {$childId} <br><br>hello world");
     // retrieve json template
   }
 

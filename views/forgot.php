@@ -17,18 +17,20 @@
 <?php } else { ?>
   <h1>Forgot your password?</h1>
 
-  <?php getTemplate()->display('partials/paragraphRight.php'); ?>
-  
-  <p>
-    <form method="post" id="forgotForm">
-      <label for="email">What's your email address?</label>
-      <input type="email" id="email" name="email" required="required">
+  <div class="clearfix">
+    <?php getTemplate()->display('partials/paragraphRight.php'); ?>
+    
+    <p>
+      <form method="post" id="forgotForm">
+        <label for="email">What's your email address?</label>
+        <input type="email" id="email" name="email" required="required">
 
-      <button type="submit"><div>Reset</div></button>
-      <br>
-      <em>Need an account? <a href="/join">Join here</a>.</em>
-      <br>
-      <em>Already have an account? <a href="/login">Sign in</a>.</em>
-    </form>
-  </p>
+        <button type="submit"><div>Reset</div></button>
+        <br>
+        <em>Need an account? <a href="/join">Join here</a>.</em>
+        <br>
+        <em>Already have an account? <a href="/login">Sign in</a>.</em>
+      </form>
+    </p>
+  </div>
 <?php } ?>
