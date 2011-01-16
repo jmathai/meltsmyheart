@@ -110,7 +110,7 @@ ul#album-list li { float:left; list-style-type:none; text-align:center; width:33
 ul#album-list li img{ height:125px; margin:auto; border:0; }
 
 ul#photo-list li{ float:left; list-style-type:none; text-align:center; width:25%; margin:10px 0; font-size:.7em;}
-ul#photo-list li img{ height:75px; margin:auto; border:0; }
+ul#photo-list li img{ height:75px; max-width:150px; margin:auto; border:0; }
 /*ul#album-list{width:150px; float:left;}
 ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}
 ul#album-list li img{width:125px;}
@@ -163,10 +163,9 @@ div.photo-queue-item {
   padding-bottom:0;
   height:37px;
 }
-#modal {
+#modal, #modal-wide {
   background-color:#fff;
   display:none;
-  width:450px;
   padding:15px;
   text-align:left;
   border:2px solid #df7112;
@@ -179,6 +178,9 @@ div.photo-queue-item {
 }
 #modal button.close {
   float:right;
+}
+.modal {
+  width:450px;
 }
 .modal-wide {
   width:700px;

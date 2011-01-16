@@ -30,7 +30,8 @@
   <div id="header-bar"></div>
   <div id="content" class="container">
     <?php include $body; ?>
-    <div id="modal" class="apple_overlay"></div>
+    <div id="modal" class="apple_overlay modal"></div>
+    <div id="modal-wide" class="apple_overlay modal-wide"></div>
     <div id="message" class="ui-state-highlight"></div>
     <div id="error" class="ui-state-error ui-state-error-text"></div>
     <div id="tooltip"></div>

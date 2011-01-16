@@ -18,6 +18,25 @@ var mmh = (function() {
       else
         $(id).html("").hide();
     };
+    var overlay = function(el, tgt) {
+      var tgt = '#' + (arguments[1] || 'modal');
+      $(el).overlay({
+        target: tgt,
+        mask: {
+          color: '#96bfce',
+          loadSpeed: 200,
+          opacity: 0.9
+        },
+        top:'10%',
+        close: tgt + ' button.close',
+        onBeforeLoad: function() {
+          mmh.loadDialog(this.getTrigger().attr("href"), {}, tgt);
+        },
+        onLoad: function() {
+          $(tgt + ' .close').click(function(e){ e.preventDefault(); $(el).data("overlay").close();});
+        }
+      });
+    };
 
     return {
       ajax: {
@@ -34,17 +53,6 @@ var mmh = (function() {
         }
       },
       clickHandlers: {
-        album: function(e) {
-          e.preventDefault();
-          mmh.loadDialog(this.href);
-          /*$.get(this.href, function(response) {
-              if(mmh.ajax.isSuccess(response)) {
-                $("#preview").html(response.message);
-              } else {
-                mmh.ajax.error(response);
-              }
-            }, 'json');*/
-        },
         photo: function(e) {
           var el = this;
           e.preventDefault();
@@ -75,31 +83,22 @@ var mmh = (function() {
       hideError: function(/*delay=null*/) {
         hideMessage('error', arguments);
       },
-      loadDialog: function(url/*, params, opts */) {
-        var params = {}, opts = {}, width = null;
-        if(arguments.length > 1)
-          params = arguments[1];
-//      if(arguments.length > 2)
-//        opts = arguments[2];
-//        if(opts['width'] === undefined)
-//          opts['width'] = 700;
-//        opts['position'] = [(parseInt(760-parseInt(opts['width']))/2), parseInt(/*info.scrollPos.y*/0+100)];
-
-//        opts['title'] = 'Please wait...';
-//        for(i in opts)
-//          $('#modal').dialog('option', i, opts[i]);
-
-//        $('#modal').bind('dialogclose', function(e, ui){ $(".loader-anim").hide(); });
-          //$.post(url, params, function(response) {
-          $.get(url, params, function(response) {
-            if(mmh.ajax.isSuccess(response)) {
-              _gaq.push(["_trackEvent", "dialog", "load", url]);
-              //$('#modal').dialog('open').html(response.message);
-              $('#modal').html(response.message);
-            } else {
-              mmh.displayError("Sorry, there was a problem loading the page you requested.");
-            }
-          }, 'json');
+      loadDialog: function(url/*, params, tgt */) {
+        var params = arguments[1] || {}, tgt = arguments[2] || '#modal';
+        $.get(url, params, function(response) {
+          if(mmh.ajax.isSuccess(response)) {
+            _gaq.push(["_trackEvent", "dialog", "load", url]);
+            $(tgt).html(response.message);
+          } else {
+            mmh.displayError("Sorry, there was a problem loading the page you requested.");
+          }
+        }, 'json');
+      },
+      overlay: function(i, el) {
+        overlay(el, 'modal');
+      },
+      overlayWide: function(i, el) {
+        overlay(el, 'modal-wide');
       },
       swfHandlers: {
         complete: function() {
