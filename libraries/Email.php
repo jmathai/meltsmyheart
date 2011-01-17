@@ -23,6 +23,6 @@ class Email
 
   private function stripHtml($template)
   {
-    return preg_replace('#\<\!--html--\>(.+?)\<\!--\/html--\>#', '${1}', $template);
+    return strip_tags($template);
   }
 }

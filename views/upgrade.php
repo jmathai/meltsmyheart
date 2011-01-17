@@ -1,3 +1,16 @@
+<h1>Everyone participating in the beta is upgraded for free!</h1>
+
+<p>
+  As our way of saying thanks for participating in our beta we're giving everyone a premium account for free.
+  You'll have access to all the features of <?php echo getConfig()->get('site')->name; ?> for life.
+</p>
+
+<p>
+  <h2>Enjoy!</h2>
+</p>
+
+<?php return; ?>
+
 <h1>The perks of upgrading</h1>
 
 <p>
@@ -13,7 +26,7 @@
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
   <input type="hidden" name="cmd" value="_s-xclick">
   <input type="hidden" name="hosted_button_id" value="<?php echo getConfig()->get('thirdparty')->paypal_button_id; ?>">
-  <input type="image" src="/img/upgrade.png" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+  <button type="submit"><div>Upgrade now</div></button>
   <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
   </form>
 </p>

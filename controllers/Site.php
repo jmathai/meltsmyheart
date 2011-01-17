@@ -400,8 +400,12 @@ class Site
   public static function photosAdd($childId)
   {
     self::requireLogin();
+    $child = Child::getById(getSession()->get('userId'), $childId);
+    if(!$child)
+      getRoute()->run('/error/404');
+
     $js = getTemplate()->get('javascript/photosAdd.js.php', array('userId' => getSession()->get('userId'), 'childId' => $childId));
-    getTemplate()->display('template.php', array('body' => 'photosAdd.php', 'js' => $js));
+    getTemplate()->display('template.php', array('body' => 'photosAdd.php', 'child' => $child, 'js' => $js));
   }
 
   public static function photosAddPost($childId)

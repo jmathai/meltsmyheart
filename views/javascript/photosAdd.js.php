@@ -7,11 +7,11 @@ var settings = {
   http_success : [200],
   post_params: {'usrhsh': '<?php echo User::postHash(); ?>'},
 
-  button_placeholder_id: 'button-select',
-  //button_image_url: '/foo/bar',
-  button_text: 'Select',
-  button_width: 100,
-  button_height:100,
+  button_placeholder_id: 'span-button-placeholder',
+  button_width: 170,
+  button_height: 45,
+  button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+  button_cursor: SWFUpload.CURSOR.HAND,
 
   // handlers
   swfupload_loaded_handler : mmh.swfHandlers.loaded,

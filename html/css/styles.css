@@ -69,6 +69,7 @@ p.right { position:absolute; left:400px; font-size:.8em; }
 p.right span{ padding:10px 0; display:block; }
 .clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix {display: inline-block;}
+object{ position:absolute; z-index:1; } /* swf upload */
 
 /* // content */
 
