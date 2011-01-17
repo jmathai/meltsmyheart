@@ -70,6 +70,7 @@ p.right span{ padding:10px 0; display:block; }
 .clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix {display: inline-block;}
 object{ position:absolute; z-index:1; } /* swf upload */
+button#button-view-page{ display:none; }
 
 /* // content */
 
@@ -115,20 +116,10 @@ ul#photo-list li{ float:left; list-style-type:none; text-align:center; width:25%
 ul#photo-list li img{ height:75px; max-width:150px; margin:auto; border:solid 2px #f2db33; padding:2px; }
 ul#photo-list li img.selected{ border-color:#8ed6c5; }
 
-/*ul#album-list{width:150px; float:left;}
-ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}
-ul#album-list li img{width:125px;}
-
-ul#photo-list{}
-ul#photo-list li{margin:0; padding:10px; list-style:none; float:left; height:125px; width:100px; text-align:center; font-size:.5em;}
-ul#photo-list li img{max-height:100px; max-width:100px;}*/
-
-/*button, .swfupload {
-  font-family:georgia,serif; font-size:1.25em; color:#000;
-  padding:5px;
-  background-color:gray;
-  border:solid 1px black;
-}*/
+ul#upload-queue { padding:0; margin:0; }
+ul#upload-queue li { padding:2px; margin:2px 0; list-style-type:none; background-color:#f2db33; }
+ul#upload-queue li.complete { background-color:#8ed6c5; }
+ul#upload-queue li.error { background-color:#df7112; }
 
 div.photo-queue-item {
   height:40px;

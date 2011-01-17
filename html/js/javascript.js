@@ -106,38 +106,32 @@ var mmh = (function() {
       },
       swfHandlers: {
         complete: function() {
-                    console.log('complete');
+                  this.uploadStart();
+                  if($("ul#upload-queue li.complete[class!=complete]").length == 0)
+                    $("#button-view-page").show();
         },
-        debug: function() {
-                 console.log('debug');
-        },
+        debug: function() { },
         dialog: function(numSelected, numQueued, totalQueued) {
-                  console.log('dialog');
-                  console.log(arguments);
                   this.startUpload();
                   return true;
         },
-        error: function(fileObj, code, message) {
-                 console.log('error: ' + code + ' - ' + message);
+        error: function(file, code, message) {
+                  $("#photo-"+file.id).addClass("error");
         },
-        loaded: function() {
-                  console.log('loaded');
-        },
-        progress: function() {
-                    console.log('progress');
+        loaded: function() { },
+        progress: function(file, complete, total) {
+                  var pct = Math.ceil(complete/total) * 100;
+                  $("#photo-"+file.id+' span').html(pct);
         },
         queued: function(file) {
                   console.log('queued');
-                  var queueItem = '<div id="photo-'+file.id+'" class="photo-queue-item"></div>';
+                  var queueItem = '<li id="photo-'+file.id+'"><span>0</span>% - ' + file.name + '</li>';
                   $("#upload-queue").prepend(queueItem);
                   return true;
         },
-        start: function() {
-                 console.log('start');
-                 return true;
-        },
-        success: function() {
-                   console.log('success');
+        start: function() { return true; },
+        success: function(file) {
+                  $("#photo-"+file.id).addClass("complete");
         }
       },
     };
