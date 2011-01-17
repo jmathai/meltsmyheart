@@ -4,8 +4,8 @@
   Select an album to view the photos you'd like to select.
 </p>
 
+<h2>Select an album</h2>
 <p>
-  <h2>Select an album</h2>
   <a class="<?php echo $service; ?>"></a>
   <ul id="album-list">
     <?php foreach($albums as $album) { ?>

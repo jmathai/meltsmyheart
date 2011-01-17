@@ -4,8 +4,8 @@
   We want to make it easy for you to select photos of your child.
   You can choose photos you've uploaded to Facebook, Smugmug or have stored on your computer.
 </p>
+<h2>Get started by selecting one now.</h2>
 <p>
-  <h2>Get started by selecting one now.</h2>
   <ul id="thirdparty">
     <li><a href="<?php echo $fbUrl; ?>" class="facebook"></a></li>
     <li><a href="<?php echo $smugUrl; ?>" class="smugmug"></a></li>

@@ -5,9 +5,7 @@
   You'll have access to all the features of <?php echo getConfig()->get('site')->name; ?> for life.
 </p>
 
-<p>
-  <h2>Enjoy!</h2>
-</p>
+<h2>Enjoy!</h2>
 
 <?php return; ?>
 
