@@ -15,3 +15,4 @@
     <?php } ?>
   </ul>
 <?php } ?>
+<button class="close"><div>Close</div></button>
