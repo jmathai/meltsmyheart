@@ -54,10 +54,14 @@ var mmh = (function() {
       },
       clickHandlers: {
         photo: function(e) {
-          var el = this;
+          var el = this, img = $(this).prev().children(':first-child');
           e.preventDefault();
           $.post(this.href, function(response) {
             if(mmh.ajax.isSuccess(response)) {
+              if($(img).hasClass('selected'))
+                $(img).removeClass('selected');
+              else
+                $(img).addClass('selected');
               $(el).before(response.message).remove();
             } else {
               mmh.ajax.error(response);

@@ -107,10 +107,12 @@ ul.home-photos, ul.home-photos li{ display:inline; list-style-type:none; margin:
 /* // child new */
 
 ul#album-list li { float:left; list-style-type:none; text-align:center; width:33%; margin:10px 0; font-size:.8em; }
-ul#album-list li img{ height:125px; margin:auto; border:0; }
+ul#album-list li img{ height:100px; max-width:200px; margin:auto; border:0; }
 
 ul#photo-list li{ float:left; list-style-type:none; text-align:center; width:25%; margin:10px 0; font-size:.7em;}
-ul#photo-list li img{ height:75px; max-width:150px; margin:auto; border:0; }
+ul#photo-list li img{ height:75px; max-width:150px; margin:auto; border:solid 2px #f2db33; padding:2px; }
+ul#photo-list li img.selected{ border-color:#8ed6c5; }
+
 /*ul#album-list{width:150px; float:left;}
 ul#album-list li{margin:0; padding:20px 0; list-style:none; font-size:.75em}
 ul#album-list li img{width:125px;}

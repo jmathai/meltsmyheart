@@ -1,9 +1,10 @@
+<h2>Select photos for <?php echo posessive($child['c_name']); ?> page</h2>
 <?php if(!empty($photos)) { ?>
   <ul id="photo-list">
     <?php foreach($photos as $photo) { ?>
       <li>
         <div>
-          <img src="<?php echo $photo['thumbUrl']; ?>">
+          <img src="<?php echo $photo['thumbUrl']; ?>" <?php if(isset($ids[$photo['internalId']])) { ?> class="selected"<?php } ?>>
         </div>
         <?php if(isset($ids[$photo['internalId']])) { ?>
           <?php getTemplate()->display('partials/photoSelectItemAction.php', array('childId' => $childId, 'photoId' => $photo['internalId'], 'action' => 'remove')); ?>
