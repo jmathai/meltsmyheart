@@ -3,7 +3,7 @@
 <div class="clearfix">
   <?php getTemplate()->display('partials/paragraphRight.php'); ?>
 
-  <p>
+  <p class="left">
     <form method="post" id="joinForm">
       <label for="email">Email</label>
       <input type="email" id="email" name="email" required="required">
