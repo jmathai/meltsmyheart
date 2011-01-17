@@ -29,3 +29,5 @@ var settings = {
 };
 
 var swfu = new SWFUpload(settings);
+
+$("#button-view-page").click(function() { location.href="<?php echo Child::getPageUrl($child); ?>"; });

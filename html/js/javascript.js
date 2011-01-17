@@ -57,6 +57,7 @@ var mmh = (function() {
           var el = this, img = $(this).prev().children(':first-child');
           e.preventDefault();
           $.post(this.href, function(response) {
+            $("#button-view-page").show();
             if(mmh.ajax.isSuccess(response)) {
               if($(img).hasClass('selected'))
                 $(img).removeClass('selected');
@@ -124,7 +125,6 @@ var mmh = (function() {
                   $("#photo-"+file.id+' span').html(pct);
         },
         queued: function(file) {
-                  console.log('queued');
                   var queueItem = '<li id="photo-'+file.id+'"><span>0</span>% - ' + file.name + '</li>';
                   $("#upload-queue").prepend(queueItem);
                   return true;

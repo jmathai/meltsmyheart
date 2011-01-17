@@ -404,7 +404,7 @@ class Site
     if(!$child)
       getRoute()->run('/error/404');
 
-    $js = getTemplate()->get('javascript/photosAdd.js.php', array('userId' => getSession()->get('userId'), 'childId' => $childId));
+    $js = getTemplate()->get('javascript/photosAdd.js.php', array('userId' => getSession()->get('userId'), 'childId' => $childId, 'child' => $child));
     getTemplate()->display('template.php', array('body' => 'photosAdd.php', 'child' => $child, 'js' => $js));
   }
 
@@ -415,13 +415,12 @@ class Site
     $userId = User::postHash($_POST['usrhsh']);
     if(!$userId)
       Api::forbidden('Could not authenticate user');
-    
+    error_log(var_export($_FILES, 1));
     $destPath = getConfig()->get('paths')->photos.'/original/'.date('Ym');
     $destName = Uploader::safeName($_FILES['photo']['name']);
     move_uploaded_file($_FILES['photo']['tmp_name'], "{$destPath}/{$destName}");
     $args = array('userId' => $userId, 'childId' => $childId, 'photoPath' => "{$destPath}/{$destName}");
     Resque::enqueue('mmh_fetch', 'Uploader', $args);
-    error_log(var_export($args, 1));
     Api::success('Photo uploaded successfully', $args);
   }
 

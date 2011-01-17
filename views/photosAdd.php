@@ -6,7 +6,7 @@
 
 <p>
   <span id="span-button-placeholder"></span>
-  <button id="button-select-photos"><div>Select</div></button>
+  <button id="button-select-photos"><div>Select photos</div></button>
   <button id="button-view-page"><div>View <?php echo posessive($child['c_name']); ?> page</div></button>
 </p>
 
