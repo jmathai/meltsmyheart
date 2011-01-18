@@ -266,7 +266,7 @@ class Site
     $redirectUrl = '/join?e=accountCreationError';
     if(empty($_POST['email']) || empty($_POST['password']))
       getRoute()->redirect($redirectUrl);
-    elseif(!User::getByEmailAndPassword($_POST['email'], $_POST['password']))
+    elseif(User::getByEmailAndPassword($_POST['email'], $_POST['password']))
       getRoute()->redirect('/join?e=emailAlreadyExists');
 
     $userId = User::add($_POST['email'], $_POST['password']);
