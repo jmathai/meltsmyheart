@@ -2,11 +2,13 @@
 
 <p>
   Select an album to view the photos you'd like to select.
+  <form action="<?php echo Child::getPageUrl($child); ?>">
+    <button type="submit"<?php if($photoCount == 0) { ?> id="button-view-page"<?php } ?>><div>View page</div></button>
+  </form>
 </p>
 
 <h2>Select an album</h2>
 <p>
-  <a class="<?php echo $service; ?>"></a>
   <ul id="album-list">
     <?php foreach($albums as $album) { ?>
       <li>

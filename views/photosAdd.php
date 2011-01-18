@@ -10,6 +10,4 @@
   <button id="button-view-page"><div>View <?php echo posessive($child['c_name']); ?> page</div></button>
 </p>
 
-<p>
-  <ul id="upload-queue"></ul>
-</p>
+<div id="upload-queue" class="clearfix"></div>

@@ -121,12 +121,34 @@ ul#upload-queue { padding:0; margin:0; }
 ul#upload-queue li { padding:2px; margin:2px 0; list-style-type:none; background-color:#f2db33; }
 ul#upload-queue li.complete { background-color:#8ed6c5; }
 ul#upload-queue li.error { background-color:#df7112; }
+div.photo-queue-item { height:40px; width:200px; background-color:yellow; border:solid 1px #000; }
 
-div.photo-queue-item {
-  height:40px;
-  width:200px;
-  background-color:yellow;
-  border:solid 1px #000;
+div.progressbar{
+  padding:4px;
+  margin:0 50px 20px 0;
+  width:130px;
+  position:relative;
+  float:left;
+}
+div.progressbar div {
+  width:123px;
+  height:12px;
+  background:url("/img/upload-percent-back.png") no-repeat -119px 0;
+  float:left;
+  margin-right:5px;
+}
+div.progressbar div.upload-error {
+  background-image:url("/img/upload-percent-back-error.png");
+}
+div.progressbar div div {
+  background:url("/img/upload-percent-border.png") no-repeat;
+}
+div.progressbar label {
+  display:block;
+  position:relative;
+  top:-15px;
+  text-indent:125px;
+  font-size:.98em;
 }
 
 /* from sr */

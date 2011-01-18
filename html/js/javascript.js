@@ -106,32 +106,38 @@ var mmh = (function() {
         overlay(el, 'modal-wide');
       },
       swfHandlers: {
-        complete: function() {
-                  this.uploadStart();
-                  if($("ul#upload-queue li.complete[class!=complete]").length == 0)
-                    $("#button-view-page").show();
+        complete: function(file) {
+          var label = $("#photo-"+file.id+' label');
+          this.uploadStart();
+          label.html(label.html().replace(/^\d{1,3}/, '100'));
+          $("#photo-"+file.id+">div").css('backgroundPosition', "1px 0")
+          if($("ul#upload-queue li.complete[class!=complete]").length == 0)
+            $("#button-view-page").show();
         },
         debug: function() { },
         dialog: function(numSelected, numQueued, totalQueued) {
-                  this.startUpload();
-                  return true;
+          this.startUpload();
+          return true;
         },
         error: function(file, code, message) {
-                  $("#photo-"+file.id).addClass("error");
+          $("#photo-"+file.id+">div").addClass("upload-error");
         },
         loaded: function() { },
         progress: function(file, complete, total) {
-                  var pct = Math.ceil(complete/total) * 100;
-                  $("#photo-"+file.id+' span').html(pct);
+          var pct = Math.ceil(complete/total) * 100, 
+              px = 119-parseInt(complete/total*119), 
+              label = $("#photo-"+file.id+' label');
+          label.html(label.html().replace(/^\d{1,3}/, pct));
+          $("#photo-"+file.id+">div").css('backgroundPosition', "-"+px+"px 0")
         },
         queued: function(file) {
-                  var queueItem = '<li id="photo-'+file.id+'"><span>0</span>% - ' + file.name + '</li>';
-                  $("#upload-queue").prepend(queueItem);
-                  return true;
+          var queueItem = '<div class="progressbar" id="photo-'+file.id+'"><div><div></div></div><label>0%<br>' + file.name + '</label></div>';
+          $("#upload-queue").prepend(queueItem);
+          return true;
         },
         start: function() { return true; },
         success: function(file) {
-                  $("#photo-"+file.id).addClass("complete");
+          $("#photo-"+file.id).addClass("complete");
         }
       },
     };

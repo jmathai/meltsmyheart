@@ -54,7 +54,7 @@ class Site
     $albums = Facebook::getAlbums($childId, $credential['c_token'], $credential['c_uid']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'child' => $child, 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'child' => $child, 'photoCount' => count($ids), 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function albumsListPhotagious($childId)
@@ -68,7 +68,7 @@ class Site
     $albums = Photagious::getAlbums($childId, $credential['c_token']);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceFacebook, 'albums' => $albums,
-      'child' => $child, 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
+      'child' => $child, 'photoCount' => count($ids), 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId, 'ids' => $ids))));
   }
 
   public static function albumsListSmugMug($childId)
@@ -82,7 +82,7 @@ class Site
     getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
-      'child' => $child, 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
+      'child' => $child, 'photoCount' => count($ids), 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
   }
 
   public static function childCheck()
@@ -414,14 +414,24 @@ class Site
     // self::requireLogin();
     $userId = User::postHash($_POST['usrhsh']);
     if(!$userId)
+    {
+      header("HTTP/1.0 404 Not Found");
       Api::forbidden('Could not authenticate user');
-    error_log(var_export($_FILES, 1));
+    }
     $destPath = getConfig()->get('paths')->photos.'/original/'.date('Ym');
     $destName = Uploader::safeName($_FILES['photo']['name']);
-    move_uploaded_file($_FILES['photo']['tmp_name'], "{$destPath}/{$destName}");
-    $args = array('userId' => $userId, 'childId' => $childId, 'photoPath' => "{$destPath}/{$destName}");
-    Resque::enqueue('mmh_fetch', 'Uploader', $args);
-    Api::success('Photo uploaded successfully', $args);
+    $success = move_uploaded_file($_FILES['photo']['tmp_name'], "{$destPath}/{$destName}");
+    if($success)
+    {
+      $args = array('userId' => $userId, 'childId' => $childId, 'photoPath' => "{$destPath}/{$destName}");
+      Resque::enqueue('mmh_fetch', 'Uploader', $args);
+      Api::success('Photo uploaded successfully', $args);
+    }
+    else
+    {
+      header("HTTP/1.0 502 Internal Server Error");
+      Api::error('Could not upload image');
+    }
   }
 
   public static function proxy($type, $service, $childId, $path)

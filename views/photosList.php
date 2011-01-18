@@ -15,7 +15,4 @@
     <?php } ?>
   </ul>
 <?php } ?>
-<button class="close"><div>Close</div></button>
-<form action="<?php echo Child::getPageUrl($child); ?>">
-  <button type="submit" id="button-view-page"><div>View <?php echo posessive($child['c_name']); ?> page</div></button>
-</form>
+<button class="close"><div>Continue</div></button>
