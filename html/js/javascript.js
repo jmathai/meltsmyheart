@@ -107,11 +107,13 @@ var mmh = (function() {
       },
       swfHandlers: {
         complete: function(file) {
-          var label = $("#photo-"+file.id+' label');
+          var label = $("#photo-"+file.id+' label'),
+              stats = this.getStats();
           this.uploadStart();
           label.html(label.html().replace(/^\d{1,3}/, '100'));
           $("#photo-"+file.id+">div").css('backgroundPosition', "1px 0")
-          if($("ul#upload-queue li.complete[class!=complete]").length == 0)
+
+          if(stats.files_queued == 0)
             $("#button-view-page").show();
         },
         debug: function() { },
