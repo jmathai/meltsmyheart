@@ -124,7 +124,7 @@ var mmh = (function() {
         },
         loaded: function() { },
         progress: function(file, complete, total) {
-          var pct = Math.ceil(complete/total) * 100, 
+          var pct = Math.ceil(complete/total*100), 
               px = 119-parseInt(complete/total*119), 
               label = $("#photo-"+file.id+' label');
           label.html(label.html().replace(/^\d{1,3}/, pct));
@@ -132,7 +132,7 @@ var mmh = (function() {
         },
         queued: function(file) {
           var queueItem = '<div class="progressbar" id="photo-'+file.id+'"><div><div></div></div><label>0%<br>' + file.name + '</label></div>';
-          $("#upload-queue").prepend(queueItem);
+          $("#upload-queue").append(queueItem);
           return true;
         },
         start: function() { return true; },
