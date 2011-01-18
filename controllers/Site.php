@@ -274,7 +274,7 @@ class Site
     {
       $user = User::getById($userId);
       User::startSession($user);
-      $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/';
+      $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/child/new';
       $args = array('email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
       Resque::enqueue('mmh_email', 'Email', $args);
     }
