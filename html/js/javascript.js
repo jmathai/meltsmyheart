@@ -33,7 +33,7 @@ var mmh = (function() {
           mmh.loadDialog(this.getTrigger().attr("href"), {}, tgt);
         },
         onLoad: function() {
-          $(tgt + ' .close').click(function(e){ e.preventDefault(); $(el).data("overlay").close();});
+          $(tgt + ' .close').live('click', function(e){ e.preventDefault(); $(el).data("overlay").close();});
         }
       });
     };
