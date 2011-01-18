@@ -1,11 +1,3 @@
-<div class="progressbar upload-error"><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar upload-error"><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar "><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar "><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar upload-error"><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar upload-error"><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar "><div><div></div></div><label>100% DSCF1000.JPG</label></div>
-<div class="progressbar "><div><div></div></div><label>100% DSCF1000.JPG</label></div>
 <h1>Welcome to <?php echo getConfig()->get('site')->name; ?></h1>
 <?php if(!empty($children)) { ?>
   <p>
