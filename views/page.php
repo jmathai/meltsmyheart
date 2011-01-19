@@ -9,7 +9,7 @@
     <div class="container">
       <h1><?php echo posessive($child['c_name']); ?> page<h1>
       <h2>Born <?php echo date('l jS \of F', $child['c_birthdate']); ?></h2>
-      <a href="<?php echo getConfig()->get('site')->base; ?>"><img src="/img/page-logo.png"></a>
+      <a href="<?php echo getConfig()->get('urls')->base; ?>"><img src="/img/page-logo.png"></a>
     </div>
   </div>
   <div id="header-bar"></div>
