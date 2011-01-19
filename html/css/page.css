@@ -1,21 +1,22 @@
 @font-face { font-family: 'Just Me Again Down Here'; font-style: normal; font-weight: normal; src: local('Just Me Again Down Here'), local('JustMeAgainDownHere'), url('http://themes.googleusercontent.com/font?kit=sN06iTc9ITubLTgXoG-kc1kSerjmKQx4_8bS0O3fSGc') format('truetype'); }
 @font-face { font-family: 'Covered By Your Grace'; font-style: normal; font-weight: normal; src: local('Covered By Your Grace'), local('CoveredByYourGrace'), url('http://themes.googleusercontent.com/font?kit=6ozZp4BPlrbDRWPe3EBGA8Swx7O1nRJXGXrmuE0DD7s') format('truetype'); }
 @font-face { font-family: 'Unkempt'; font-style: normal; font-weight: normal; src: local('Unkempt'), url('http://themes.googleusercontent.com/font?kit=opYoFyuMZRiBj_IeDTrh8g') format('truetype'); }
-body { font-family: 'Unkempt', arial, serif; font-size:1em; margin:0; padding:0; background:url("/img/page-background-cork.jpg");}
+
+body { font-family: 'Unkempt', arial, serif; font-size:1em; margin:0; padding:0; background:url("/img/page-background-cork.jpg") fixed;}
 h1, h2 { color:#fff; font-size:2em; margin:0 0 0 52px; padding:0; }
 h2 { font-size:1.25em; padding:0 20px;}
 .covered { font-family: 'Covered By Your Grace', arial, serif; }
 h3, .just { font-family: 'Just Me Again Down Here', arial, serif; font-size:1.3em; }
 
-div#header{ background-color:#3a839c; height:75px; }
+div#header{ background:url("/img/page-sprite-aaa.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; }
 div#header div{position:relative;}
-div#header img{ position:absolute; top:15px; left:670px; width:98px; height:50px; border:0; }
-div#header-bar{ background:url("/img/page-header-bar.png") repeat-x; height:11px; } 
+div#header div a div{ position:absolute; background:url("/img/page-sprite-aaa.png") repeat-x 0 0; top:15px; left:670px; width:98px; height:50px; border:0; }
 div.container { width:780px; margin:auto; }
+div#child{ padding-top:86px; }
 div#child ul li{ list-style-type:none; padding:0; margin:0; float:left; }
 div#child ul li label{ float:left; }
-div#child ul li div{ width:200px; height:200px; background:url("/img/frame-vintage-200x200.png"); padding:15px 12px 46px 14px; margin:10px 10px 15px; }
-div#child ul li div img { width:200px; height:200px; }
+div#child ul li div{ width:200px; height:200px; background:url("/img/page-sprite-aaa.png") no-repeat 0 -138px; padding:15px 12px 46px 14px; margin:10px 10px 15px; }
+div#child ul li div img { width:200px; height:200px; border:0; }
 div#child ul li div label { font-family:'Just Me Again Down Here', arial, serif; font-size:2.75em; text-align:center; width:100%; line-height:.5em; }
 div#footer{ background-color:#daa2b5; color:#fff; font-size:smaller; padding:0; }
 div#footer hr { border:0; margin:0; padding:0; height:20px; background-color:#ba8a9a; }
@@ -23,3 +24,9 @@ div#footer div { color:#eee; padding:10px 0px 10px 103px; }
 
 .clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix {display: inline-block;}
+
+#lightbox-container-image-data-box {
+  font-family:'Unkempt', arial, serif;
+  font-size:1em;
+  line-height:1em;
+}
