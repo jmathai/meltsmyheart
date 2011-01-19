@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-  <title></title>
+  <title><?php echo getConfig()->get('site')->name; ?></title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
   <link rel="stylesheet" type="text/css" href="/css/ui/jquery-ui-1.8.7.custom.css">
   <!--[if IE]>

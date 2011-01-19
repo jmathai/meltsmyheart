@@ -1,0 +1,15 @@
+body { font-family: 'Unkempt', arial, serif; font-size:1em; margin:0; padding:0;}
+h1, h2 { font-size:2em; margin:0; padding:0;}
+h2 { font-size:1.25em; padding:0 20px;}
+.covered { font-family: 'Covered By Your Grace', arial, serif; }
+h3, .just { font-family: 'Just Me Again Down Here', arial, serif; font-size:1.3em; }
+
+div#container { width:780px; margin:auto; }
+div#child ul li{ list-style-type:none; padding:0; margin:0; float:left; }
+div#child ul li label{ float:left; }
+div#child ul li div{ width:200px; height:200px; background:url("/img/frame-vintage-200x200.png"); padding:15px 12px 46px 14px; margin:10px 10px 15px; }
+div#child ul li div img { width:200px; height:200px; }
+div#child ul li div label { font-size:1.2em; text-align:center; width:100%; padding:7px 0 0 0; }
+
+.clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix {display: inline-block;}

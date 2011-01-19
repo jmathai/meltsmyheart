@@ -1,8 +1,14 @@
-<h1><?php echo $child['c_name']; ?><h1>
-<h3>Born <?php echo date('l jS \of F', $child['c_birthdate']); ?></h3>
-<?php foreach($photos as $week => $weekPhotos) { ?>
-  <h5><?php echo sprintf('%s %s', $child['c_name'], $week); ?></h5>
-  <?php foreach($weekPhotos as $photo) { ?>
-    <img src="/photos<?php echo Photo::generateUrl($photo['p_basePath'], 200, 200/*, array(Photo::contrast)*/); ?>" hspace="5" vspace="5" title="<?php echo date('Y-m-d', $photo['p_dateTaken']); ?>">
-  <?php } ?>
-<?php } ?>
+<h1><?php echo posessive($child['c_name']); ?> page<h1>
+<h2>Born <?php echo date('l jS \of F', $child['c_birthdate']); ?></h2>
+<div id="child" class="clearfix">
+  <ul>
+    <?php foreach($photos as $photo) { ?>
+      <li>
+        <div>
+          <img src="/photos<?php echo Photo::generateUrl($photo['p_basePath'], 200, 200, array(Photo::square, Photo::contrast)); ?>" title="<?php echo date('Y-m-d', $photo['p_dateTaken']); ?>">
+          <label><?php echo sprintf('%s old', displayAge($child['c_birthdate'], $photo['p_dateTaken'])); ?></label>
+        </div>
+      </li>
+    <?php } ?>
+  </ul>
+</div>

@@ -106,8 +106,7 @@ class Site
   {
     $child = Child::getByDomain($name);
     $photos = Photo::getByChild($child['c_u_id'], $child['c_id']);
-    $photosByGroup = Photo::photosByGroup($child['c_birthdate'], $photos);
-    getTemplate()->display('template.php', array('body' => 'childPage.php', 'child' => $child, 'photos' => $photosByGroup));
+    getTemplate()->display('page.php', array('child' => $child, 'photos' => $photos));
   }
 
   public static function childNewPost()
