@@ -1,5 +1,5 @@
 body { font-family: 'Unkempt', arial, serif; font-size:1em; margin:0; padding:0; background:url("/img/page-background-cork.jpg");}
-h1, h2 { font-size:2em; margin:0; padding:0;}
+h1, h2 { color:#fff; font-size:2em; margin:0 0 0 52px; padding:0; }
 h2 { font-size:1.25em; padding:0 20px;}
 .covered { font-family: 'Covered By Your Grace', arial, serif; }
 h3, .just { font-family: 'Just Me Again Down Here', arial, serif; font-size:1.3em; }
@@ -14,6 +14,9 @@ div#child ul li label{ float:left; }
 div#child ul li div{ width:200px; height:200px; background:url("/img/frame-vintage-200x200.png"); padding:15px 12px 46px 14px; margin:10px 10px 15px; }
 div#child ul li div img { width:200px; height:200px; }
 div#child ul li div label { font-family:'Just Me Again Down Here', arial, serif; font-size:2.75em; text-align:center; width:100%; line-height:.5em; }
+div#footer{ background-color:#daa2b5; color:#fff; font-size:smaller; padding:0; }
+div#footer hr { border:0; margin:0; padding:0; height:20px; background-color:#ba8a9a; }
+div#footer div { color:#eee; padding:10px 0px 10px 103px; }
 
 .clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix {display: inline-block;}

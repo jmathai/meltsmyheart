@@ -18,8 +18,10 @@
     <div id="content">
       <?php getTemplate()->display('childPage.php', array('child' => $child, 'photos' => $photos)); ?>
     </div>
-    <div id="footer">
-    </div>
+  </div>
+  <div id="footer">
+    <hr>
+    <div class="container">&copy; <?php echo date('Y'); ?> <?php echo getConfig()->get('site')->name; ?></div>
   </div>
   <script src="/js/jquery.js"></script>
   <script src="/js/page.js"></script>
