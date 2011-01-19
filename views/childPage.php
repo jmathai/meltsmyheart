@@ -1,5 +1,3 @@
-<h1><?php echo posessive($child['c_name']); ?> page<h1>
-<h2>Born <?php echo date('l jS \of F', $child['c_birthdate']); ?></h2>
 <div id="child" class="clearfix">
   <ul>
     <?php foreach($photos as $photo) { ?>
