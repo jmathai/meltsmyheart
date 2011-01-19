@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <title><?php echo sprintf("%s's page on %s", $child['c_name'], getConfig()->get('site')->name); ?></title>
-  <link rel="stylesheet" type="text/css" href="/css/page.css">
+  <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', array('page.css')); ?>">
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -22,7 +22,6 @@
     <hr>
     <div class="container">&copy; <?php echo date('Y'); ?> <?php echo getConfig()->get('site')->name; ?></div>
   </div>
-  <script src="/js/jquery.js"></script>
-  <script src="/js/page.js"></script>
+  <script src="<?php echo getAsset('js', array('jquery.min.js', 'plugins/jquery.lightbox-0.5.min.js','page.js')); ?>"></script>
 </body>
 </html>

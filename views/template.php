@@ -1,8 +1,7 @@
 <html lang="en">
 <head>
   <title><?php echo getConfig()->get('site')->name; ?></title>
-  <link rel="stylesheet" type="text/css" href="/css/styles.css">
-  <link rel="stylesheet" type="text/css" href="/css/ui/jquery-ui-1.8.7.custom.css">
+  <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', array('styles.css','ui/jquery-ui-1.8.7.custom.css')); ?>">
   <!--[if IE]>
   <link rel="stylesheet" type="text/css" href="/css/ie.css">
   <![endif]-->
@@ -65,12 +64,7 @@
       <?php } ?>
     </div>
   </div>
-  <script src="/js/jquery.js"></script>
-  <script src="/js/swfupload.js"></script>
-  <script src="/js/plugins/swfupload.queue.js"></script>
-  <script src="/js/plugins/jquery-ui-1.8.7.custom.min.js"></script>
-  <script src="/js/plugins/jquery.tools.min.js"></script>
-  <script src="/js/javascript.js"></script>
+  <script src="<?php echo getAsset('js', array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js')); ?>"></script>
   <script>
     var _gaq = _gaq || [];
     $(document).ready(function() {

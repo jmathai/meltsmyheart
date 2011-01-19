@@ -49,6 +49,20 @@ function emailLink()
   return '<a href="mailto:' . getConfig()->get('email')->from_email . '">' . getConfig()->get('email')->from_email . '</a>';
 }
 
+function getAsset($type, $files)
+{
+  $uri    = sprintf('/%s/compress-%s.%s?files=%s', $type, getConfig()->get('assets')->$type, $type, implode(',', $files));
+  if(getConfig()->get('assets')->minify)
+  {
+    $hash   = md5($uri);
+    $relativePath = "/{$type}/static/{$hash}.{$type}";
+    if(file_exists(getConfig()->get('paths')->docroot . $relativePath))
+      $uri = $relativePath;
+  }
+
+  return $uri;
+}
+
 function getFacebook()
 {
   static $facebook;
@@ -133,4 +147,10 @@ function quoteEncode($str)
 function quoteDecode($str)
 {
   return html_entity_decode($str);
+}
+
+function validCacheInclude($parent, $child, $ext)
+{
+  $extLen = -1 * (int)strlen($ext);
+  return substr($child, $extLen) == $ext;
 }
