@@ -1,3 +1,6 @@
+@font-face { font-family: 'Just Me Again Down Here'; font-style: normal; font-weight: normal; src: local('Just Me Again Down Here'), local('JustMeAgainDownHere'), url('http://themes.googleusercontent.com/font?kit=sN06iTc9ITubLTgXoG-kc1kSerjmKQx4_8bS0O3fSGc') format('truetype'); }
+@font-face { font-family: 'Covered By Your Grace'; font-style: normal; font-weight: normal; src: local('Covered By Your Grace'), local('CoveredByYourGrace'), url('http://themes.googleusercontent.com/font?kit=6ozZp4BPlrbDRWPe3EBGA8Swx7O1nRJXGXrmuE0DD7s') format('truetype'); }
+@font-face { font-family: 'Unkempt'; font-style: normal; font-weight: normal; src: local('Unkempt'), url('http://themes.googleusercontent.com/font?kit=opYoFyuMZRiBj_IeDTrh8g') format('truetype'); }
 body { font-family: 'Unkempt', arial, serif; font-size:1em; margin:0; padding:0; background:url("/img/page-background-cork.jpg");}
 h1, h2 { color:#fff; font-size:2em; margin:0 0 0 52px; padding:0; }
 h2 { font-size:1.25em; padding:0 20px;}

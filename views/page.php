@@ -2,7 +2,6 @@
 <head>
   <title><?php echo sprintf("%s's page on %s", $child['c_name'], getConfig()->get('site')->name); ?></title>
   <link rel="stylesheet" type="text/css" href="/css/page.css">
-  <link href="http://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here|Unkempt|Covered+By+Your+Grace" rel="stylesheet" type="text/css">
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
