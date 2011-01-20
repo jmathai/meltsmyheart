@@ -113,6 +113,7 @@ class EpiDatabase
 
   private function prepare($sql, $params = array())
   {
+    $this->init();
     try
     {
       $sth = $this->dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
