@@ -87,8 +87,14 @@ class Site
 
   public static function childCheck()
   {
-    $child = Child::getByDomain($_POST['value']);
-    Api::success(empty($child), "Checking if {$_POST['value']} exists");
+    $value = $_POST['value'];
+    if(preg_match('/^([a-zA-Z0-9-]+).meltsmyheart.com$/', $value, $matches))
+      $value = $matches[1];
+    if(preg_match('/^[a-zA-Z0-9-]$/', $value) === false)
+      Api::success(false, "Invalid domain {$value}");
+
+    $child = Child::getByDomain($value);
+    Api::success(empty($child), "Checking if {$value} exists");
   }
 
   public static function childNew()
@@ -116,7 +122,11 @@ class Site
   {
     self::requireLogin();
     $date = strtotime($_POST['childBirthDate']);
-    if($date === false || empty($_POST['childName']) || empty($_POST['childDomain']))
+    $domain = $_POST['childDomain'];
+    if(preg_match('/^([a-zA-Z0-9-]+)$/', $domain, $matches))
+      $domain = $matches[1];
+
+    if($date === false || empty($_POST['childName']) || empty($domain))
       getRoute()->redirect('/child/new?e=invalidFields');
 
     $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $date, $_POST['childDomain']);
@@ -234,7 +244,7 @@ class Site
       getRoute()->redirect('/forgot?e=emailDoesNotExist');
 
     $token = md5(str_repeat($_POST['email'], 2));
-    Resque::enqueue('mmh_email', 'Email', array('email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
+    Resque::enqueue('mmh_email', 'Email', array('subject' => 'Forgot your password?', 'email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
     getRoute()->redirect('/forgot/confirm');
   }
 
@@ -277,7 +287,7 @@ class Site
       $user = User::getById($userId);
       User::startSession($user);
       $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/child/new';
-      $args = array('email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
+      $args = array('subject' => 'Welcome to '.getConfig()->get('site')->name, 'email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
       Resque::enqueue('mmh_email', 'Email', $args);
     }
     getRoute()->redirect($redirectUrl);
@@ -599,6 +609,7 @@ class Site
   private static function requireUpgrade()
   {
     self::requireLogin();
+    return;
     if(getSession()->get('accountType') != User::accountTypePaid)
     {
       getRoute()->run('/upgrade');

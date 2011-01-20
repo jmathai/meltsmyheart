@@ -6,7 +6,7 @@ class Email
 
   public function perform()
   {
-    $message = Swift_Message::newInstance(/*$this->args['subject'] .*/ 'Test Subject') 
+    $message = Swift_Message::newInstance($this->args['subject']) 
       ->setFrom(array(getConfig()->get('email')->from_email => getConfig()->get('email')->from_name))
       ->setTo($this->args['email'])
       ->setBody($this->args['template'], 'text/html')
