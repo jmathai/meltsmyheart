@@ -25,7 +25,7 @@ function displayAge($born, $taken)
     return '--';
   elseif($hours < 1)
     return 'a few minutes';
-  elseif($hours < 23)
+  elseif($hours < 24)
     return "{$hours} hour" . plural($hours);
 
   $days = intval($seconds / 86400);
