@@ -69,7 +69,7 @@ function getFacebook()
   if($facebook)
     return $facebook;
 
-  $config = array('appId' => getConfig()->get('thirdparty')->fb_appId, 'secret' => getConfig()->get('thirdparty')->fb_secret);
+  $config = array('appId' => getSecret('fb_appId'), 'secret' => getSecret('fb_secret'));
   $facebook = new FacebookGraph($config);
   return $facebook;
 }
@@ -98,13 +98,28 @@ function getQuote()
   return "{$quote['quote']} - <em>{$quote['by']}</em>";
 }
 
+function getSecret($name)
+{
+  static $secrets = array();
+  if(isset($secrets[$name]))
+    return $secrets[$name];
+
+  $filename = getConfig()->get('paths')->secret."/{$name}";
+  if(file_exists($filename))
+    $secrets[$name] = trim(file_get_contents($filename));
+  else
+    $secrets[$name] = null;
+
+  return $secrets[$name];
+}
+
 function getSmugMug($userToken=null, $userSecret=null)
 {
   static $smugMug;
   if($smugMug)
     return $smugMug;
 
-  $config = array('APIKey' => getConfig()->get('thirdparty')->sm_key, 'OAuthSecret' => getConfig()->get('thirdparty')->sm_secret, 'AppName' => getConfig()->get('thirdparty')->sm_name);
+  $config = array('APIKey' => getSecret('sm_key'), 'OAuthSecret' => getSecret('sm_secret'), 'AppName' => getConfig()->get('thirdparty')->sm_name);
   $smugMug = new phpSmug($config);
   if(!empty($userToken) && !empty($userSecret))
     $smugMug->setToken("id={$userToken}", "Secret={$userSecret}");

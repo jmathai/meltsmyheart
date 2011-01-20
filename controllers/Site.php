@@ -105,6 +105,9 @@ class Site
   public static function childPage($name)
   {
     $child = Child::getByDomain($name);
+    if(!$child)
+      getRoute()->run('/error/404');
+
     $photos = Photo::getByChild($child['c_u_id'], $child['c_id']);
     getTemplate()->display('page.php', array('child' => $child, 'photos' => $photos));
   }
