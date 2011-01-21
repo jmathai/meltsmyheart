@@ -138,6 +138,8 @@ function getString($token, $params = array())
 
 function normalizeRoute($route)
 {
+  if($route == '/child/new')
+    return $route;
   return preg_replace(array('#(/child)/[a-zA-Z0-9-]+#', '#/[^/]?\d+([^/])?#'), '\\1', $route);
 }
 
