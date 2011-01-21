@@ -179,10 +179,10 @@ class Site
       $childId = getSession()->get('currentChildId');
       getRoute()->redirect("/albums/list/photagious/{$childId}");
     }
-    /* TODO else
+    else
     {
-
-    }*/
+      getRoute()->redirect('/error/general?e=connectionFailed');
+    }
   }
 
   public static function connectSmugMug()
@@ -257,7 +257,7 @@ class Site
       $userId = getSession()->get('userId');
       $template = 'home.php';
       $children = Child::getByUserId($userId);
-      // TODO remove this crap
+      // TODO remove nested query
       foreach($children as $key => $value)
       {
         $children[$key]['photos'] = Photo::getByChild($userId, $value['c_id']);
