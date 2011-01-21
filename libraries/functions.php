@@ -136,6 +136,11 @@ function getString($token, $params = array())
   return '';
 }
 
+function normalizeRoute($route)
+{
+  return preg_replace('#/[^/]?\d+([^/])?#', '\\1', $route);
+}
+
 function plural($int)
 {
   return $int > 1 ? 's' : '';

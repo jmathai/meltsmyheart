@@ -30,7 +30,10 @@ var mmh = (function() {
         top:'10%',
         close: tgt + ' button.close',
         onBeforeLoad: function() {
-          mmh.loadDialog(this.getTrigger().attr("href"), {}, tgt);
+          var anchor = this.getTrigger(), href = anchor.attr("href"), track = anchor.attr("track") || href;
+          $("#modal").html("");
+          mmh.loadDialog(href, {}, tgt);
+          mpq.push(["track", track, {"display": "modal"}]); 
         },
         onLoad: function() {
           $(tgt + ' .close').live('click', function(e){ e.preventDefault(); $(el).data("overlay").close();});

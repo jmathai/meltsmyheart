@@ -11,7 +11,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Facebook::getPhotos($userId, $childId, $credential['c_token'], $albumId);
-    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids, 'service' => Credential::serviceFacebook));
     Api::success($markup);
   }
 
@@ -25,7 +25,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::servicePhotagious);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Photagious::getPhotos($userId, $childId, $credential['c_token'], $tag);
-    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids, 'service' => Credential::servicePhotagious));
     Api::success($markup);
   }
 
@@ -39,7 +39,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = SmugMug::getPhotos($userId, $childId, $credential['c_token'], $credential['c_secret'], $albumId, $albumKey);
-    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids, 'service' => Credential::serviceSmugMug));
     Api::success($markup);
   }
 
@@ -81,6 +81,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
+    $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
       'child' => $child, 'photoCount' => count($ids), 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
   }

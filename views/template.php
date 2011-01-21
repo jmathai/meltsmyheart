@@ -66,12 +66,19 @@
   </div>
   <script src="<?php echo getAsset('js', array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js')); ?>"></script>
   <script>
-    var _gaq = _gaq || [];
+    var _gaq = _gaq || [], mpq = [];
     $(document).ready(function() {
-      //$("#modal").dialog({autoOpen:false, modal:true, show:"scale", hide:"scale"});
-    //$(document).scroll(function() {
-    //    $("#modal").dialog("option", "position", "center");
-    //});
+      mpq.push(["init", "<?php echo getSecret('mp_token'); ?>"]);
+      mpq.push(["track", "page-view", {"path": "<?php echo normalizeRoute(getRoute()->route()); ?>"}]); 
+      mpq.push(["track", "<?php echo normalizeRoute(getRoute()->route()); ?>"]); 
+      <?php if(getConfig()->get('site')->mode == 'dev') { ?>
+        mpq.push(["set_config", {"test": true}]);
+      <?php } ?>
+      (function() {
+        var mp = document.createElement("script"); mp.type = "text/javascript"; mp.async = true;
+        mp.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + "//api.mixpanel.com/site_media/js/api/mixpanel.js";
+        var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(mp, s);
+      })(); 
       <?php if(isset($_GET['e'])) { ?>
         mmh.displayError(<?php echo json_encode(getString($_GET['e'])); ?>);
       <?php } ?>
