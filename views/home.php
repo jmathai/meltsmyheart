@@ -22,5 +22,9 @@
     <?php } ?>
   </p>
 <?php } else { ?>
-
+  <h2>You haven't added any of your children</h2>
+  <p>
+    It's easy to get started. Click the button below to add a child.
+    <form action="/child/new"><button type="submit" class="yellow"><div>Add child</div></button></form>
+  </p>
 <?php } ?>
