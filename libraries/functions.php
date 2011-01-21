@@ -138,7 +138,7 @@ function getString($token, $params = array())
 
 function normalizeRoute($route)
 {
-  return preg_replace('#/[^/]?\d+([^/])?#', '\\1', $route);
+  return preg_replace(array('#(/child)/[a-zA-Z0-9-]+#', '#/[^/]?\d+([^/])?#'), '\\1', $route);
 }
 
 function plural($int)
