@@ -34,12 +34,12 @@ class Uploader
     $im->exiftran($baseFile);
 
     // thumb 150x150
-    $thumbFile = "{$this->dirDestThumb}/{$this->photoSafeName}";
+    /*$thumbFile = "{$this->dirDestThumb}/{$this->photoSafeName}";
     $im = new ImageMagick($baseFile, getConfig()->get('paths')->exe);
-    $im->scale(150, 150, $thumbFile, true);
+    $im->scale(150, 150, $thumbFile, true);*/
 
     $systemPath = getConfig()->get('paths')->photos;
-    $thumbPath = str_replace($systemPath, '', $thumbFile);
+    $thumbPath = null; //$thumbPath = str_replace($systemPath, '', $thumbFile);
     $basePath =  str_replace($systemPath, '', $baseFile);
     $originalPath =  str_replace($systemPath, '', $this->photoFile);
 
