@@ -4,7 +4,7 @@
     <?php foreach($photos as $photo) { ?>
       <li>
         <div>
-          <img src="<?php echo $photo['thumbUrl']; ?>" <?php if(isset($ids[$photo['internalId']])) { ?> class="selected"<?php } ?>>
+          <img src="<?php echo $photo['thumbUrl']; ?>" class="frame-polaroid">
         </div>
         <?php if(isset($ids[$photo['internalId']])) { ?>
           <?php getTemplate()->display('partials/photoSelectItemAction.php', array('childId' => $childId, 'photoId' => $photo['internalId'], 'action' => 'remove')); ?>

@@ -54,15 +54,15 @@ var mmh = (function() {
       },
       clickHandlers: {
         photo: function(e) {
-          var el = this, img = $(this).prev().children(':first-child');
+          var el = this;
           e.preventDefault();
           $.post(this.href, function(response) {
             $("#button-view-page").show();
             if(mmh.ajax.isSuccess(response)) {
-              if($(img).hasClass('selected'))
-                $(img).removeClass('selected');
+              if($(el).hasClass('add'))
+                $(el).removeClass('add').addClass('remove');
               else
-                $(img).addClass('selected');
+                $(el).removeClass('remove').addClass('add');
               $(el).before(response.message).remove();
             } else {
               mmh.ajax.error(response);
