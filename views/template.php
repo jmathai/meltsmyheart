@@ -10,7 +10,7 @@
 <body>
   <div id="header">
     <div class="container">
-      <a href="/" title="<?php echo getConfig()->get('site')->name; ?>"><img src="/img/logo.png" id="logo" alt="<?php echo getConfig()->get('site')->name; ?>"></a>
+      <a href="<?php echo getConfig()->get('urls')->base; ?>" title="<?php echo getConfig()->get('site')->name; ?>"><img src="/img/logo.png" id="logo" alt="<?php echo getConfig()->get('site')->name; ?>"></a>
       <?php if(User::isLoggedIn()) { ?>
         <div class="loginlogout">You're logged in as <?php echo getSession()->get('email'); ?>, <a href="/logout">logout</a>.</div>
         <ul id="navigation">
@@ -40,13 +40,13 @@
     <div class="container">
       <ul>
         <li><h4>&copy; <?php echo date('Y'); ?> <?php echo getConfig()->get('site')->name; ?></h4></li>
-        <li><a href="/share-baby-photos">Share baby photos</a></li>
+        <!--<li><a href="/share-baby-photos">Share baby photos</a></li>
         <li><a href="/create-baby-scrapbook">Create baby scrapbook</a></li>
         <li><a href="/make-childs-photoblog">Make a child's photo blog</a></li>
-        <li><a href="/design-childs-webpage">Design child's webpage</a></li>
+        <li><a href="/design-childs-webpage">Design child's webpage</a></li>-->
       </ul>
       <?php if($_SERVER['REQUEST_URI'] == '/' && !User::isLoggedIn()) { ?>
-        <p>
+        <!--<p>
           "<?php echo getConfig()->get('site')->name; ?> is my favorite way to share my baby's photos. 
           I already upload them to Facebook so it was easy to create my child's page."
           <em>Suja Brane - Cincinnati, OH (<a href="http://anna.meltsmyheart.com">http://anna.meltsmyheart.com</a>)</em>
@@ -60,7 +60,7 @@
           "Everyone I shared Gabriel's <?php echo getConfig()->get('site')->name; ?> webpage with loved it.
           They kept commenting on how fast he's growing up!"
           <em>Leeja Thomas - Houston, TX (<a href="http://gabriel.meltsmyheart.com">http://gabriel.meltsmyheart.com</a>)</em>
-        <p>
+        <p>-->
       <?php } ?>
     </div>
   </div>
