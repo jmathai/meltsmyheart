@@ -1,6 +1,10 @@
 <html lang="en">
 <head>
-  <title><?php echo getConfig()->get('site')->name; ?></title>
+  <title><?php echo getConfig()->get('site')->name; ?> - An easy and beautiful way to share photos of your children</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="description" content="The easiest most beautiful way to share photos of your children. Let us automatically group your child's photos by age and apply filters to make your photos look even better.">
+  <meta name="Child photos, children photos, baby photos, share baby photos, share children photo, print baby photos.">
+  <meta name="robots" content="index, follow" />
   <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', array('styles.css','ui/jquery-ui-1.8.7.custom.css')); ?>">
   <!--[if IE]>
   <link rel="stylesheet" type="text/css" href="/css/ie.css">
