@@ -8,7 +8,7 @@
       <label for="childName">Child's name</label>
       <input type="text" name="childName" required="required">
 
-      <label for="childBirthDate">Birthdate &amp; time<em>(this format 6/19/2010 at 10:06 am)</em></label>
+      <label for="childBirthDate">Birthdate &amp; time<em>(this format 6/19/2010 10:06 am)</em></label>
       <input type="text" name="childBirthDate" date="mm/dd/yyyy">
 
       <label for="childDomain">Web page URL<em>(http://johnny.meltsmyheart.com - just enter johnny)</em></label>

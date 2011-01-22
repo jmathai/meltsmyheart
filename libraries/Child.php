@@ -4,6 +4,9 @@ class Child
   const limitFree = 1;
   public static function add($userId, $name, $birthdate, $domain)
   {
+    $domain = strtolower($domain);
+    if(!preg_match('/^[a-zA-Z0-9-]+$/', $domain))
+      return false;
     $params = array(':userId' => $userId, ':name' => $name, ':birthdate' => $birthdate, ':domain' => $domain);
     return getDatabase()->execute('INSERT INTO child(c_u_id, c_name, c_birthdate, c_domain)
       VALUES(:userId, :name, :birthdate, :domain)', $params);
@@ -29,6 +32,9 @@ class Child
 
   public static function getPageUrl($child)
   {
-    return "/child/{$child['c_domain']}";
+    if(getConfig()->get('site')->mode == 'prod')
+      return "http://{$child}.meltsmyheart.com";
+    else
+      return "/child/{$child['c_domain']}";
   }
 }
