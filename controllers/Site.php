@@ -220,15 +220,15 @@ class Site
     header('HTTP/1.0 404 Not Found');
     header('Status: 404 Not Found');
     if($ajax == 'ajax')
-      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REDIRECT_URL'])));
+      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REQUEST_URI'])));
     else
-      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REDIRECT_URL']));
+      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REQUEST_URI']));
     die();
   }
 
   public static function errorGeneral($ajax = false)
   {
-    $body = getTemplate()->get('errorGeneral.php', array('page' => $_SERVER['REDIRECT_URL']));
+    getTemplate()->display('template.php', array('body' => 'errorGeneral.php', 'page' => $_SERVER['REQUEST_URI']));
     die();
   }
 
@@ -600,7 +600,7 @@ class Site
     if(!getSession()->get('userId'))
     {
       if($_SERVER['REQUEST_METHOD'] == 'GET')
-        $url = '/login?r='.urlencode($_SERVER['REDIRECT_URL']);
+        $url = '/login?r='.urlencode($_SERVER['REQUEST_URI']);
       else
         $url = '/login';
       getRoute()->redirect($url);
