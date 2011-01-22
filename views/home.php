@@ -8,7 +8,12 @@
         <?php if(count($child['photos']) > 0) { ?>
           <ul class="home-photos">
           <?php foreach($child['photos'] as $num => $photo) { ?>
-            <li><img src="<?php echo !empty($photo['p_thumbPath']) ? Photo::generateUrl($photo['p_basePath'], 100, 100, array(Photo::square)) : '/img/processing.png'; ?>" class="frame-polaroid" title="<?php echo quoteEncode($child['c_name']) . ' at ' . displayAge($child['c_birthdate'], $photo['p_dateTaken']); ?> old."/></li>
+            <li>
+              <?php if(!empty($photo['p_basePath'])) { ?>
+                <img src="<?php echo Photo::generateUrl($photo['p_basePath'], 100, 100, array(Photo::square)); ?>" class="frame-polaroid" title="<?php echo quoteEncode($child['c_name']) . ' at ' . displayAge($child['c_birthdate'], $photo['p_dateTaken']); ?> old."></li>
+              <?php } else { ?>
+                <img src="/img/logo-heart-100.png" class="frame-polaroid" title="Processing..."></li>
+              <?php } ?>
             <?php if($num >= 11) break; ?>
           <?php } ?>
           </ul>
