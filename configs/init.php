@@ -7,7 +7,8 @@ include "{$epiPath}/Epi.php";
 Epi::setPath('base', $epiPath);
 Epi::setPath('config', dirname(dirname(__FILE__)).'/configs');
 Epi::setPath('view', dirname(dirname(__FILE__)).'/views');
-Epi::init('cache','config','database','route','session','template');
+Epi::setSetting('exceptions', true);
+Epi::init('cache','config','database','route','session','template','logger');
 
 // configs
 getConfig()->load('prod.ini');
@@ -21,3 +22,7 @@ EpiDatabase::employ($dbConfig->type, $dbConfig->name, $dbConfig->host, $dbConfig
 EpiSession::employ(EpiSession::PHP);
 EpiCache::employ(EpiCache::MEMCACHED);
 
+/*set_exception_handler(function($e){
+  getLogger()->crit('Uncaught exception', $e);
+  getRoute()->run('/error/general');
+});*/
