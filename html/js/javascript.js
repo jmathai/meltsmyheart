@@ -30,7 +30,10 @@ var mmh = (function() {
         top:'10%',
         close: tgt + ' button.close',
         onBeforeLoad: function() {
-          mmh.loadDialog(this.getTrigger().attr("href"), {}, tgt);
+          var anchor = this.getTrigger(), href = anchor.attr("href"), track = anchor.attr("track") || href;
+          $("#modal").html("");
+          mmh.loadDialog(href, {}, tgt);
+          mpq.push(["track", track, {"display": "modal"}]); 
         },
         onLoad: function() {
           $(tgt + ' .close').live('click', function(e){ e.preventDefault(); $(el).data("overlay").close();});
@@ -54,15 +57,15 @@ var mmh = (function() {
       },
       clickHandlers: {
         photo: function(e) {
-          var el = this, img = $(this).prev().children(':first-child');
+          var el = this;
           e.preventDefault();
           $.post(this.href, function(response) {
             $("#button-view-page").show();
             if(mmh.ajax.isSuccess(response)) {
-              if($(img).hasClass('selected'))
-                $(img).removeClass('selected');
+              if($(el).hasClass('add'))
+                $(el).removeClass('add').addClass('remove');
               else
-                $(img).addClass('selected');
+                $(el).removeClass('remove').addClass('add');
               $(el).before(response.message).remove();
             } else {
               mmh.ajax.error(response);
@@ -150,11 +153,11 @@ $.tools.validator.localize("en", {
   '[required]':'This form field is required.',
   '[min]':'Arvon on oltava suurempi, kuin $1',
 });
-$.tools.validator.fn("[date]", "Please enter a valid date.", function(input) {
+$.tools.validator.fn("[date]", "Please enter a valid date and time. (i.e. 6/19/2010 at 10:06 am)", function(input) {
   var value = input.attr('date');
   switch(value) {
     case 'mm/dd/yyyy':
-      return input.val().match(/\d{1,2}\/\d{1,2}\/\d{4}/) != null;
+      return input.val().match(/\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{2} (am|pm|AM|PM)/) != null;
       break;
   }
   return true;
@@ -176,8 +179,11 @@ $.tools.validator.fn("[check-name]", "This name is already in use.", function(in
           });
   return ret;
 });
+$.tools.validator.fn("[check-domain]", "Please enter only alphabets, numbers and -.", function(input) {
+  return input.val().match(/^[a-zA-Z0-9-]+$/) != null;
+});
 $.tools.validator.fn("[data-equals]", "Does not match $1.", function(input) {
 	var name = input.attr("data-equals"),
 		 field = this.getInputs().filter("[name=" + name + "]"); 
-	return input.val() == field.val() ? true : [name]; 
+	return input.val() == field.val() ? true : [name];
 });

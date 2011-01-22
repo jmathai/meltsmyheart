@@ -135,6 +135,7 @@ class Photo
 
   public static function generateUrl($basePath, $width, $height, $options = array())
   {
+    $prefix = getConfig()->get('urls')->base;
     $customPath = preg_replace('#^/base/#', '/custom/', $basePath);
     $params = '{'.intval($width).','.intval($height); // {1,2
     if(!empty($options))
@@ -145,7 +146,7 @@ class Photo
     $hash = self::generateHash(array_merge(array($width, $height), $options));
     $params .= ",{$hash}}";
     $fileParts = pathinfo($customPath);
-    return "{$fileParts['dirname']}/{$fileParts['filename']}{$params}.{$fileParts['extension']}";
+    return "{$prefix}/photos{$fileParts['dirname']}/{$fileParts['filename']}{$params}.{$fileParts['extension']}";
   }
 
   public static function getByBasePath($basePath)

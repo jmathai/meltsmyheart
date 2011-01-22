@@ -11,7 +11,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceFacebook);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Facebook::getPhotos($userId, $childId, $credential['c_token'], $albumId);
-    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids, 'service' => Credential::serviceFacebook));
     Api::success($markup);
   }
 
@@ -25,7 +25,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::servicePhotagious);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = Photagious::getPhotos($userId, $childId, $credential['c_token'], $tag);
-    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids, 'service' => Credential::servicePhotagious));
     Api::success($markup);
   }
 
@@ -39,7 +39,7 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     $photos = SmugMug::getPhotos($userId, $childId, $credential['c_token'], $credential['c_secret'], $albumId, $albumKey);
-    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids));
+    $markup = getTemplate()->get('photosList.php', array('childId' => $childId, 'child' => $child, 'photos' => $photos, 'ids' => $ids, 'service' => Credential::serviceSmugMug));
     Api::success($markup);
   }
 
@@ -81,14 +81,21 @@ class Site
     $credential = Credential::getByService($userId, Credential::serviceSmugMug);
     getSmugMug()->setToken("id={$credential['c_token']}", "Secret={$credential['c_secret']}");
     $albums = SmugMug::getAlbums($childId, $credential['c_token'], $credential['c_secret'], $credential['c_uid']);
+    $ids = Photo::extractIds(Photo::getByChild($userId, $childId));
     getTemplate()->display('template.php', array('body' => 'albumsList.php', 'service' => Credential::serviceSmugMug, 'albums' => $albums,
       'child' => $child, 'photoCount' => count($ids), 'js' => getTemplate()->get('javascript/albumsList.js.php', array('childId' => $childId))));
   }
 
   public static function childCheck()
   {
-    $child = Child::getByDomain($_POST['value']);
-    Api::success(empty($child), "Checking if {$_POST['value']} exists");
+    $value = $_POST['value'];
+    if(preg_match('/^([a-zA-Z0-9-]+).meltsmyheart.com$/', $value, $matches))
+      $value = $matches[1];
+    if(preg_match('/^[a-zA-Z0-9-]$/', $value) === false)
+      Api::success(false, "Invalid domain {$value}");
+
+    $child = Child::getByDomain($value);
+    Api::success(empty($child), "Checking if {$value} exists");
   }
 
   public static function childNew()
@@ -116,7 +123,11 @@ class Site
   {
     self::requireLogin();
     $date = strtotime($_POST['childBirthDate']);
-    if($date === false || empty($_POST['childName']) || empty($_POST['childDomain']))
+    $domain = $_POST['childDomain'];
+    if(preg_match('/^([a-zA-Z0-9-]+)$/', $domain, $matches))
+      $domain = $matches[1];
+
+    if($date === false || empty($_POST['childName']) || empty($domain))
       getRoute()->redirect('/child/new?e=invalidFields');
 
     $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $date, $_POST['childDomain']);
@@ -169,10 +180,10 @@ class Site
       $childId = getSession()->get('currentChildId');
       getRoute()->redirect("/albums/list/photagious/{$childId}");
     }
-    /* TODO else
+    else
     {
-
-    }*/
+      getRoute()->redirect('/error/general?e=connectionFailed');
+    }
   }
 
   public static function connectSmugMug()
@@ -209,15 +220,15 @@ class Site
     header('HTTP/1.0 404 Not Found');
     header('Status: 404 Not Found');
     if($ajax == 'ajax')
-      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REDIRECT_URL'])));
+      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REQUEST_URI'])));
     else
-      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REDIRECT_URL']));
+      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REQUEST_URI']));
     die();
   }
 
   public static function errorGeneral($ajax = false)
   {
-    $body = getTemplate()->get('errorGeneral.php', array('page' => $_SERVER['REDIRECT_URL']));
+    getTemplate()->display('template.php', array('body' => 'errorGeneral.php', 'page' => $_SERVER['REQUEST_URI']));
     die();
   }
 
@@ -234,7 +245,7 @@ class Site
       getRoute()->redirect('/forgot?e=emailDoesNotExist');
 
     $token = md5(str_repeat($_POST['email'], 2));
-    Resque::enqueue('mmh_email', 'Email', array('email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
+    Resque::enqueue('mmh_email', 'Email', array('subject' => 'Forgot your password?', 'email' => $_POST['email'], 'template' => getTemplate()->get('email/forgot.php', array('email' => $_POST['email'], 'token' => $token))));
     getRoute()->redirect('/forgot/confirm');
   }
 
@@ -247,7 +258,7 @@ class Site
       $userId = getSession()->get('userId');
       $template = 'home.php';
       $children = Child::getByUserId($userId);
-      // TODO remove this crap
+      // TODO remove nested query
       foreach($children as $key => $value)
       {
         $children[$key]['photos'] = Photo::getByChild($userId, $value['c_id']);
@@ -277,7 +288,7 @@ class Site
       $user = User::getById($userId);
       User::startSession($user);
       $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/child/new';
-      $args = array('email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
+      $args = array('subject' => 'Welcome to '.getConfig()->get('site')->name, 'email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
       Resque::enqueue('mmh_email', 'Email', $args);
     }
     getRoute()->redirect($redirectUrl);
@@ -589,7 +600,7 @@ class Site
     if(!getSession()->get('userId'))
     {
       if($_SERVER['REQUEST_METHOD'] == 'GET')
-        $url = '/login?r='.urlencode($_SERVER['REDIRECT_URL']);
+        $url = '/login?r='.urlencode($_SERVER['REQUEST_URI']);
       else
         $url = '/login';
       getRoute()->redirect($url);
@@ -599,6 +610,7 @@ class Site
   private static function requireUpgrade()
   {
     self::requireLogin();
+    return;
     if(getSession()->get('accountType') != User::accountTypePaid)
     {
       getRoute()->run('/upgrade');

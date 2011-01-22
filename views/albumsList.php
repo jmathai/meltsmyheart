@@ -12,9 +12,9 @@
   <ul id="album-list">
     <?php foreach($albums as $album) { ?>
       <li>
-        <a href="<?php echo $album['link']; ?>" class="album"><img src="<?php echo $album['cover']; ?>"></a>
+        <a href="<?php echo $album['link']; ?>" track="/album/photos/<?php echo $service; ?>" class="album"><img src="<?php echo $album['cover']; ?>" class="frame-polaroid"></a>
         <br>
-        <a href="<?php echo $album['link']; ?>" class="album"><?php echo $album['name']; ?></a>
+        <a href="<?php echo $album['link']; ?>" track="/album/photos/<?php echo $service; ?>" class="album"><?php echo $album['name']; ?></a>
       </li>
     <?php } ?>
   </ul>

@@ -1,9 +1,11 @@
-<h1>One of our children must have deleted the page you were looking for.</h1>
+<h1>One of our children must have deleted the page you were looking for</h1>
 
 <p>
-  <img src="/img/creative/polaroid-3-500-1.jpg" class="auto-500">
+The page you were looking for could not be found. 
+Usually this is because you followed a bad link. 
+If you believe this is a problem with the site then send an email to <?php echo emailLink(); ?>
 </p>
 
 <p>
-If you followed a link to this page please report it by sending an email to <?php echo emailLink(); ?>.
+  <img src="/img/creative/polaroid-3-500-1.jpg" class="auto-500">
 </p>

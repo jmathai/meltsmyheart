@@ -1,18 +1,21 @@
 <?php
-include '../configs/init.php';
-
-// controllers
-include getConfig()->get('paths')->controllers . '/Site.php';
-include getConfig()->get('paths')->controllers . '/Api.php';
-
-// routes
-if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyhert\.com$/', $_SERVER['HTTP_HOST'], $matches))
+try
 {
-  getRoute()->load('routes-child.ini');
-  getRoute()->run("/{$matches[1]}"); 
-}
-else
-{
+  include '../configs/init.php';
+
+  // controllers
+  include getConfig()->get('paths')->controllers . '/Site.php';
+  include getConfig()->get('paths')->controllers . '/Api.php';
+
+  // routes
   getRoute()->load('routes.ini');
-  getRoute()->run(); 
+  if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyheart\.com$/', $_SERVER['HTTP_HOST'], $matches) && isset($matches[1]) && $matches[1] != 'www')
+    getRoute()->run("/child/{$matches[1]}"); 
+  else
+    getRoute()->run(); 
+}
+catch(Exception $e)
+{
+  getLogger()->crit('Uncaught exception', $e);
+  getRoute()->run('/error/general');
 }

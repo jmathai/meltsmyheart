@@ -22,6 +22,22 @@
     <div class="container">&copy; <?php echo date('Y'); ?> <?php echo getConfig()->get('site')->name; ?></div>
   </div>
   <script src="<?php echo getAsset('js', array('jquery.min.js', 'plugins/jquery.lightbox-0.5.min.js','page.js')); ?>"></script>
-  <script> $("a.child-photo").lightBox();</script>
+  <script>
+    $(document).ready(function() {
+      var _gaq = _gaq || [], mpq = [];
+      $("a.child-photo").lightBox();
+      mpq.push(["init", "<?php echo getSecret('mp_token'); ?>"]);
+      mpq.push(["track", "page-view", {"path": "<?php echo normalizeRoute(getRoute()->route()); ?>"}]); 
+      mpq.push(["track", "<?php echo normalizeRoute(getRoute()->route()); ?>"]); 
+      <?php if(getConfig()->get('site')->mode == 'dev') { ?>
+        mpq.push(["set_config", {"test": true}]);
+      <?php } ?>
+      (function() {
+        var mp = document.createElement("script"); mp.type = "text/javascript"; mp.async = true;
+        mp.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + "//api.mixpanel.com/site_media/js/api/mixpanel.js";
+        var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(mp, s);
+      })(); 
+    });
+  </script>
 </body>
 </html>
