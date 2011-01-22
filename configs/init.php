@@ -19,7 +19,7 @@ include getConfig()->get('paths')->libraries . '/functions.php';
 
 $dbConfig = getConfig()->get('db');
 EpiDatabase::employ($dbConfig->type, $dbConfig->name, $dbConfig->host, $dbConfig->user, getSecret('mysql_pass'));
-EpiSession::employ(EpiSession::PHP);
+EpiSession::employ(EpiSession::MEMCACHED);
 EpiCache::employ(EpiCache::MEMCACHED);
 
 /*set_exception_handler(function($e){

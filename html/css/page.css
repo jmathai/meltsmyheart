@@ -8,14 +8,14 @@ h2 { font-size:1.25em; padding:0 20px;}
 .covered { font-family: 'Covered By Your Grace', arial, serif; }
 h3, .just { font-family: 'Just Me Again Down Here', arial, serif; font-size:1.3em; }
 
-div#header{ background:url("/img/page-sprite-aaa.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; }
+div#header{ background:url("/img/page-sprite-aab.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; }
 div#header div{position:relative;}
-div#header div a div{ position:absolute; background:url("/img/page-sprite-aaa.png") repeat-x 0 0; top:15px; left:670px; width:98px; height:50px; border:0; }
+div#header div a div{ position:absolute; background:url("/img/page-sprite-aab.png") repeat-x 0 0; top:15px; left:670px; width:98px; height:50px; border:0; }
 div.container { width:780px; margin:auto; }
 div#child{ padding-top:86px; }
 div#child ul li{ list-style-type:none; padding:0; margin:0; float:left; }
 div#child ul li label{ float:left; }
-div#child ul li div{ width:200px; height:200px; background:url("/img/page-sprite-aaa.png") no-repeat 0 -138px; padding:15px 12px 46px 14px; margin:10px 10px 15px; }
+div#child ul li div{ width:200px; height:200px; background:url("/img/page-sprite-aab.png") no-repeat 0 -138px; padding:15px 12px 46px 14px; margin:10px 10px 15px; }
 div#child ul li div img { width:200px; height:200px; border:0; }
 div#child ul li div label { font-family:'Just Me Again Down Here', arial, serif; font-size:2.75em; text-align:center; width:100%; line-height:.5em; }
 div#footer{ background-color:#daa2b5; color:#fff; font-size:smaller; padding:0; }
