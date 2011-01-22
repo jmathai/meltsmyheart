@@ -21,9 +21,12 @@
           <form action="/photos/source/<?php echo $child['c_id']; ?>"><button class="yellow" type="submit"><div>Add photos</div></button></form>
           <form action="<?php echo Child::getPageUrl($child); ?>"><button class="yellow"><div>View page</div></button></form>
         <?php }else{ ?>
-           
+          You haven't added any photos of <?php echo $child['c_name']; ?> yet.
+          Click the button below to get started.
+          <form action="/photos/source/<?php echo $child['c_id']; ?>"><button class="yellow" type="submit"><div>Add photos</div></button></form>
         <?php } ?>
       </p>
+      <hr>
     <?php } ?>
   </p>
 <?php } else { ?>
