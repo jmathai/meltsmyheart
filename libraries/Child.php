@@ -33,7 +33,7 @@ class Child
   public static function getPageUrl($child)
   {
     if(getConfig()->get('site')->mode == 'prod')
-      return "http://{$child}.meltsmyheart.com";
+      return "http://{$child['c_domain']}.meltsmyheart.com";
     else
       return "/child/{$child['c_domain']}";
   }
