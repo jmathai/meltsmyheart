@@ -44,10 +44,17 @@
     <div class="container">
       <ul>
         <li><h4>&copy; <?php echo date('Y'); ?> <?php echo getConfig()->get('site')->name; ?></h4></li>
-        <!--<li><a href="/share-baby-photos">Share baby photos</a></li>
+        <li><a href="/about">About us</a></li>
+        <li><a href="/help">FAQ / help </a></li>
+        <li><a href="/terms">Terms </a></li>
+        <li><a href="/privacy">Privacy </a></li>
+      </ul>
+      <ul>
+        <li><h4>Additional resources</h4></li>
+        <li><a href="/share-baby-photos">Share baby photos</a></li>
         <li><a href="/create-baby-scrapbook">Create baby scrapbook</a></li>
         <li><a href="/make-childs-photoblog">Make a child's photo blog</a></li>
-        <li><a href="/design-childs-webpage">Design child's webpage</a></li>-->
+        <li><a href="/design-childs-webpage">Design child's webpage</a></li>
       </ul>
       <?php if($_SERVER['REQUEST_URI'] == '/' && !User::isLoggedIn()) { ?>
         <!--<p>

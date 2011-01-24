@@ -4,6 +4,7 @@ try
   include '../configs/init.php';
 
   // controllers
+  include getConfig()->get('paths')->controllers . '/Simple.php';
   include getConfig()->get('paths')->controllers . '/Site.php';
   include getConfig()->get('paths')->controllers . '/Api.php';
 
