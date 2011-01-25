@@ -39,7 +39,7 @@ class Child
       if(!empty($child['c_pageSettings']))
         $children[$key]['c_pageSettings'] = json_decode($child['c_pageSettings'], 1);
     }
-
+    return $children;
   }
 
   public static function getPageUrl($child)
@@ -52,12 +52,18 @@ class Child
 
   public static function getTheme($child)
   {
-    $theme = array('css' => array('plugins/jquery.lightbox-0.5.css','theme-default.css'));
+    $theme = array('css' => array('plugins/jquery.lightbox-0.5.css','shared.css','theme-default.css'));
     if(isset($child['c_pageSettings']['theme']['css']))
     {
       foreach($child['c_pageSettings']['theme']['css'] as $css)
         $theme['css'][] = $css;
     }
     return $theme;
+  }
+
+  public static function updateSettings($userId, $childId, $settings)
+  {
+    $params = array(':userId' => $userId, ':childId' => $childId, ':settings' => json_encode($settings));
+    return getDatabase()->execute('UPDATE child SET c_pageSettings=:settings WHERE c_id=:childId AND c_u_id=:userId', $params);
   }
 }

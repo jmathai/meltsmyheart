@@ -5,7 +5,7 @@
   <meta name="description" content="The easiest most beautiful way to share photos of your children. Let us automatically group your child's photos by age and apply filters to make your photos look even better.">
   <meta name="Child photos, children photos, baby photos, share baby photos, share children photo, print baby photos.">
   <meta name="robots" content="index, follow" />
-  <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', array('styles.css','ui/jquery-ui-1.8.7.custom.css')); ?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', getAssetCssMember()); ?>">
   <!--[if IE]>
   <link rel="stylesheet" type="text/css" href="/css/ie.css">
   <![endif]-->
@@ -75,7 +75,7 @@
       <?php } ?>
     </div>
   </div>
-  <script src="<?php echo getAsset('js', array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js')); ?>"></script>
+  <script src="<?php echo getAsset('js', getAssetJsMember()); ?>"></script>
   <script>
     var _gaq = _gaq || [], mpq = [];
     $(document).ready(function() {

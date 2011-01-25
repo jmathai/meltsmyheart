@@ -117,7 +117,41 @@ class Site
 
     $theme = Child::getTheme($child);
     $photos = Photo::getByChild($child['c_u_id'], $child['c_id']);
-    getTemplate()->display('page.php', array('theme' => $theme, 'child' => $child, 'photos' => $photos));
+    $loggedIn = User::isLoggedIn();
+    $params = array('theme' => $theme, 'child' => $child, 'photos' => $photos, 'loggedIn' => $loggedIn);
+    if($loggedIn)
+      $params['js'] = getTemplate()->get('javascript/childPage.js.php');
+    getTemplate()->display('page.php', $params);
+  }
+
+  public static function childPageCustomize($childId)
+  {
+    self::requireLogin();
+    $child = Child::getById(getSession()->get('userId'), $childId);
+    if(!$child)
+      getRoute()->run('/error/404/ajax');
+    Api::success(getTemplate()->get('partials/childPageCustomize.php', array('child' => $child, 'theme' => $child['c_pageSettings']['theme'])));
+  }
+
+  public static function childPageCustomizePost($childId)
+  {
+    self::requireLogin();
+    $child = Child::getById(getSession()->get('userId'), $childId);
+    if(!$child)
+      getRoute()->run('/error/404/ajax');
+
+    $update = array();
+    if(!empty($_POST['background']))
+      $update[] = $_POST['background'];
+    if(!empty($_POST['photo-layout']))
+      $update[] = $_POST['photo-layout'];
+
+    $settings = $child['c_pageSettings'];
+    $settings['theme']['css'] = $update;
+    Child::updateSettings(getSession()->get('userId'), $childId, $settings);
+
+    $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/';
+    getRoute()->redirect($redirectUrl);
   }
 
   public static function childNewPost()
@@ -218,12 +252,16 @@ class Site
 
   public static function error404($ajax = null)
   {
-    header('HTTP/1.0 404 Not Found');
-    header('Status: 404 Not Found');
     if($ajax == 'ajax')
-      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REQUEST_URI'])));
+    {
+      Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REQUEST_URI'], 'ajax' => true)));
+    }
     else
+    {
+      header('HTTP/1.0 404 Not Found');
+      header('Status: 404 Not Found');
       getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REQUEST_URI']));
+    }
     die();
   }
 
