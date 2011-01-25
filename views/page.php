@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <title><?php echo sprintf("%s's page on %s", $child['c_name'], getConfig()->get('site')->name); ?></title>
-  <?php if($loggedIn) { ?>
+  <?php if($isOwner) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', getAssetCssMember()); ?>">
   <?php } ?>
   <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', $theme['css']); ?>">
@@ -12,7 +12,7 @@
     <div class="container">
       <h1><?php echo posessive($child['c_name']); ?> page<h1>
       <h2>Born <?php echo date('l jS \of F', $child['c_birthdate']); ?></h2>
-      <?php if($loggedIn) { ?>
+      <?php if($isOwner) { ?>
         <button id="child-page-edit" href="/child/page/customize/<?php echo $child['c_id']; ?>"><div>Customize</div></button>
       <?php } ?>
       <a href="<?php echo getConfig()->get('urls')->base; ?>"><div></div></a>
@@ -27,7 +27,7 @@
     <hr>
     <div class="container">&copy; <?php echo date('Y'); ?> <?php echo getConfig()->get('site')->name; ?></div>
   </div>
-  <?php if($loggedIn) { ?>
+  <?php if($isOwner) { ?>
     <div id="modal" class="apple_overlay modal"></div>
     <div id="modal-wide" class="apple_overlay modal-wide"></div>
     <div id="message" class="ui-state-highlight"></div>

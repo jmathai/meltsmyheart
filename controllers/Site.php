@@ -117,9 +117,9 @@ class Site
 
     $theme = Child::getTheme($child);
     $photos = Photo::getByChild($child['c_u_id'], $child['c_id']);
-    $loggedIn = User::isLoggedIn();
-    $params = array('theme' => $theme, 'child' => $child, 'photos' => $photos, 'loggedIn' => $loggedIn);
-    if($loggedIn)
+    $isOwner = getSession()->get('userId') == $child['c_u_id'];
+    $params = array('theme' => $theme, 'child' => $child, 'photos' => $photos, 'isOwner' => $isOwner);
+    if($isOwner)
       $params['js'] = getTemplate()->get('javascript/childPage.js.php');
     getTemplate()->display('page.php', $params);
   }
