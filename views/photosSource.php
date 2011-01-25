@@ -7,7 +7,7 @@
 <h2>Get started by selecting one now.</h2>
 <p>
   <ul id="thirdparty">
-    <li><a href="<?php echo $fbUrl; ?>" class="facebook"></a></li>
+    <!--<li><a href="<?php echo $fbUrl; ?>" class="facebook"></a></li>-->
     <li><a href="<?php echo $smugUrl; ?>" class="smugmug"></a></li>
     <?php if(getSession()->get('userId') == 1) { ?>
       <li><a href="<?php echo $ptgUrl; ?>" class="photagious"></a></li>
