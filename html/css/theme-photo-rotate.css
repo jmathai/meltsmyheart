@@ -1,0 +1,8 @@
+div#child ul li:nth-child(odd) div {
+  -moz-transform: rotate(10deg);
+  -webkit-transform: rotate(10deg);
+}
+div#child ul li:nth-child(even) div {
+  -moz-transform: rotate(-5deg);
+  -webkit-transform: rotate(-5deg);
+}

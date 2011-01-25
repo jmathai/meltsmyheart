@@ -8,7 +8,7 @@ h2 { font-size:1.25em; padding:0 20px;}
 .covered { font-family: 'Covered By Your Grace', arial, serif; }
 h3, .just { font-family: 'Just Me Again Down Here', arial, serif; font-size:1.3em; }
 
-div#header{ background:url("/img/page-sprite-aab.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; }
+div#header{ background:url("/img/page-sprite-aab.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; z-index:999;}
 div#header div{position:relative;}
 div#header div a div{ position:absolute; background:url("/img/page-sprite-aab.png") repeat-x 0 0; top:15px; left:670px; width:98px; height:50px; border:0; }
 div.container { width:780px; margin:auto; }

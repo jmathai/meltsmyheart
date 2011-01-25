@@ -9,4 +9,9 @@ class Theme
 
     return $theme;
   }
+
+  public static function getThemeCss($theme)
+  {
+
+  }
 }
