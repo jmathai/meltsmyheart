@@ -63,6 +63,26 @@ function getAsset($type, $files)
   return $uri;
 }
 
+function getAssetCssMember()
+{
+  return array('styles.css','shared.css','ui/jquery-ui-1.8.7.custom.css');
+}
+
+function getAssetCssVisitor()
+{
+
+}
+
+function getAssetJsMember()
+{
+  return array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery.lightbox-0.5.min.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js','internal.js','page.js');
+}
+
+function getAssetJsVisitor()
+{
+  return array('jquery.min.js','plugins/jquery.tools.min.js','plugins/jquery.lightbox-0.5.min.js','javascript.js','page.js');
+}
+
 function getFacebook()
 {
   static $facebook;

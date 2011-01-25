@@ -1,0 +1,4 @@
+button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-button-aaa.png") no-repeat 0 0; width:163px; height:44px; margin:5px 10px 5px 0; border:0; cursor:pointer; }
+button div{ margin-top:-7px; }
+div#error, div#message, div#debug {position:absolute; width:700px; margin-left:20px; padding:10px; display:none; font-size:20px;z-index:999999;}
+div#error p, div#message p, div#debug p {display:block; padding:5px 20px; font-size:12px;}

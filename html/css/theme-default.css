@@ -8,9 +8,10 @@ h2 { font-size:1.25em; padding:0 20px;}
 .covered { font-family: 'Covered By Your Grace', arial, serif; }
 h3, .just { font-family: 'Just Me Again Down Here', arial, serif; font-size:1.3em; }
 
-div#header{ background:url("/img/page-sprite-aab.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; }
+div#header{ background:url("/img/page-sprite-aab.png") repeat-x 0 -55px; height:83px; width:100%; top:0; left:0; position:fixed; z-index:999;}
 div#header div{position:relative;}
 div#header div a div{ position:absolute; background:url("/img/page-sprite-aab.png") repeat-x 0 0; top:15px; left:670px; width:98px; height:50px; border:0; }
+div#header div button{ position:absolute; top:15px; left:420px; }
 div.container { width:780px; margin:auto; }
 div#child{ padding-top:86px; }
 div#child ul li{ list-style-type:none; padding:0; margin:0; float:left; }
@@ -24,6 +25,8 @@ div#footer div { color:#eee; padding:10px 0px 10px 103px; }
 
 .clearfix:after { margin-bottom:10px; content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .clearfix {display: inline-block;}
+.modal h1, .modal-wide h1{ color:#c01f55; font-size:1.2em; margin:0; }
+.modal h2, .modal-wide h2{ color:#327085; font-size:1.1em; margin:0; padding:0; }
 
 #lightbox-container-image-data-box {
   font-family:'Unkempt', arial, serif;
