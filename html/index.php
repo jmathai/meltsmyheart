@@ -10,7 +10,7 @@ try
 
   // routes
   getRoute()->load('routes.ini');
-  if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyheart\.com$/', $_SERVER['HTTP_HOST'], $matches) && isset($matches[1]) && $matches[1] != 'www')
+  if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyheart\.com$/', $_SERVER['HTTP_HOST'], $matches))
   {
     if(!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')
       getRoute()->run("/child/{$matches[1]}"); 
