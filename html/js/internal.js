@@ -2,7 +2,7 @@ $.tools.validator.localize("en", {
   '[required]':'This form field is required.',
   '[min]':'Arvon on oltava suurempi, kuin $1',
 });
-$.tools.validator.fn("[date]", "Please enter a valid date and time. (i.e. 6/19/2010 at 10:06 am)", function(input) {
+$.tools.validator.fn("[date]", "Please enter a valid date and time. (i.e. 6/19/2010 10:06 am)", function(input) {
   var value = input.attr('date');
   switch(value) {
     case 'mm/dd/yyyy':
