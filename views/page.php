@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <title><?php echo sprintf("%s's page on %s", $child['c_name'], getConfig()->get('site')->name); ?></title>
-  <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', array('plugins/jquery.lightbox-0.5.css','page.css')); ?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo getAsset('css', array('plugins/jquery.lightbox-0.5.css',"theme-{$theme['t_name']}.css")); ?>">
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 <body>

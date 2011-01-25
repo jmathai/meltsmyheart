@@ -115,8 +115,10 @@ class Site
     if(!$child)
       getRoute()->run('/error/404');
 
+    $theme = Theme::getByName($child['c_t_name']);
+
     $photos = Photo::getByChild($child['c_u_id'], $child['c_id']);
-    getTemplate()->display('page.php', array('child' => $child, 'photos' => $photos));
+    getTemplate()->display('page.php', array('theme' => $theme, 'child' => $child, 'photos' => $photos));
   }
 
   public static function childNewPost()

@@ -14,20 +14,20 @@ class Child
 
   public static function getByDomain($domain)
   {
-    $params = array(':domain' => $domain);
-    return getDatabase()->one('SELECT * FROM child WHERE c_domain=:domain', $params);
+    $params = array(':domain' => $domain, ':active' => 1);
+    return getDatabase()->one('SELECT * FROM child WHERE c_domain=:domain AND c_isActive=:active', $params);
   }
 
   public static function getById($userId, $childId)
   {
-    $params = array(':userId' => $userId, ':childId' => $childId);
-    return getDatabase()->one('SELECT * FROM child WHERE c_id=:childId AND c_u_id=:userId', $params);
+    $params = array(':userId' => $userId, ':childId' => $childId, ':active' => 1);
+    return getDatabase()->one('SELECT * FROM child WHERE c_id=:childId AND c_u_id=:userId AND c_isActive=:active', $params);
   }
 
   public static function getByUserId($userId)
   {
-    $params = array(':userId' => $userId);
-    return getDatabase()->all('SELECT * FROM child WHERE c_u_id=:userId', $params);
+    $params = array(':userId' => $userId, ':active' => 1);
+    return getDatabase()->all('SELECT * FROM child WHERE c_u_id=:userId AND c_isActive=:active', $params);
   }
 
   public static function getPageUrl($child)
