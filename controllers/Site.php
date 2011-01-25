@@ -130,7 +130,8 @@ class Site
     $child = Child::getById(getSession()->get('userId'), $childId);
     if(!$child)
       getRoute()->run('/error/404/ajax');
-    Api::success(getTemplate()->get('partials/childPageCustomize.php', array('child' => $child, 'theme' => $child['c_pageSettings']['theme'])));
+    $theme = isset($child['c_pageSettings']['theme']) ? $child['c_pageSettings']['theme'] : array();
+    Api::success(getTemplate()->get('partials/childPageCustomize.php', array('child' => $child, 'theme' => $theme)));
   }
 
   public static function childPageCustomizePost($childId)

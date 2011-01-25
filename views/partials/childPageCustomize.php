@@ -34,7 +34,7 @@
   <button type="submit"><div>Save</div></button> or <a href="#" class="close">close</a>
 </form>
 <script>
-  <?php foreach($theme['css'] as $css) { ?>
+  <?php foreach((array)$theme['css'] as $css) { ?>
     $("form#child-customize input[value=<?php echo $css; ?>]").attr("checked", true);
   <?php } ?>
 </script>
