@@ -53,7 +53,6 @@ class Child
   public static function getTheme($child)
   {
     $theme = array('css' => array('plugins/jquery.lightbox-0.5.css','theme-default.css'));
-    var_dump($child);
     if(isset($child['c_pageSettings']['theme']['css']))
     {
       foreach($child['c_pageSettings']['theme']['css'] as $css)
