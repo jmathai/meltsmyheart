@@ -54,6 +54,6 @@ class Uploader
 
   public static function safeName($url)
   {
-    return rand(0,1000).'_'.time().'_'.preg_replace('/[^a-zA-Z0-9-.]/', '_', basename($url));
+    return md5(rand(0,1000).'-'.$url).'.jpg'; //rand(0,1000).'_'.time().'_'.preg_replace('/[^a-zA-Z0-9-.]/', '_', basename($url));
   }
 }
