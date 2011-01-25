@@ -118,6 +118,7 @@ class Site
     $theme = Child::getTheme($child);
     $photos = Photo::getByChild($child['c_u_id'], $child['c_id']);
     $isOwner = getSession()->get('userId') == $child['c_u_id'];
+
     $params = array('theme' => $theme, 'child' => $child, 'photos' => $photos, 'isOwner' => $isOwner);
     if($isOwner)
       $params['js'] = getTemplate()->get('javascript/childPage.js.php');
@@ -152,7 +153,7 @@ class Site
     Child::updateSettings(getSession()->get('userId'), $childId, $settings);
 
     $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/';
-    getRoute()->redirect($redirectUrl);
+    getRoute()->redirect($redirectUrl, null, true);
   }
 
   public static function childNewPost()

@@ -10,7 +10,7 @@ class EpiSession_Memcached implements EpiSessionInterface
     if(empty($_COOKIE[EpiSession::COOKIE]))
     {
       $cookieVal = md5(uniqid(rand(), true));
-      setcookie(EpiSession::COOKIE, $cookieVal, time()+1209600, '/');
+      setcookie(EpiSession::COOKIE, $cookieVal, time()+1209600, '/', '.meltsmyheart.com');
       $_COOKIE[EpiSession::COOKIE] = $cookieVal;
     }
     $this->host = !empty($params[0]) ? $params[0] : 'localhost';
