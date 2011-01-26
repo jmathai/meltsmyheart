@@ -11,11 +11,13 @@ class Uploader
     $this->dirDestOriginal = getConfig()->get('paths')->photos.$this->dirOriginal.$this->yearMonth;
     $this->dirDestBase = getConfig()->get('paths')->photos.$this->dirBase.$this->yearMonth;
     $this->dirDestThumb = getConfig()->get('paths')->photos.$this->dirThumb.$this->yearMonth;
+    $this->s3 = new S3(getSecret('amz_key'), getSecret('amz_secret'));
   }
 
   public function perform()
   {
     $this->photoFile = $this->args['photoPath'];
+    // this is already safe'd in Site
     $this->photoSafeName = basename($this->photoFile);
     $key = Credential::serviceSelf . '-' . uniqid();
     $this->args['entryId'] = Photo::add($this->args['userId'], $this->args['childId'], $key);
@@ -23,7 +25,10 @@ class Uploader
     Photo::setUse($this->args['userId'], $this->args['entryId'], 1);
   }
 
-  public function tearDown() { }
+  public function tearDown()
+  {
+    unset($this->s3);
+  }
 
   protected function processPhoto()
   {
@@ -50,6 +55,10 @@ class Uploader
       $dateTaken = $photoData['dateTaken'];
     $exif = json_encode($photoData);
     Photo::update($this->args['userId'], $this->args['entryId'], $thumbPath, $basePath, $originalPath, $exif, $dateTaken);
+
+    $s3Success = $this->s3->uploadFile(getConfig()->get('thirdparty')->amz_bucket, "original{$this->yearMonth}/{$this->photoSafeName}", "{$this->photoFile}");
+    if($s3Success)
+      unlink($this->photoFile);
   }
 
   public static function safeName($url)
