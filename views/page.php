@@ -12,10 +12,13 @@
     <div class="container">
       <h1><?php echo posessive($child['c_name']); ?> page<h1>
       <h2>Born <?php echo date('l jS \of F', $child['c_birthdate']); ?></h2>
-      <?php if($isOwner) { ?>
-        <button id="child-page-edit" href="/child/page/customize/<?php echo $child['c_id']; ?>"><div>Customize</div></button>
-      <?php } ?>
       <a href="<?php echo getConfig()->get('urls')->base; ?>"><div></div></a>
+      <?php if($isOwner) { ?>
+        <div id="nav-owner">
+          <button id="child-page-edit" href="/child/page/customize/<?php echo $child['c_id']; ?>"><div>Customize</div></button>
+          <form action="<?php echo getConfig()->get('urls')->base; ?>/photos/source/<?php echo $child['c_id']; ?>"><button type="submit"><div>Add photos</div></button>
+        </div>
+        <?php } ?>
     </div>
   </div>
   <div class="container">
