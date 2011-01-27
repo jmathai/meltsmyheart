@@ -12,6 +12,12 @@ class Child
       VALUES(:userId, :name, :birthdate, :domain)', $params);
   }
 
+  public static function delete($userId, $childId)
+  {
+    $params = array(':userId' => $userId, ':childId' => $childId);
+    return getDatabase()->execute('UPDATE child SET c_isActive=0 WHERE c_id=:childId AND c_u_id=:userId', $params);
+  }
+
   public static function getByDomain($domain)
   {
     $params = array(':domain' => $domain, ':active' => 1);

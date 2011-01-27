@@ -92,6 +92,8 @@
       })(); 
       <?php if(isset($_GET['e'])) { ?>
         mmh.displayError(<?php echo json_encode(getString($_GET['e'])); ?>);
+      <?php } elseif(isset($_GET['m'])) { ?>
+        mmh.displayConfirm(<?php echo json_encode(getString($_GET['m'])); ?>);
       <?php } ?>
       <?php if(isset($js)) { ?>
         <?php echo $js; ?>

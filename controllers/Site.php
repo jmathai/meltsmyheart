@@ -88,6 +88,7 @@ class Site
 
   public static function childCheck()
   {
+    self::requireLogin();
     $value = $_POST['value'];
     if(preg_match('/^([a-zA-Z0-9-]+).meltsmyheart.com$/', $value, $matches))
       $value = $matches[1];
@@ -96,6 +97,18 @@ class Site
 
     $child = Child::getByDomain($value);
     Api::success(empty($child), "Checking if {$value} exists");
+  }
+
+  public static function childDelete($childId)
+  {
+    self::requireLogin();
+    $userId = getSession()->get('userId');
+    $child = Child::getById($userId, $childId);
+    if(!$child)
+      Api::forbidden('Sorry but we were unable to remove the child requested.');
+
+    Child::delete($userId, $childId);
+    Api::success('Your child was successfully removed from our system.', array('childId' => $childId));
   }
 
   public static function childNew()
