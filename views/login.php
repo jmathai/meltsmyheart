@@ -6,17 +6,17 @@
   <p>
     <form method="post" id="loginForm">
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" required="required" />
+      <input type="email" id="email" name="email" required="required" tabindex="1">
 
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" required="required">
+      <input type="password" id="password" name="password" required="required" tabindex="2">
 
       <input type="hidden" name="r" value="<?php echo $r; ?>">
-      <button type="submit">Login</button>
+      <button type="submit" tabindex="3">Login</button>
       <br>
-      <em>Need an account? <a href="/join">Join here</a>.</em>
+      <em>Need an account? <a href="/join" tabindex="3">Join here</a>.</em>
       <br>
-      <em>Forgot your password? <a href="/forgot">Reset it here</a>.</em>
+      <em>Forgot your password? <a href="/forgot" tabindex="4">Reset it here</a>.</em>
     </form>
   </p>
 </div>

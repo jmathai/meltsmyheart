@@ -23,13 +23,13 @@
     <p>
       <form method="post" id="forgotForm">
         <label for="email">What's your email address?</label>
-        <input type="email" id="email" name="email" required="required">
+        <input type="email" id="email" name="email" required="required" tabindex="1">
 
         <button type="submit"><div>Reset</div></button>
         <br>
-        <em>Need an account? <a href="/join">Join here</a>.</em>
+        <em>Need an account? <a href="/join" tabindex="2">Join here</a>.</em>
         <br>
-        <em>Already have an account? <a href="/login">Sign in</a>.</em>
+        <em>Already have an account? <a href="/login" tabindex="3">Sign in</a>.</em>
       </form>
     </p>
   </div>
