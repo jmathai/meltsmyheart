@@ -75,7 +75,7 @@ function getAssetCssVisitor()
 
 function getAssetJsMember()
 {
-  return array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery.lightbox-0.5.min.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js','internal.js','page.js');
+  return array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery.cross-slide.min.js','plugins/jquery.lightbox-0.5.min.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js','internal.js','page.js');
 }
 
 function getAssetJsVisitor()

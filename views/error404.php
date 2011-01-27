@@ -1,8 +1,4 @@
-<?php if($ajax) { ?>
-  <h1>One of our children must have deleted the page you were looking for</h1>
-<?php } else { ?>
-
-<?php } ?>
+<h1>One of our children must have deleted the page you were looking for</h1>
 
 <p>
 The page you were looking for could not be found. 

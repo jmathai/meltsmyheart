@@ -320,6 +320,10 @@ class Site
       }
       $js = getTemplate()->get('javascript/home.js.php');
     }
+    else
+    {
+      $js = getTemplate()->get('javascript/splash.js.php');
+    }
     getTemplate()->display('template.php', array('body' => $template, 'children' => $children, 'cntChildren' => count($children), 'js' => $js));
   }
 
