@@ -6,7 +6,7 @@ $.tools.validator.fn("[date]", "Please enter a valid date and time. (i.e. 6/19/2
   var value = input.attr('date');
   switch(value) {
     case 'mm/dd/yyyy':
-      return input.val().match(/\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{2} (am|pm|AM|PM)/) != null;
+      return input.val().match(/\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{2} ?(am|pm|AM|PM)/) != null;
       break;
   }
   return true;

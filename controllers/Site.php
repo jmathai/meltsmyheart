@@ -172,7 +172,7 @@ class Site
   public static function childNewPost()
   {
     self::requireLogin();
-    $date = strtotime($_POST['childBirthDate']);
+    $date = strtotime(preg_replace('/(\d)(am|pm|AM|PM)/', '${1} ${2}', $_POST['childBirthDate']));
     $domain = $_POST['childDomain'];
     if(preg_match('/^([a-zA-Z0-9-]+)$/', $domain, $matches))
       $domain = $matches[1];
