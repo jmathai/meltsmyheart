@@ -16,16 +16,16 @@
     <div class="container">
       <a href="<?php echo getConfig()->get('urls')->base; ?>" title="<?php echo getConfig()->get('site')->name; ?>"><img src="/img/logo.png" id="logo" alt="<?php echo getConfig()->get('site')->name; ?>"></a>
       <?php if(User::isLoggedIn()) { ?>
-        <div class="loginlogout">You're logged in as <?php echo getSession()->get('email'); ?>, <a href="/logout">logout</a>.</div>
+        <div class="loginlogout">You're logged in as <?php echo getSession()->get('email'); ?>, <a href="/logout" tabindex="20">logout</a>.</div>
         <ul id="navigation">
-          <li><a href="/child/new" class="add-child"><div></div>Add Child</a></li>
-          <li><a href="/share" class="share"><div></div>Share</a></li>
-          <li><a href="/upgrade" class="upgrade"><div></div>Upgrade</a></li>
+          <li><a href="/child/new" class="add-child" tabindex="10"><div></div>Add Child</a></li>
+          <li><a href="/share" class="share" tabindex="11"><div></div>Share</a></li>
+          <li><a href="/upgrade" class="upgrade" tabindex="12"><div></div>Upgrade</a></li>
           <!--<li><a href="/login">Login</a> or <a href="/join">join</a></li>-->
           <!--<li><a href="/logout">Logout</a></li>-->
         </ul>
       <?php } else { ?>
-        <div class="loginlogout"><a href="/login">Login</a> or <a href="/join">join</a>.</div>
+        <div class="loginlogout"><a href="/login" tabindex="10">Login</a> or <a href="/join" tabindex="11">join</a>.</div>
         <div class="quote"><?php echo getQuote(); ?></div>
       <?php } ?>
     </div>
