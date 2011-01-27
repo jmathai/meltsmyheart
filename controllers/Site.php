@@ -254,6 +254,7 @@ class Site
 
   public static function error404($ajax = null)
   {
+    getLogger()->info(sprintf('Error accessing %s on %s', $_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST']));
     if($ajax == 'ajax')
     {
       Api::notFound(getTemplate()->get('error404.php', array('page' => $_SERVER['REQUEST_URI'], 'ajax' => true)));
@@ -262,7 +263,7 @@ class Site
     {
       header('HTTP/1.0 404 Not Found');
       header('Status: 404 Not Found');
-      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REQUEST_URI']));
+      getTemplate()->display('template.php', array('body' => 'error404.php', 'page' => $_SERVER['REQUEST_URI'], 'ajax' => false));
     }
     die();
   }
