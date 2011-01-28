@@ -20,7 +20,7 @@
 <p>
   "<?php echo getConfig()->get('site')->name; ?> is my favorite way to share my baby's photos. 
   I already upload them to Smugmug so it was easy to create my child's page."
-  <em>Rachel Mathai - Sunnyvale, CA<!--(<a href="http://tavin.meltsmyheart.com">http://tavin.meltsmyheart.com</a>)--></em>
+  <em>Lisa Mcfarlane - Redwood City, CA<!--(<a href="http://tavin.meltsmyheart.com">http://tavin.meltsmyheart.com</a>)--></em>
 <p>
 <p>
   "My favorite part of <?php echo getConfig()->get('site')->name; ?> is how great the site makes my boring photos look. 
