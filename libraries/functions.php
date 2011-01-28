@@ -57,7 +57,12 @@ function getAsset($type, $files)
     $hash   = md5($uri);
     $relativePath = "/{$type}/static/{$hash}.{$type}";
     if(file_exists(getConfig()->get('paths')->docroot . $relativePath))
-      $uri = $relativePath;
+    {
+      if(getConfig()->get('site')->mode == 'prod')
+        $uri = getConfig()->get('urls')->cdn.$relativePath;
+      else
+        $uri = $relativePath;
+    }
   }
 
   return $uri;
@@ -65,7 +70,7 @@ function getAsset($type, $files)
 
 function getAssetCssMember()
 {
-  return array('styles.css','shared.css','ui/jquery-ui-1.8.7.custom.css');
+  return array('styles.css','shared.css');
 }
 
 function getAssetCssVisitor()
@@ -75,12 +80,12 @@ function getAssetCssVisitor()
 
 function getAssetJsMember()
 {
-  return array('jquery.min.js','plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery.cross-slide.min.js','plugins/jquery.lightbox-0.5.min.js','plugins/jquery-ui-1.8.7.custom.min.js','plugins/jquery.tools.min.js','javascript.js','internal.js','page.js');
+  return array('plugins/swfupload.js','plugins/swfupload.queue.js','plugins/jquery.cross-slide.min.js','plugins/jquery.lightbox-0.5.min.js','plugins/jquery.tools.min.js','javascript.js','internal.js','page.js');
 }
 
 function getAssetJsVisitor()
 {
-  return array('jquery.min.js','plugins/jquery.tools.min.js','plugins/jquery.lightbox-0.5.min.js','javascript.js','page.js');
+  return array('plugins/jquery.tools.min.js','plugins/jquery.lightbox-0.5.min.js','javascript.js','page.js');
 }
 
 function getFacebook()

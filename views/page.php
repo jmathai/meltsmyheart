@@ -36,8 +36,10 @@
     <div id="message" class="ui-state-highlight"></div>
     <div id="error" class="ui-state-error ui-state-error-text"></div>
     <div id="tooltip"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script src="<?php echo getAsset('js', getAssetJsMember()); ?>"></script>
   <?php } else { ?>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script src="<?php echo getAsset('js', getAssetJsVisitor()); ?>"></script>
   <?php } ?>
   <script>

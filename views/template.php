@@ -75,6 +75,7 @@
       <?php } ?>
     </div>
   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
   <script src="<?php echo getAsset('js', getAssetJsMember()); ?>"></script>
   <script>
     var _gaq = _gaq || [], mpq = [];
