@@ -327,10 +327,11 @@ class Site
     getTemplate()->display('template.php', array('body' => $template, 'children' => $children, 'cntChildren' => count($children), 'js' => $js));
   }
 
-  public static function join()
+  public static function join($context = null)
   {
-    $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'joinForm'));
-    getTemplate()->display('template.php', array('body' => 'join.php', 'js' => $js));
+    $params = array('body' => 'join.php', 'context' => quoteEncode($context), 'r' => (isset($_GET['r']) ? quoteEncode($_GET['r']) : ''),
+      'js' => getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'joinForm')));
+    getTemplate()->display('template.php', $params);
   }
  
   public static function joinPost()
@@ -341,12 +342,15 @@ class Site
     elseif(User::getByEmailAndPassword($_POST['email'], $_POST['password']))
       getRoute()->redirect('/join?e=emailAlreadyExists');
 
-    $userId = User::add($_POST['email'], $_POST['password']);
+    $prefs = null;
+    if($_POST['context'] == 'affiliate')
+      $prefs = array('isAffiliate' => 1);
+    $userId = User::add($_POST['email'], $_POST['password'], User::accountTypeFree, $prefs);
     if($userId)
     {
       $user = User::getById($userId);
       User::startSession($user);
-      $redirectUrl = isset($_POST['r']) ? $_POST['r'] : '/child/new';
+      $redirectUrl = !empty($_POST['r']) ? $_POST['r'] : '/child/new';
       $args = array('subject' => 'Welcome to '.getConfig()->get('site')->name, 'email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
       Resque::enqueue('mmh_email', 'Email', $args);
     }
@@ -355,9 +359,9 @@ class Site
 
   public static function login()
   {
-    $r = isset($_GET['r']) ? $_GET['r'] : '/';
+    $r = isset($_GET['r']) ? quoteEncode($_GET['r']) : '/';
     $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'loginForm'));
-    getTemplate()->display('template.php', array('body' => 'login.php', 'js' => $js, 'r' => quoteEncode($r)));
+    getTemplate()->display('template.php', array('body' => 'login.php', 'js' => $js, 'r' => $r));
   }
 
   public static function logout()

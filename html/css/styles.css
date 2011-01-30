@@ -40,7 +40,7 @@ div#header-bar{ background:url("/img/sprite-main-aaa.png") repeat-x 0 -133px; he
 div#content{ padding:10px 0; min-height:400px; }
 h1, h2, h3{ margin:0; padding:0; font-weight:bold; }
 h1, div.h1{ font-size:1.4em; color:#c01f55; }
-h2, div.h2{ font-size:1.30em; color:#327085; }
+h2, div.h2, span.h2{ font-size:1.30em; color:#327085; font-weight:bold; }
 h3, div.h3{ font-size:1.15em; color:#404040; }
 h4, div.h4{ font-size:1.1em; color:#fff; margin:0; padding:0; }
 hr{ border:0; height:1px; background-color:#8ed6c5; }

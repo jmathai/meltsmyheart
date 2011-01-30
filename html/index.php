@@ -4,9 +4,10 @@ try
   include '../configs/init.php';
 
   // controllers
+  include getConfig()->get('paths')->controllers . '/Affiliate.php';
+  include getConfig()->get('paths')->controllers . '/Api.php';
   include getConfig()->get('paths')->controllers . '/Simple.php';
   include getConfig()->get('paths')->controllers . '/Site.php';
-  include getConfig()->get('paths')->controllers . '/Api.php';
 
   // routes
   getRoute()->load('routes.ini');
@@ -24,6 +25,6 @@ try
 }
 catch(Exception $e)
 {
-  getLogger()->crit('Uncaught exception', $e);
+  getLogger()->crit('Uncaught exception in '.__FILE__.':'.__LINE__, $e);
   getRoute()->run('/error/general');
 }

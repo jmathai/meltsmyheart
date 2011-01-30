@@ -1,6 +1,10 @@
 <p class="right">
-  <img src="/img/creative/polaroid-3-300-<?php echo rand(1,2); ?>.jpg">
-  <span>
-    <?php echo getQuote(); ?>
-  </span>
+  <?php if($context === 'affiliate') { ?>
+    <?php getTemplate()->display('partials/affiliateRight.php'); ?>
+  <?php } else { ?>
+    <img src="/img/creative/polaroid-3-300-<?php echo rand(1,2); ?>.jpg">
+    <span>
+      <?php echo getQuote(); ?>
+    </span>
+  <?php } ?>
 </p>

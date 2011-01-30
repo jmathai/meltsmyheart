@@ -4,12 +4,12 @@ class User
   const accountTypeFree = 'free';
   const accountTypePaid = 'paid';
   const hashAlgorithm = 'sha512';
-  public static function add($email, $password, $type=self::accountTypeFree)
+  public static function add($email, $password, $type=self::accountTypeFree, $prefs=null)
   {
-    $params = array(':email' => $email, ':password' => self::generatePasswordHash($password, $email),
+    $params = array(':email' => $email, ':password' => self::generatePasswordHash($password, $email), ':prefs' => json_encode($prefs),
                     ':accountType' => $type, ':key' => md5(str_repeat($email, 2)), ':dateCreated' => time());
-    return getDatabase()->execute('INSERT INTO `user`(u_key, u_email, u_password, u_accountType, u_dateCreated)
-      VALUES(:key, :email, :password, :accountType, :dateCreated)', $params);
+    return getDatabase()->execute('INSERT INTO `user`(u_key, u_email, u_password, u_accountType, u_prefs, u_dateCreated)
+      VALUES(:key, :email, :password, :accountType, :prefs, :dateCreated)', $params);
   }
 
   public static function endSession()
@@ -75,7 +75,12 @@ class User
     getSession()->set('userId', $user['u_id']);
     getSession()->set('email', $user['u_email']);
     getSession()->set('accountType', $user['u_accountType']);
-    getSession()->set('prefs', $user['u_prefs']);
+    getSession()->set('prefs', json_decode($user['u_prefs'], 1));
+  }
+
+  public static function updatePrefs($userId, $prefs)
+  {
+    return getDatabase()->execute('UPDATE `user` SET u_prefs=:prefs WHERE u_id=:userId', array(':prefs' => json_encode($prefs), ':userId' => $userId));
   }
 
   public static function upgrade($userId)
