@@ -26,7 +26,7 @@ ul#navigation li{
   float:left;
   position:relative;
 }
-ul#navigation li a{ height:22px; color:#fff; text-decoration:none; } 
+ul#navigation li a{ height:22px; color:#fff; text-decoration:none; font-size:.9em; } 
 ul#navigation li a div{ background:url("/img/sprite-main-aaa.png") no-repeat; float:left; height:22px; width:22px; margin-right:5px; padding:0 0 0 0; } 
 ul#navigation li a.add-child div{ background-position: 0 -218px; margin-left:4px; }
 ul#navigation li a.share div{ background-position: -22px -218px; margin-left:17px; }
