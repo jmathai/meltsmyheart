@@ -342,12 +342,11 @@ class Site
     elseif(User::getByEmailAndPassword($_POST['email'], $_POST['password']))
       getRoute()->redirect('/join?e=emailAlreadyExists');
 
-    $prefs = null;
-    if($_POST['context'] == 'affiliate')
-      $prefs = array('isAffiliate' => 1);
-    $userId = User::add($_POST['email'], $_POST['password'], User::accountTypeFree, $prefs);
+    $userId = User::add($_POST['email'], $_POST['password']);
     if($userId)
     {
+      if($affiliate = Affiliate::parseCookie())
+        Affiliate::logUser(Affiliate::signup, $affiliate['userToken'], $affiliate['affiliateId']);
       $user = User::getById($userId);
       User::startSession($user);
       $redirectUrl = !empty($_POST['r']) ? $_POST['r'] : '/child/new';
@@ -649,6 +648,8 @@ class Site
         $userId = getSession()->get('userId');
         User::upgrade($userId);
         $user = User::getById($userId);
+        if($affiliate = Affiliate::parseCookie())
+          Affiliate::logUser(Affiliate::upgrade, $affiliate['userToken'], $affiliate['affiliateId']);
         User::startSession($user);
         getRoute()->redirect('/?m=upgraded');
         break;

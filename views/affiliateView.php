@@ -12,9 +12,12 @@
   Just follow the instructions below to embed the link into your site.
 </p>
 <p>
-  <pre><code>
-    http://meltsmyheart.com/foo
-  </code></pre>
+  Your affiliate link is <strong><em><?php printf('%s/a/%s', getConfig()->get('urls')->base, $affiliate['a_key']); ?></em></strong>. Use it anyway you wish but a simple example is below.
+  <pre>
+&lt;a href="<?php printf('%s/a/%s', getConfig()->get('urls')->base, $affiliate['a_key']); ?>"&gt;
+  Enter text or image tag here
+&lt;/a&gt;
+  </pre>
 </p>
 
 <a name="statistics"></a>
@@ -28,4 +31,21 @@
 <p>
   You can request a payment at any time.
   Fill out this form below and we'll mail you a check.
+</p>
+<p>
+  <form method="post" action="/affiliate/payment" id="affiliateForm">
+    <label for="name">Amount <em>(Your balance is $<?php echo number_format($balance, 2); ?>)</em></label>
+    <input type="text" id="name" name="name" required="required">
+
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" required="required">
+
+    <label for="name">Address</label>
+    <input type="text" id="address" name="address" required="required">
+
+    <label for="name">City, State Zip</label>
+    <input type="text" id="citystatezip" name="citystatezip" required="required">
+
+    <button type="submit"><div>Send payment</div></button>
+  </form>
 </p>

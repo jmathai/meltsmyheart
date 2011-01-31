@@ -111,6 +111,9 @@ div.home ul { margin:25px 10px; }
 
 /* // child new */
 
+/* affiliate */
+pre{margin:0; padding:0;}
+
 ul#album-list li { float:left; list-style-type:none; text-align:center; width:33%; margin:10px 0; font-size:.8em; }
 ul#album-list li img{ height:100px; max-width:200px; margin:auto; }
 

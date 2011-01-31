@@ -16,7 +16,7 @@
       <input type="hidden" name="r" value="<?php echo $r; ?>">
       <input type="hidden" name="context" value="<?php echo $context; ?>">
 
-      <button type="submit" tabindex="4">Join us</button>
+      <button type="submit" tabindex="4"><div>Join us</div></button>
       <br>
       <em>Already have an account? <a href="/login?r=<?php echo $r; ?>" tabindex="5">Sign in</a>.</em>
     </form>

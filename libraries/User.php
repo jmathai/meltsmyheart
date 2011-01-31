@@ -75,7 +75,7 @@ class User
     getSession()->set('userId', $user['u_id']);
     getSession()->set('email', $user['u_email']);
     getSession()->set('accountType', $user['u_accountType']);
-    getSession()->set('prefs', json_decode($user['u_prefs'], 1));
+    getSession()->set('prefs', $user['u_prefs']);
   }
 
   public static function updatePrefs($userId, $prefs)

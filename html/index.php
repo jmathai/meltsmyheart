@@ -4,8 +4,8 @@ try
   include '../configs/init.php';
 
   // controllers
-  include getConfig()->get('paths')->controllers . '/Affiliate.php';
   include getConfig()->get('paths')->controllers . '/Api.php';
+  include getConfig()->get('paths')->controllers . '/Partner.php';
   include getConfig()->get('paths')->controllers . '/Simple.php';
   include getConfig()->get('paths')->controllers . '/Site.php';
 

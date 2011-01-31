@@ -12,7 +12,7 @@
       <input type="password" id="password" name="password" required="required" tabindex="2">
 
       <input type="hidden" name="r" value="<?php echo $r; ?>">
-      <button type="submit" tabindex="3">Login</button>
+      <button type="submit" tabindex="3"><div>Login</div></button>
       <br>
       <em>Need an account? <a href="/join?r=<?php echo $r; ?>" tabindex="3">Join here</a>.</em>
       <br>
