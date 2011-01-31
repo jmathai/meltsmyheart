@@ -32,6 +32,7 @@ class Partner
 
   public static function view()
   {
+    Site::requireLogin();
     $userId = getSession()->get('userId');
     $affiliate = Affiliate::getByUserId($userId);
     $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'affiliateForm'));

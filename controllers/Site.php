@@ -659,7 +659,7 @@ class Site
     }
   }
 
-  private static function requireLogin()
+  public static function requireLogin()
   {
     if(!getSession()->get('userId'))
     {
@@ -671,7 +671,7 @@ class Site
     }
   }
 
-  private static function requireUpgrade()
+  public static function requireUpgrade()
   {
     self::requireLogin();
     return;

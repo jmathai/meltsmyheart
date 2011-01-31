@@ -13,12 +13,10 @@
 </p>
 <p>
   Your affiliate link is <strong><em><?php printf('%s/a/%s', getConfig()->get('urls')->base, $affiliate['a_key']); ?></em></strong>. Use it anyway you wish but a simple example is below.
-  <pre>
-&lt;a href="<?php printf('%s/a/%s', getConfig()->get('urls')->base, $affiliate['a_key']); ?>"&gt;
-  Enter text or image tag here
-&lt;/a&gt;
-  </pre>
 </p>
+<pre>&lt;a href="<?php printf('%s/a/%s', getConfig()->get('urls')->base, $affiliate['a_key']); ?>"&gt;
+  Enter text or image tag here
+&lt;/a&gt;</pre>
 
 <a name="statistics"></a>
 <h2>View your statistics</h2>
