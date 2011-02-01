@@ -5,11 +5,22 @@ class Affiliate
   const signup = 'signup';
   const upgrade = 'upgrade';
   const cookie = 'af';
+  const cpaSignup = 0;
+  const cpaUpgrade = 2;
+  private static $stats;
+
   public static function add($userId)
   {
     $params = array(':userId' => $userId, ':key' => uniqid(), ':dateCreated' => time());
     return getDatabase()->execute('INSERT INTO `affiliate`(a_u_id, a_key, a_dateCreated)
       VALUES(:userId, :key, :dateCreated)', $params);
+  }
+
+  public static function getBalance($affiliateId)
+  {
+    $stats = self::getStats($affiliateId);
+    //return number_format($stats['signup']*self::cpaSignup + $stats['upgrade']*self::cpaUpgrade, 2);
+    return number_format($stats['signup']['_cnt']*self::cpaSignup + $stats['upgrade']['_cnt']*self::cpaUpgrade, 2);
   }
 
   public static function getByUserId($userId)
@@ -26,6 +37,20 @@ class Affiliate
   {
     return getDatabase()->one('SELECT * FROM affiliate_stat WHERE as_a_id=:affiliateId AND as_userToken=:userToken', 
       array(':affiliateId' => $affiliateId, ':userToken' => $userToken));
+  }
+
+  public static function getStats($affiliateId)
+  {
+    if(self::$stats)
+      return self::$stats;
+    $view = getDatabase()->one('SELECT COUNT(*) AS _cnt FROM affiliate_stat WHERE as_a_id=:affiliateId AND as_actions & 1', 
+      array(':affiliateId' => $affiliateId));
+    $signup = getDatabase()->one('SELECT COUNT(*) AS _cnt FROM affiliate_stat WHERE as_a_id=:affiliateId AND as_actions & 2', 
+      array(':affiliateId' => $affiliateId));
+    $upgrade = getDatabase()->one('SELECT COUNT(*) AS _cnt FROM affiliate_stat WHERE as_a_id=:affiliateId AND as_actions & 4', 
+      array(':affiliateId' => $affiliateId));
+    self::$stats = array('view' => $view, 'signup' => $signup, 'upgrade' => $upgrade);
+    return self::$stats;
   }
 
   public static function logUser($action, $userToken, $affiliateId)

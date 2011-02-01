@@ -129,7 +129,6 @@ ul#upload-queue { padding:0; margin:0; }
 ul#upload-queue li { padding:2px; margin:2px 0; list-style-type:none; background-color:#f2db33; }
 ul#upload-queue li.complete { background-color:#8ed6c5; }
 ul#upload-queue li.error { background-color:#df7112; }
-div.photo-queue-item { height:40px; width:200px; background-color:yellow; border:solid 1px #000; }
 
 div.progressbar{
   padding:4px;
@@ -145,6 +144,7 @@ div.progressbar div {
   float:left;
   margin-right:5px;
 }
+div.affiliate-progress{ height:25px; }
 div.progressbar div.upload-error {
   background-image:url("/img/upload-percent-back-error.png");
 }

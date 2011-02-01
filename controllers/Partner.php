@@ -35,7 +35,10 @@ class Partner
     Site::requireLogin();
     $userId = getSession()->get('userId');
     $affiliate = Affiliate::getByUserId($userId);
+    $stats = Affiliate::getStats($affiliate['a_id']);
+    $balance = Affiliate::getBalance($affiliate['a_id']);
     $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'affiliateForm'));
-    getTemplate()->display('template.php', array('body' => 'affiliateView.php', 'affiliate' => $affiliate, 'js' => $js));
+    getTemplate()->display('template.php', array('body' => 'affiliateView.php', 'affiliate' => $affiliate, 
+      'balance' => $balance, 'stats' => $stats, 'js' => $js));
   }
 }

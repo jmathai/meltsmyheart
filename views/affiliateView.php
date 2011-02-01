@@ -1,9 +1,13 @@
 <h1>Your affiliate account</h1>
-
 <p>
   Thanks for being an affiliate of <?php echo getConfig()->get('site')->name; ?>.
   From here you can get your <a href="#link">affiliate link</a>, <a href="#statistics">view statistics</a> and <a href="#payment">request a payment</a>.
 </p>
+<p>
+  <strong>Your current balance is $<?php echo $balance; ?>.</strong>
+</p>
+
+<hr>
 
 <a name="link"></a>
 <h2>Get your affiliate link</h2>
@@ -22,6 +26,25 @@
 <h2>View your statistics</h2>
 <p>
   Quickly see how many people clicked through from your page, what percentage signed up and how many upgraded.
+</p>
+<p>
+  <strong>You've had a total of <?php echo $stats['view']['_cnt']; ?> referrals</strong>
+  <div class="clearfix">
+    <?php if($stats['view']['_cnt'] > 0) { ?>
+      <div class="progressbar affiliate-progress">
+        <div style="background-position:-<?php echo intval(119-($stats['signup']['_cnt']/$stats['view']['_cnt'])*119); ?>px 0;"><div></div></div>
+        <label><?php printf('%d%%<br>', intval(100*($stats['signup']['_cnt']/$stats['view']['_cnt']))); ?>Sign ups: <?php echo $stats['signup']['_cnt']; ?></label>
+      </div>
+    <?php } ?>
+  </div>
+  <div class="clearfix">
+    <?php if($stats['view']['_cnt'] > 0) { ?>
+      <div class="progressbar affiliate-progress">
+        <div style="background-position:-<?php echo intval(119-($stats['upgrade']['_cnt']/$stats['view']['_cnt'])*119); ?>px 0;"><div></div></div>
+        <label><?php printf('%d%%<br>', intval(100*($stats['upgrade']['_cnt']/$stats['view']['_cnt']))); ?>Upgrades: <?php echo $stats['upgrade']['_cnt']; ?></label>
+      </div>
+    <?php } ?>
+  </div>
 </p>
 
 <a name="payment"></a>
