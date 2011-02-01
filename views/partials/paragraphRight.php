@@ -1,5 +1,5 @@
 <p class="right">
-  <?php if($context === 'affiliate') { ?>
+  <?php if(isset($context) && $context === 'affiliate') { ?>
     <?php getTemplate()->display('partials/affiliateRight.php'); ?>
   <?php } else { ?>
     <img src="/img/creative/polaroid-3-300-<?php echo rand(1,2); ?>.jpg">

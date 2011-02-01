@@ -112,6 +112,7 @@ div.home ul { margin:25px 10px; }
 /* // child new */
 
 /* affiliate */
+img.affiliate-graphic{ width:300px; height:236px; margin:25px 0; -moz-transform: rotate(5deg); -webkit-transform: rotate(5deg); }
 pre{margin:4px 0 16px; display:table; padding:8px 4px; background-color:#eee; border:dotted 2px #ccc;}
 
 ul#album-list li { float:left; list-style-type:none; text-align:center; width:33%; margin:10px 0; font-size:.8em; }

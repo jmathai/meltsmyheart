@@ -7,7 +7,7 @@ class Partner
     {
       $userToken = uniqid();
       $affiliate = Affiliate::getByKey($affiliateKey);
-      Affiliate::setCookie($userToken, $affilateKey, $affiliate['a_id']);
+      Affiliate::setCookie($userToken, $affiliateKey, $affiliate['a_id']);
       Affiliate::logUser(Affiliate::view, $userToken, $affiliate['a_id']);
     }
     getRoute()->redirect('/join/referred');
@@ -26,6 +26,8 @@ class Partner
       $affiliateId = Affiliate::add($userId);
       if(!$affiliateId)
         throw new Exception('Could not add affiliate id');
+      Resque::enqueue('mmh_email', 'Email', array('subject' => sprintf('Welcome to the %s affiliate program', getConfig()->get('site')->name), 
+        'email' => getSession()->get('email'), 'template' => getTemplate()->get('email/affiliate.php')));
     }
     getRoute()->redirect('/affiliate');
   }

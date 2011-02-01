@@ -649,7 +649,19 @@ class Site
         User::upgrade($userId);
         $user = User::getById($userId);
         if($affiliate = Affiliate::parseCookie())
+        {
           Affiliate::logUser(Affiliate::upgrade, $affiliate['userToken'], $affiliate['affiliateId']);
+          // affiliate email
+          $_aff = Affiliate::getByKey($affiliate['affiliateKey']);
+          error_log(var_export($affiliate, 1));
+          error_log(var_export($_aff, 1));
+          $_affUser = User::getById($_aff['a_u_id']);
+          Resque::enqueue('mmh_email', 'Email', array('subject' => 'One of your referrals upgraded!', 
+            'email' => $_affUser['u_email'], 'template' => getTemplate()->get('email/affiliate-upgrade.php')));
+        }
+        // upgrade welcome email
+        Resque::enqueue('mmh_email', 'Email', array('subject' => 'Thank you for upgrading!', 
+          'email' => getSession()->get('email'), 'template' => getTemplate()->get('email/upgraded.php')));
         User::startSession($user);
         getRoute()->redirect('/?m=upgraded');
         break;

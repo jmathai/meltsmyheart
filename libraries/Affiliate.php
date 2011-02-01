@@ -19,7 +19,6 @@ class Affiliate
   public static function getBalance($affiliateId)
   {
     $stats = self::getStats($affiliateId);
-    //return number_format($stats['signup']*self::cpaSignup + $stats['upgrade']*self::cpaUpgrade, 2);
     return number_format($stats['signup']['_cnt']*self::cpaSignup + $stats['upgrade']['_cnt']*self::cpaUpgrade, 2);
   }
 
