@@ -22,7 +22,7 @@ class Partner
 
   public static function logAndRedirect($affiliateKey)
   {
-    if(!isset($_COOKIE['affiliateKey']) || $_COOKIE['affiliateKey'] == $affiliateKey)
+    if(!$parsedCookie = Affiliate::parseCookie() && $parsedCookie['affiliateKey'] != $affiliateKey)
     {
       $userToken = uniqid();
       $affiliate = Affiliate::getByKey($affiliateKey);
