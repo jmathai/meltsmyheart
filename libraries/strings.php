@@ -11,6 +11,8 @@ $strings['emailDoesNotExist'] = 'We couldn\'t find an account with that email ad
 $strings['facebookStatus'] = "See photos of {$c_name} on " . getConfig()->get('site')->name . '.';
 $strings['facebookCaption'] = getConfig()->get('site')->name . ' is the fastest and most beautiful way to share photos of your children.';
 $strings['facebookDescription'] = "Experience {$c_name} growing up through photos on " . getConfig()->get('site')->name . '.';
+$strings['paymentRequestSubmitted'] = 'Your payment request has been submitted.';
+$strings['couldNotFindAffiliateAccount'] = 'We could not find an affiliate account for you.';
 
 
 $strings['quotes'] = array();
