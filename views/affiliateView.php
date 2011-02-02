@@ -54,17 +54,17 @@
   Fill out this form below and we'll mail you a check.
 </p>
 <p>
-  <form method="post" action="/affiliate/payment" id="affiliateForm">
-    <label for="name">Amount <em>(Your balance is $<?php echo number_format($balance, 2); ?>)</em></label>
-    <input type="text" id="name" name="name" required="required">
+  <form method="post" action="/affiliate/payment/<?php echo $affiliate['a_id']; ?>" id="affiliateForm">
+    <label for="amount">Amount <em>(Your balance is $<?php echo number_format($balance, 2); ?>)</em></label>
+    <input type="text" id="amount" name="amount" required="required">
 
     <label for="name">Name</label>
     <input type="text" id="name" name="name" required="required">
 
-    <label for="name">Address</label>
+    <label for="address">Address</label>
     <input type="text" id="address" name="address" required="required">
 
-    <label for="name">City, State Zip</label>
+    <label for="citystatezip">City, State Zip</label>
     <input type="text" id="citystatezip" name="citystatezip" required="required">
 
     <button type="submit"><div>Send payment</div></button>

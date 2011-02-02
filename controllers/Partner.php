@@ -1,6 +1,25 @@
 <?php
 class Partner
 {
+  public static function affiliatePayment($affiliateId)
+  {
+    Site::requireLogin();
+    $userId = getSession()->get('userId');
+    $affiliate = Affiliate::getByUserId($userId);
+    if($affiliate['a_id'] == $affiliateId)
+    {
+      $params = array('affiliateId' => $affiliateId, 'email' => getSession()->get('email'), 'amount' => $_POST['amount'],
+        'balance' => Affiliate::getBalance($affiliateId), 'name' => $_POST['name'], 'address' => $_POST['address'], 'cityStateZip' => $_POST['citystatezip']);
+      Resque::enqueue('mmh_email', 'Email', array('subject' => 'New Affiliate Payment Request', 'email' => getConfig()->get('email')->from_email, 
+        'template' => getTemplate()->get('email/affiliate-payment.php', $params)));
+      getRoute()->redirect('/affiliate?m=paymentRequestSubmitted');
+    }
+    else
+    {
+      getRoute()->redirect('/affiliate?e=couldNotFindAffiliateAccount');
+    }
+  }
+
   public static function logAndRedirect($affiliateKey)
   {
     if(!isset($_COOKIE['affiliateKey']) || $_COOKIE['affiliateKey'] == $affiliateKey)
