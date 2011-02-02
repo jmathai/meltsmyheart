@@ -6,17 +6,18 @@ var mmh = (function() {
       $(id).css({"top":+t+"px"});
       msg += ' - [<a href="#" onclick="mmh.hideError(); mmh.hideConfirm(); return false;">Close</a>]'+small;
       if(!sticky)
-        $(id).html(msg).show("fade", {}, 1000, function(){ setTimeout(function(){ $(id).hide("fade", {}, 1500); }, 5000) });
+        $(id).html(msg).fadeIn(1000, function(){ setTimeout(function(){ $(id).fadeOut(1500); }, 5000) });
       else
-        $(id).html(msg).show("fade", {}, 1000);
+        $(id).html(msg).fadeIn(1000);
+      return;
     };
     var hideMessage = function(type, args) {
       var id = type == 'error' ? '#error' : '#message';
       var delay = args.length > 0 ? args[0] : null;
       if(delay)
-        $(id).html("").hide("blind", {}, 1500);
+        $(id).html("").fadeOut(1500);
       else
-        $(id).html("").hide();
+        $(id).html("").fadeOut();
     };
     var overlay = function(el, tgt) {
       var tgt = '#' + (arguments[1] || 'modal');
