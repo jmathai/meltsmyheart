@@ -111,6 +111,11 @@ div.home ul { margin:25px 10px; }
 
 /* // child new */
 
+/* upgrade */
+ul.upgrade { margin:0; padding:0 30px; font-size:1.3em; list-style:none; }
+ul.upgrade li{ height:27px; margin:5px 0; padding:5px 0 0 40px; background:url("/img/sprite-icons-aab.png") no-repeat -40px 0; }
+/* // upgrade */
+
 /* affiliate */
 img.affiliate-graphic{ width:300px; height:236px; margin:25px 0; -moz-transform: rotate(5deg); -webkit-transform: rotate(5deg); }
 pre{margin:4px 0 16px; display:table; padding:8px 4px; background-color:#eee; border:dotted 2px #ccc;}
@@ -122,43 +127,23 @@ ul#photo-list { max-height:350px; overflow:auto; }
 ul#photo-list li{ float:left; list-style-type:none; text-align:center; width:25%; margin:10px 0; font-size:.7em;}
 ul#photo-list li img{ height:75px; max-width:150px; margin:auto; }
 ul#photo-list li a{ padding-left:20px; height:16px; display:table; margin:auto; margin-top:2px; }
-ul#photo-list li a.add{ background:url("/img/sprite-icons-aaa.png") no-repeat 0 0; }
-ul#photo-list li a.remove{ background:url("/img/sprite-icons-aaa.png") no-repeat 0 -16px; }
+ul#photo-list li a.add{ background:url("/img/sprite-icons-aab.png") no-repeat 0 0; }
+ul#photo-list li a.remove{ background:url("/img/sprite-icons-aab.png") no-repeat 0 -16px; }
 
-
+/* upload */
 ul#upload-queue { padding:0; margin:0; }
 ul#upload-queue li { padding:2px; margin:2px 0; list-style-type:none; background-color:#f2db33; }
 ul#upload-queue li.complete { background-color:#8ed6c5; }
 ul#upload-queue li.error { background-color:#df7112; }
 
-div.progressbar{
-  padding:4px;
-  margin:0 50px 20px 0;
-  width:130px;
-  position:relative;
-  float:left;
-}
-div.progressbar div {
-  width:123px;
-  height:12px;
-  background:url("/img/upload-percent-back.png") no-repeat -119px 0;
-  float:left;
-  margin-right:5px;
-}
+div.progressbar{ padding:4px; margin:0 50px 20px 0; width:130px; position:relative; float:left; }
+div.progressbar div { width:123px; height:12px; background:url("/img/upload-percent-back.png") no-repeat -119px 0; float:left; margin-right:5px; }
 div.affiliate-progress{ height:25px; }
-div.progressbar div.upload-error {
-  background-image:url("/img/upload-percent-back-error.png");
-}
-div.progressbar div div {
-  background:url("/img/upload-percent-border.png") no-repeat;
-}
-div.progressbar label {
-  display:block;
-  position:relative;
-  top:-15px;
-  text-indent:125px;
-  font-size:.98em;
-}
+div.progressbar div.upload-error { background-image:url("/img/upload-percent-back-error.png"); }
+div.progressbar div div { background:url("/img/upload-percent-border.png") no-repeat; }
+div.progressbar label { display:block; position:relative; top:-15px; text-indent:125px; font-size:.98em; }
+
+/* // upload */
 
 /* from sr */
 .fb-font{ color:#333; font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size:13px; }

@@ -686,7 +686,6 @@ class Site
   public static function requireUpgrade()
   {
     self::requireLogin();
-    return;
     if(getSession()->get('accountType') != User::accountTypePaid)
     {
       getRoute()->run('/upgrade');

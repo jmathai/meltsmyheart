@@ -19,11 +19,9 @@
       <?php if(User::isLoggedIn()) { ?>
         <div class="loginlogout">You're logged in as <?php echo getSession()->get('email'); ?>, <a href="/logout" tabindex="20">logout</a>.</div>
         <ul id="navigation">
-          <li><a href="/child/new" class="add-child" tabindex="10"><div></div>Add Child</a></li>
-          <li><a href="/share" class="share" tabindex="11"><div></div>Share</a></li>
-          <li><a href="/upgrade" class="upgrade" tabindex="12"><div></div>Upgrade</a></li>
-          <!--<li><a href="/login">Login</a> or <a href="/join">join</a></li>-->
-          <!--<li><a href="/logout">Logout</a></li>-->
+          <li><a href="/" class="upgrade" tabindex="10"><div></div>Home</a></li>
+          <li><a href="/child/new" class="add-child" tabindex="11"><div></div>Add Child</a></li>
+          <li><a href="/share" class="share" tabindex="12"><div></div>Share</a></li>
         </ul>
       <?php } else { ?>
         <div class="loginlogout"><a href="/login" tabindex="10">Login</a> or <a href="/join" tabindex="11">join</a>.</div>

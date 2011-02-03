@@ -1,30 +1,27 @@
-<h1>Everyone participating in the beta is upgraded for free!</h1>
+<h1>You need to upgrade for that</h1>
 
 <p>
-  As our way of saying thanks for participating in our beta we're giving everyone a premium account for free.
-  You'll have access to all the features of <?php echo getConfig()->get('site')->name; ?> for life.
+  You can purchase a subscription for under $10 per year. Here's a list of features you get by upgrading <?php echo getConfig()->get('site')->name; ?>.
 </p>
 
-<h2>Enjoy!</h2>
+<h2>What you get for upgrading</h2>
 
-<?php return; ?>
-
-<h1>The perks of upgrading</h1>
-
-<p>
-  <span class="first">T</span>here are two options for upgrading.
-  You can purchase a subscription for under $10 per year or invite 5 friends to join <?php echo getConfig()->get('site')->name; ?>.
-</p>
+<ul class="upgrade">
+  <li>Create unlimited pages for your children</li>
+  <li>A family page that showcases each child's page <sup>*</sup></li>
+  <li>Additional premium themes and photo filters <sup>*</sup></li>
+  <li>Top level domain for your child (i.e. www.childsname.com)<sup>*</sup></li>
+</ul>
 
 <p>
-  Pick the one that's right for you.
-</p>
-
-<p>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+  <form action="<?php echo getConfig()->get('thirdparty')->paypal_host; ?>/cgi-bin/webscr" method="post">
   <input type="hidden" name="cmd" value="_s-xclick">
   <input type="hidden" name="hosted_button_id" value="<?php echo getConfig()->get('thirdparty')->paypal_button_id; ?>">
   <button type="submit"><div>Upgrade now</div></button>
-  <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+  <img alt="" border="0" src="<?php echo getConfig()->get('thirdparty')->paypal_host; ?>/en_US/i/scr/pixel.gif" width="1" height="1">
   </form>
+</p>
+
+<p>
+  <sup>*</sup> We just launched and are working hard on building out paid premium features!
 </p>
