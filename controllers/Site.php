@@ -322,7 +322,7 @@ class Site
     }
     else
     {
-      $js = getTemplate()->get('javascript/splash.js.php');
+      $js = getTemplate()->get('javascript/splash.js.php', array('host' => getConfig()->get('urls')->cdn));
     }
     getTemplate()->display('template.php', array('body' => $template, 'children' => $children, 'cntChildren' => count($children), 'js' => $js));
   }
