@@ -88,6 +88,19 @@ function getAssetJsVisitor()
   return array('plugins/jquery.tools.min.js','plugins/jquery.lightbox-0.5.min.js','javascript.js','page.js');
 }
 
+function getAssetImage($path)
+{
+  $fullPath = getConfig()->get('paths')->docroot . $path;
+  $md5 = sha1_file($fullPath);
+  preg_match('/\.([a-zA-Z]{3,4})$/', $path, $matches);
+  $ext = $matches[1];
+  $dest = "/img/static/{$md5}.{$ext}";
+  $fullDest = getConfig()->get('paths')->docroot . $dest;
+  if(!file_exists($fullDest))
+    copy($fullPath, $fullDest);
+  return $dest;
+}
+
 function getFacebook()
 {
   static $facebook;

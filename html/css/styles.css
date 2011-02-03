@@ -8,7 +8,7 @@
 body {font-family:"Trebuchet MS","Lucida Grande",georgia,serif; font-size:1em; color:#000; padding:0; margin:0; }
 
 /* header */
-div#header{ background:url("/img/sprite-main-aaa.png") repeat-x 0 0; height:133px; }
+div#header{ background:url("<?php echo getAssetImage('/img/sprite-main.png'); ?>") repeat-x 0 0; height:133px; }
 div#header img#logo{ width:166px; height:83px; border:0; position:absolute; top:0; left:30px; }
 div#header div.loginlogout{ position:absolute; top:2px; width:100%; text-align:right; font-size:.9em; color:#eee; }
 div#header div.loginlogout a{ color:#eee; }
@@ -16,7 +16,7 @@ div#header div.quote{ color:#0a77aa; position:absolute; left:225px; top:35px; fo
 ul#navigation{ position:absolute; top:60px; left:230px; height:50px; }
 ul#navigation, ul#navigation li{ list-style-type:none; margin:0; padding:0; }
 ul#navigation li{
-  background:url("/img/sprite-main-aaa.png") no-repeat 0 -157px;
+  background:url("<?php echo getAssetImage('/img/sprite-main.png'); ?>") no-repeat 0 -157px;
   margin-right:10px; 
   width:112px;
   height:44px;
@@ -27,12 +27,12 @@ ul#navigation li{
   position:relative;
 }
 ul#navigation li a{ height:22px; color:#fff; text-decoration:none; font-size:.9em; } 
-ul#navigation li a div{ background:url("/img/sprite-main-aaa.png") no-repeat; float:left; height:22px; width:22px; margin-right:5px; padding:0 0 0 0; } 
+ul#navigation li a div{ background:url("<?php echo getAssetImage('/img/sprite-main.png'); ?>") no-repeat; float:left; height:22px; width:22px; margin-right:5px; padding:0 0 0 0; } 
 ul#navigation li a.add-child div{ background-position: 0 -218px; margin-left:4px; }
 ul#navigation li a.share div{ background-position: -22px -218px; margin-left:17px; }
 ul#navigation li a.upgrade div{ background-position: -44px -218px; margin-left:8px; }
 
-div#header-bar{ background:url("/img/sprite-main-aaa.png") repeat-x 0 -133px; height:24px; width:100%; margin-top:-24px; position:relative; } 
+div#header-bar{ background:url("<?php echo getAssetImage('/img/sprite-main.png'); ?>") repeat-x 0 -133px; height:24px; width:100%; margin-top:-24px; position:relative; } 
 
 /* // header */
 
@@ -56,10 +56,10 @@ div.container{ width:760px; margin:auto; padding:0 10px; position:relative; }
 /* page specific */
 ul#thirdparty { margin:10px 20px; padding:0; }
 ul#thirdparty li { list-style-type:none; margin:8px 0;}
-a.facebook{ display:block; width:93px; height:26px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat -7px 0; }
-a.smugmug{ display:block; width:110px; height:26px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat 0 -26px; }
-a.computer{ height:26px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat 0 -54px; padding-left:30px; }
-a.photagious{ display:block; width:117px; height:23px; background:url("/img/sprite-3rdparty-logos-aaa.png") no-repeat 0 -80px; }
+a.facebook{ display:block; width:93px; height:26px; background:url("<?php echo getAssetImage('/img/sprite-3rdparty-logos.png'); ?>") no-repeat -7px 0; }
+a.smugmug{ display:block; width:110px; height:26px; background:url("<?php echo getAssetImage('/img/sprite-3rdparty-logos.png'); ?>") no-repeat 0 -26px; }
+a.computer{ height:26px; background:url("<?php echo getAssetImage('/img/sprite-3rdparty-logos.png'); ?>") no-repeat 0 -54px; padding-left:30px; }
+a.photagious{ display:block; width:117px; height:23px; background:url("<?php echo getAssetImage('/img/sprite-3rdparty-logos.png'); ?>") no-repeat 0 -80px; }
 img.auto-500{ width:500px; margin:auto; display:block; }
 .right { position:absolute; left:400px; font-size:.8em; }
 .right span{ padding:10px 0; display:block; }
@@ -94,7 +94,7 @@ div#footer div p a{ color:#0a77aa; }
 /* // footer */
 
 /* photo */
-img.frame-100 { background:url("/img/sprite-main-aaa.png") no-repeat 0 -243px; width:100px; height:100px; padding:7px 6px 7px 8px; }
+img.frame-100 { background:url("<?php echo getAssetImage('/img/sprite-main.png'); ?>") no-repeat 0 -243px; width:100px; height:100px; padding:7px 6px 7px 8px; }
 img.frame-polaroid { border:solid 1px #ccc; padding:5px 5px 20px 5px; background-color:#fff; }
 /* // photo */
 
@@ -113,7 +113,7 @@ div.home ul { margin:25px 10px; }
 
 /* upgrade */
 ul.upgrade { margin:0; padding:0 30px; font-size:1.3em; list-style:none; }
-ul.upgrade li{ height:27px; margin:5px 0; padding:5px 0 0 40px; background:url("/img/sprite-icons-aab.png") no-repeat -40px 0; }
+ul.upgrade li{ height:27px; margin:5px 0; padding:5px 0 0 40px; background:url("<?php echo getAssetImage('/img/sprite-icons.png'); ?>") no-repeat -40px 0; }
 /* // upgrade */
 
 /* affiliate */
@@ -127,8 +127,8 @@ ul#photo-list { max-height:350px; overflow:auto; }
 ul#photo-list li{ float:left; list-style-type:none; text-align:center; width:25%; margin:10px 0; font-size:.7em;}
 ul#photo-list li img{ height:75px; max-width:150px; margin:auto; }
 ul#photo-list li a{ padding-left:20px; height:16px; display:table; margin:auto; margin-top:2px; }
-ul#photo-list li a.add{ background:url("/img/sprite-icons-aab.png") no-repeat 0 0; }
-ul#photo-list li a.remove{ background:url("/img/sprite-icons-aab.png") no-repeat 0 -16px; }
+ul#photo-list li a.add{ background:url("<?php echo getAssetImage('/img/sprite-icons.png'); ?>") no-repeat 0 0; }
+ul#photo-list li a.remove{ background:url("<?php echo getAssetImage('/img/sprite-icons.png'); ?>") no-repeat 0 -16px; }
 
 /* upload */
 ul#upload-queue { padding:0; margin:0; }
@@ -137,10 +137,10 @@ ul#upload-queue li.complete { background-color:#8ed6c5; }
 ul#upload-queue li.error { background-color:#df7112; }
 
 div.progressbar{ padding:4px; margin:0 50px 20px 0; width:130px; position:relative; float:left; }
-div.progressbar div { width:123px; height:12px; background:url("/img/upload-percent-back.png") no-repeat -119px 0; float:left; margin-right:5px; }
+div.progressbar div { width:123px; height:12px; background:url("<?php echo getAssetImage('/img/upload-percent-back.png'); ?>") no-repeat -119px 0; float:left; margin-right:5px; }
 div.affiliate-progress{ height:25px; }
-div.progressbar div.upload-error { background-image:url("/img/upload-percent-back-error.png"); }
-div.progressbar div div { background:url("/img/upload-percent-border.png") no-repeat; }
+div.progressbar div.upload-error { background-image:url("<?php echo getAssetImage('/img/upload-percent-back-error.png'); ?>"); }
+div.progressbar div div { background:url("<?php echo getAssetImage('/img/upload-percent-border.png'); ?>") no-repeat; }
 div.progressbar label { display:block; position:relative; top:-15px; text-indent:125px; font-size:.98em; }
 
 /* // upload */
@@ -159,7 +159,7 @@ div.progressbar label { display:block; position:relative; top:-15px; text-indent
 /* tooltip styling. by default the element to be styled is .tooltip  */
 .tooltip {
 	display:none;
-	background:transparent url("/img/tooltip-container.png");
+	background:transparent url("<?php echo getAssetImage('/img/tooltip-container.png'); ?>");
 	font-size:.75em;
 	height:45px;
 	width:199px;
@@ -169,7 +169,7 @@ div.progressbar label { display:block; position:relative; top:-15px; text-indent
   margin-top:10px;
 }
 .tooltip.bottom {
-	background:transparent url("/img/tooltip-container-bottom.png");
+	background:transparent url("<?php echo getAssetImage('/img/tooltip-container-bottom.png'); ?>");
   margin-top:-10px;
   padding-top:33px;
   padding-bottom:0;

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 header('Content-Type: text/css');
 ini_set('include_path', '.');
 require '../../configs/init.php';
@@ -16,14 +17,17 @@ if(!empty($_GET['__args__']))
     $fullPath = $baseDir . '/' . $file;
     if(file_exists($fullPath) && validCacheInclude(__FILE__, $fullPath, '.css'))
     {
+      include $fullPath;
+      $css = ob_get_contents();
+      ob_flush();
       if(getConfig()->get('assets')->minify)
       {
-        $tmp = new CSSMin(file_get_contents($fullPath));
+        $tmp = new CSSMin($css);
         $cache .= $tmp->getCss() . "\n";
       }
       else
       {
-        $cache .= file_get_contents($fullPath) . "\n";
+        $cache .= $css . "\n";
       }
     }
   }
@@ -33,3 +37,4 @@ if(!empty($_GET['__args__']))
 
   echo $cache;
 }
+ob_end_flush();

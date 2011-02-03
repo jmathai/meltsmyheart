@@ -1,1 +1,1 @@
-body{ background-image:url("/img/page-background-tartan.png"); }
+body{ background-image:url("<?php echo getAssetImage('/img/page-background-tartan.png'); ?>"); }

@@ -1,10 +1,10 @@
-button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("/img/sprite-button-aaa.png") no-repeat 0 0; width:163px; height:44px; margin:5px 10px 5px 0; border:0; cursor:pointer; }
+button{ text-align:center; text-transform:capitalize; font-size:1em; color:#9c4d09; background:transparent url("<?php echo getAssetImage('/img/sprite-button.png'); ?>") no-repeat 0 0; width:163px; height:44px; margin:5px 10px 5px 0; border:0; cursor:pointer; }
 button div{ margin-top:-7px; }
 div#error, div#message, div#debug {position:absolute; width:700px; margin-left:20px; padding:10px; display:none; font-size:20px;z-index:999999;}
 div#error p, div#message p, div#debug p {display:block; padding:5px 20px; font-size:12px;}
 /* jquery ui */
-.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #fcefa1; background: #fbf9ee url(/css/ui/images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x; color: #363636; }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #fcefa1; background: #fbf9ee url("/css/ui/images/ui-bg_glass_55_fbf9ee_1x400.png") 50% 50% repeat-x; color: #363636; }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a { color: #363636; }
-.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #fef1ec url(/css/ui/images/ui-bg_inset-soft_95_fef1ec_1x100.png) 50% bottom repeat-x; color: #cd0a0a; }
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #fef1ec url("/css/ui/images/ui-bg_inset-soft_95_fef1ec_1x100.png") 50% bottom repeat-x; color: #cd0a0a; }
 .ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a { color: #cd0a0a; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text, .ui-widget-header .ui-state-error-text { color: #cd0a0a; }
