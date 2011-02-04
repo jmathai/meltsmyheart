@@ -35,6 +35,7 @@ var mmh = (function() {
           $("#modal").html("");
           mmh.loadDialog(href, {}, tgt);
           mpq.push(["track", track, {"display": "modal"}]); 
+          _gaq.push(["_trackEvent", "dialog", "load", track]);
         },
         onLoad: function() {
           $(tgt + ' .close').live('click', function(e){ e.preventDefault(); $(el).data("overlay").close();});
