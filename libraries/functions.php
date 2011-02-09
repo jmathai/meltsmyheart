@@ -174,6 +174,17 @@ function getString($token, $params = array())
   return '';
 }
 
+function isMobile()
+{
+  static $isMobile = null;
+  if($isMobile !== null)
+    return $isMobile;
+
+  $md = new Mobile_Detect();
+  $isMobile = $md->isMobile();
+  return $isMobile;
+}
+
 function normalizeRoute($route)
 {
   if($route == '/child/new')

@@ -4,13 +4,21 @@ try
   include '../configs/init.php';
 
   // controllers
-  include getConfig()->get('paths')->controllers . '/Api.php';
-  include getConfig()->get('paths')->controllers . '/Partner.php';
-  include getConfig()->get('paths')->controllers . '/Simple.php';
-  include getConfig()->get('paths')->controllers . '/Site.php';
+  $isMobile = isMobile();
+  if($isMobile)
+  {
+    include getConfig()->get('paths')->controllers . '/Mobile.php';
+    getRoute()->load('mobile-routes.ini');
+  }
+  else
+  {
+    include getConfig()->get('paths')->controllers . '/Api.php';
+    include getConfig()->get('paths')->controllers . '/Partner.php';
+    include getConfig()->get('paths')->controllers . '/Simple.php';
+    include getConfig()->get('paths')->controllers . '/Site.php';
+    getRoute()->load('routes.ini');
+  }
 
-  // routes
-  getRoute()->load('routes.ini');
   if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyheart\.com$/', $_SERVER['HTTP_HOST'], $matches))
   {
     if(!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')

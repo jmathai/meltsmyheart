@@ -46,7 +46,6 @@
   <script>
     var _gaq = _gaq || [], mpq = [];
     $(document).ready(function() {
-      $("a.child-photo").lightBox();
       mpq.push(["init", "<?php echo getSecret('mp_token'); ?>"]);
       mpq.push(["track", "page-view", {"path": "<?php echo normalizeRoute(getRoute()->route()); ?>"}]); 
       mpq.push(["track", "<?php echo normalizeRoute(getRoute()->route()); ?>"]); 
