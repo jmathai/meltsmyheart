@@ -16,7 +16,7 @@
       </div>
 
       <input type="hidden" name="r" value="<?php echo $r; ?>">
-      <button type="submit" tabindex="3"><div>Login</div></button>
+      <button type="submit" tabindex="3" data-theme="b"><div>Login</div></button>
       <br>
       <em>Need an account? <a href="/join?r=<?php echo $r; ?>" tabindex="3">Join here</a>.</em>
       <br>

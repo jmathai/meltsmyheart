@@ -27,7 +27,7 @@
           <input type="email" id="email" name="email" required="required" tabindex="1">
         </div>
 
-        <button type="submit"><div>Reset</div></button>
+        <button type="submit" data-theme="b"><div>Reset</div></button>
         <br>
         <em>Need an account? <a href="/join" tabindex="2">Join here</a>.</em>
         <br>

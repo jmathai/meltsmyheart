@@ -20,7 +20,7 @@
         <input type="text" name="childDomain" required="required" check-domain="true" check-name="" tabindex="3">
       </div>
 
-      <button class="yellow" type="submit" tabindex="4"><div>Submit</div></button>
+      <button class="yellow" type="submit" tabindex="4" data-theme="b"><div>Submit</div></button>
     </form>
   </p>
 </div>
