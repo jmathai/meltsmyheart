@@ -10,7 +10,7 @@
 <div data-role="page" data-theme="c">
   <div data-role="header" data-theme="e">
     <?php if(!isset($noHeaderButtons) || !$noHeaderButtons) { ?>
-      <a href="/" data-role="button" data-inline="true" data-icon="home">home</a>
+      <a href="/" data-role="button" data-inline="true" data-icon="back" data-rel="back">back</a>
     <?php } ?>
     <h1><?php echo $title; ?></h1>
     <?php if(User::isLoggedIn() && (!isset($noHeaderButtons) || !$noHeaderButtons)) { ?>

@@ -1,6 +1,9 @@
 <h1>Your children</h1>
 
 <?php if(count($children) > 0) { ?>
+  <p>
+    <a href="/child/new" data-role="button" data-icon="add" data-theme="b">Add another child</a>
+  </p>
   <ul data-role="listview" data-split-icon="delete">
     <?php foreach($children as $child) { ?>
       <li>
@@ -12,5 +15,5 @@
     <?php } ?>
   </ul>
 <?php } else { ?>
-  button
+  <a href="/child/new" data-role="button" data-icon="add">Add your child</a>
 <?php } ?>
