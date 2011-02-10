@@ -46,7 +46,7 @@ class Mobile
     }
     else
     {
-      $params = array('body' => '../login.php', 'title' => 'Login or Join', 'r' => '/child/new');
+      $params = array('body' => '../login.php', 'title' => 'Login', 'r' => '/');
     }
     getTemplate()->display('mobile/template.php', $params);
   }

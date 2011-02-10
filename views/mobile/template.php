@@ -2,7 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="<?php echo getAsset('css', array('jquery.mobile.css')); ?>">
-  <script src="<?php echo getAsset('js', array('jquery.min.js','jquery.mobile.min.js')); ?>"></script>
+  <script src="<?php echo getAsset('js', array('jquery.min.js','jquery.mobile.min.js')); /* unminified */?>"></script>
   <title><?php echo getConfig()->get('site')->name; ?></title>
 </head>
 
@@ -13,7 +13,7 @@
       <a href="/" data-role="button" data-inline="true" data-icon="home">home</a>
     <?php } ?>
     <h1><?php echo $title; ?></h1>
-    <?php if(!isset($noHeaderButtons) || !$noHeaderButtons && User::isLoggedIn()) { ?>
+    <?php if(User::isLoggedIn() && (!isset($noHeaderButtons) || !$noHeaderButtons)) { ?>
       <a href="/logout" data-role="button" data-inline="true" data-icon="delete">logout</a>
     <?php } ?>
   </div>
