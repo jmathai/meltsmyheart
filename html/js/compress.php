@@ -16,7 +16,7 @@ if(!empty($_GET['__args__']))
     $fullPath = $baseDir . '/' . $file;
     if(file_exists($fullPath) && validCacheInclude(__FILE__, $fullPath, '.js'))
     {
-      if(getConfig()->get('assets')->minify)
+      if(getConfig()->get('assets')->minify && !isMobile())
         $cache .= JSMin::minify(file_get_contents($fullPath)) . "\n";
       else
         $cache .= file_get_contents($fullPath) . "\n";
