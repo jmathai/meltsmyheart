@@ -53,7 +53,7 @@ class Child
     if(getConfig()->get('site')->mode == 'prod')
       return "http://{$child['c_domain']}.meltsmyheart.com";
     else
-      return "/child/{$child['c_domain']}";
+      return "/child/page/{$child['c_domain']}";
   }
 
   public static function getTheme($child)
