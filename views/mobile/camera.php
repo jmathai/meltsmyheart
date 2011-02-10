@@ -2,7 +2,7 @@
 
 <p>
   In order to use your mobile device's camera you'll need to install our app.
-  We're still putting the finishing touches on it and will notify everyone when it is ready.
+  We're still putting the finishing touches on it and will notify everyone when it is ready. You can go <a href="/" rel="external">home</a> and add more children.
 </p>
 
 <p>
@@ -13,6 +13,7 @@
 <div data-role="collapsible" data-collapsed="true" data-theme="a">
   <h3>What do I do now?</h3>
   <p>You can upload photos from your desktop computer and Smugmug. Other online services coming soon.</p>
+  <p><a href="/" rel="external" data-role="button" data-inline="true" data-icon="home" data-theme="e">Go home</a></p>
 </div>
 <div data-role="collapsible" data-collapsed="true" data-theme="a">
   <h3>How soon till the app is ready?</h3>

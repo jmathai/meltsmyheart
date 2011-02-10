@@ -20,6 +20,7 @@
         <input type="text" name="childDomain" required="required" check-domain="true" check-name="" tabindex="3">
       </div>
 
+      <input type="hidden" name="r" value="<?php echo $r; ?>">
       <button class="yellow" type="submit" tabindex="4" data-theme="b"><div>Submit</div></button>
     </form>
   </p>
