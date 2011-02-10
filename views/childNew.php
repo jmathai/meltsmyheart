@@ -5,14 +5,20 @@
 
   <p>
     <form method="post" action="/child/new" id="childNewForm">
-      <label for="childName">Child's name</label>
-      <input type="text" name="childName" required="required" tabindex="1">
+      <div data-role="fieldcontain">
+        <label for="childName">Child's name</label>
+        <input type="text" name="childName" required="required" tabindex="1">
+      </div>
 
-      <label for="childBirthDate">Birthdate &amp; time<em>(this format 6/19/2010 10:06 am)</em></label>
-      <input type="text" name="childBirthDate" date="mm/dd/yyyy" tabindex="2">
+      <div data-role="fieldcontain">
+        <label for="childBirthDate">Birthdate &amp; time<em>(this format 6/19/2010 10:06 am)</em></label>
+        <input type="text" name="childBirthDate" date="mm/dd/yyyy" tabindex="2">
+      </div>
 
-      <label for="childDomain">Web page URL<em>(http://johnny.meltsmyheart.com - just enter johnny)</em></label>
-      <input type="text" name="childDomain" required="required" check-domain="true" check-name="" tabindex="3">
+      <div data-role="fieldcontain">
+        <label for="childDomain">Web page URL<em>(http://johnny.meltsmyheart.com - just enter johnny)</em></label>
+        <input type="text" name="childDomain" required="required" check-domain="true" check-name="" tabindex="3">
+      </div>
 
       <button class="yellow" type="submit" tabindex="4"><div>Submit</div></button>
     </form>

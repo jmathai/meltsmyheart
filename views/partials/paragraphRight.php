@@ -1,3 +1,4 @@
+<?php if(isMobile()) { return; } ?>
 <p class="right">
   <?php if(isset($context) && $context === 'affiliate') { ?>
     <?php getTemplate()->display('partials/affiliateRight.php'); ?>

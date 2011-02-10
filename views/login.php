@@ -4,12 +4,16 @@
   <?php getTemplate()->display('partials/paragraphRight.php'); ?>
 
   <p>
-    <form method="post" id="loginForm">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required="required" tabindex="1">
+    <form method="post" action="/login" id="loginForm">
+      <div data-role="fieldcontain">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required="required" tabindex="1">
+      </div>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required="required" tabindex="2">
+      <div data-role="fieldcontain">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required="required" tabindex="2">
+      </div>
 
       <input type="hidden" name="r" value="<?php echo $r; ?>">
       <button type="submit" tabindex="3"><div>Login</div></button>

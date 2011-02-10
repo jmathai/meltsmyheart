@@ -181,7 +181,7 @@ function isMobile()
     return $isMobile;
 
   $md = new Mobile_Detect();
-  $isMobile = $md->isMobile();
+  $isMobile = $md->isMobile() || getConfig()->get('site')->force_mobile == 1;
   return $isMobile;
 }
 

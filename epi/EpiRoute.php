@@ -78,11 +78,18 @@ class EpiRoute
     $parsed_array = parse_ini_file($file, true);
     foreach($parsed_array as $route)
     {
-      $method = strtolower($route['method']);
-      if(isset($route['class']) && isset($route['function']))
-        $this->$method($route['path'], array($route['class'], $route['function']));
-      elseif(isset($route['function']))
-        $this->$method($route['path'], $route['function']);
+      if(stristr($route['method'], '|'))
+        $methods = (array)explode('|', $route['method']);
+      else
+        $methods = array($route['method']);
+      foreach($methods as $method)
+      {
+        $method = strtolower($method);
+        if(isset($route['class']) && isset($route['function']))
+          $this->$method($route['path'], array($route['class'], $route['function']));
+        elseif(isset($route['function']))
+          $this->$method($route['path'], $route['function']);
+      }
     }
   }
   
@@ -107,7 +114,7 @@ class EpiRoute
       {
         array_shift($arguments);
         $def = $this->routes[$ind];
-        if($_SERVER['REQUEST_METHOD'] != $def['httpMethod'])
+        if(!preg_match('/^'.$def['httpMethod'].'$/', $_SERVER['REQUEST_METHOD']))
         {
           continue;
         }

@@ -105,10 +105,18 @@ class Site
     $userId = getSession()->get('userId');
     $child = Child::getById($userId, $childId);
     if(!$child)
-      Api::forbidden('Sorry but we were unable to remove the child requested.');
+    {
+      if(isMobile())
+        getRoute()->redirect('/?e=couldNotDeleteChild');
+      else
+        Api::forbidden('Sorry but we were unable to remove the child requested.');
+    }
 
     Child::delete($userId, $childId);
-    Api::success('Your child was successfully removed from our system.', array('childId' => $childId));
+    if(isMobile())
+      getRoute()->redirect('/?m=childDeleted');
+    else
+      Api::success('Your child was successfully removed from our system.', array('childId' => $childId));
   }
 
   public static function childNew()
@@ -119,7 +127,7 @@ class Site
       self::requireUpgrade();
 
     $js = getTemplate()->get('javascript/formValidator.js.php', array('formId' => 'childNewForm'));
-    getTemplate()->display('template.php', array('body' => 'childNew.php', 'js' => $js));
+    getTemplate()->display('template.php', array('body' => 'childNew.php', 'r' => '/photos/source', 'js' => $js));
   }
 
   public static function childPage($name)
@@ -181,7 +189,8 @@ class Site
       getRoute()->redirect('/child/new?e=invalidFields');
 
     $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $date, $_POST['childDomain']);
-    getRoute()->redirect("/photos/source/{$childId}");
+    $r = isset($_POST['r']) ? $_POST['r'] : '/photos/source';
+    getRoute()->redirect("{$r}/{$childId}");
   }
 
   public static function connectFacebook($childId = null)

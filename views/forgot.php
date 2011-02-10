@@ -22,8 +22,10 @@
     
     <p>
       <form method="post" id="forgotForm">
-        <label for="email">What's your email address?</label>
-        <input type="email" id="email" name="email" required="required" tabindex="1">
+        <div data-role="fieldcontain">
+          <label for="email">What's your email address?</label>
+          <input type="email" id="email" name="email" required="required" tabindex="1">
+        </div>
 
         <button type="submit"><div>Reset</div></button>
         <br>

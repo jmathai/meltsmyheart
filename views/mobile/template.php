@@ -7,16 +7,22 @@
 </head>
 
 <body>
-<div data-role="page" data-theme="e">
-  <div data-role="header">
+<div data-role="page" data-theme="c">
+  <div data-role="header" data-theme="e">
+    <?php if(!isset($noHeaderButtons) || !$noHeaderButtons) { ?>
+      <a href="/" data-role="button" data-inline="true" data-icon="home">home</a>
+    <?php } ?>
     <h1><?php echo $title; ?></h1>
+    <?php if(!isset($noHeaderButtons) || !$noHeaderButtons && User::isLoggedIn()) { ?>
+      <a href="/logout" data-role="button" data-inline="true" data-icon="delete">logout</a>
+    <?php } ?>
   </div>
 
   <div data-role="content">
-    hello world.
+    <?php include getConfig()->get('paths')->views."/mobile/{$body}"; ?>
   </div>
   
-  <div data-role="footer" id="persistent-footer" data-position="fixed">
+  <!--<div data-role="footer" id="persistent-footer" data-position="fixed" data-theme="a">
 		<div data-role="navbar"> 
 			<ul> 
 				<li><a href="/children" class="ui-btn-active">Children</a></li> 
@@ -24,7 +30,7 @@
 				<li><a href="/friends">Friends</a></li> 
 			</ul> 
 		</div>
-  </div>
+  </div>-->
 </div>
 <script>
 </script>

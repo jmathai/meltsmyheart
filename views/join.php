@@ -5,14 +5,20 @@
 
   <p class="left">
     <form method="post" id="joinForm" action="/join">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required="required" tabindex="1">
+      <div data-role="fieldcontain">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required="required" tabindex="1">
+      </div> 
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required="required" tabindex="2">
+      <div data-role="fieldcontain">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required="required" tabindex="2">
+      </div>
 
-      <label for="passwordConfirm">Confirm password</label>
-      <input type="password" id="passwordConfirm" name="passwordConfirm" required="required" data-equals="password" tabindex="3">
+      <div data-role="fieldcontain">
+        <label for="passwordConfirm">Confirm password</label>
+        <input type="password" id="passwordConfirm" name="passwordConfirm" required="required" data-equals="password" tabindex="3">
+      </div>
       <input type="hidden" name="r" value="<?php echo $r; ?>">
       <input type="hidden" name="context" value="<?php echo $context; ?>">
 
