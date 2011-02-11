@@ -1,0 +1,2 @@
+export ANT_HOME=/Users/jmathai/Y/phonegap/android/ant
+export PATH=/Users/jmathai/Y/phonegap/android/tools:/Users/jmathai/Y/phonegap/android/ant/bin:$PATH
