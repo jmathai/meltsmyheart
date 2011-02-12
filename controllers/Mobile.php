@@ -1,10 +1,21 @@
 <?php
 class Mobile
 {
-  public static function camera($childId)
+  public static function camera($childId = null)
   {
     Site::requireLogin();
-    getTemplate()->display('mobile/template.php', array('body' => 'camera.php', 'title' => 'Take a Picture'));
+    if($childId === null)
+    {
+      getTemplate()->display('mobile/template.php', array('body' => 'cameraUnsupported.php', 'title' => 'Camera not supported'));
+      die();
+    }
+
+    $child = Child::getById(getSession()->get('userId'), $childId);
+    if(!$child)
+      getRoute()->run('/error/404');
+
+    $js = getTemplate()->get('mobile/javascript/camera.js.php');
+    getTemplate()->display('mobile/template.php', array('body' => 'camera.php', 'title' => 'Take a Picture', 'child' => $child, 'js' => $js));
   }
 
   public static function childConfirmDelete($childId)

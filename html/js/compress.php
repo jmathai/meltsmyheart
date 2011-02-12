@@ -23,7 +23,7 @@ if(!empty($_GET['__args__']))
     }
   }
 
-  if(getConfig()->get('assets')->minify)
+  if(getConfig()->get('assets')->static)
     file_put_contents(getConfig()->get('paths')->docroot . "/js/static/{$hash}.js", "/* Cache of {$_SERVER['REQUEST_URI']} */\n{$cache}");
 
   echo $cache;

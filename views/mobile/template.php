@@ -33,6 +33,11 @@
   </div>-->
 </div>
 <script>
+  <?php if(isset($js)) { ?>
+    $(document).ready(function() {
+      <?php echo $js; ?>
+    });
+  <?php } ?>
 </script>
 </body>
 </html>
