@@ -2,7 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="<?php echo getAsset('css', array('jquery.mobile.css')); ?>">
-  <script src="<?php echo getAsset('js', array('jquery.min.js','jquery.mobile.min.js')); /* unminified */?>"></script>
+  <script src="<?php echo getAsset('js', array('jquery.min.js','jquery.mobile.min.js')); ?>"></script>
   <title><?php echo getConfig()->get('site')->name; ?></title>
 </head>
 
