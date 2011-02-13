@@ -32,6 +32,7 @@
 		</div>
   </div>-->
 </div>
+<script src="<?php echo getAsset('js', array('phonegap-0.9.3.js')); ?>"></script>
 <script>
   <?php if(isset($js)) { ?>
     $(document).ready(function() {
