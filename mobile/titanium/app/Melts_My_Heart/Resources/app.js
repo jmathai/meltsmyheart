@@ -1,31 +1,36 @@
-Titanium.include('mmh.js');
-Titanium.include('http.js');
-Titanium.include('camera.js');
+Ti.include('mmh.js');
+Ti.include('views.js');
+
+Ti.include('db.js');
+Ti.include('http.js');
+Ti.include('camera.js');
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 
 // Defaults
-Titanium.UI.setBackgroundColor('#000');
+Ti.UI.setBackgroundColor('#000');
 
-var winMain = Titanium.UI.createWindow({  
-    title:'Melts My Heart',
-    backgroundColor:'#fff'
-});
-var lblMain = Titanium.UI.createLabel({
-	color:'#999',
-	text:'Melts My Heart',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'center',
-	width:'auto'
-});
-winMain.add(lblMain);
+// TODO use only one window and call mmh.switchView by passing different views
+var winMain;
 
-btnStartCamera = mmh.ui.button.create('Start Camera', {width: 150});
+// check if email and hashed password are stored
+userId = mmh.user.getId();
+Ti.API.info(userId);
+
+// home window
+var winMain = Ti.UI.createWindow({  
+    title: mmh.constant('siteName'),
+    backgroundColor: '#fff'
+});
+
+/*btnStartCamera = mmh.ui.button.create('Start Camera', {width: 150});
 btnStartCamera.addEventListener('click', function() { 
   camera.start({
     success: mmh.camera.callback.success,
     failure: mmh.camera.callback.failure
   });
 });
+winHome.add(btnStartCamera);*/
 
-winMain.add(btnStartCamera);
 winMain.open();
+mmh.switchView('One', Ti.UI.createView());
+mmh.switchView('Two', Ti.UI.createView());
