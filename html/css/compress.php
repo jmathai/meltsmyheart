@@ -20,9 +20,10 @@ if(!empty($_GET['__args__']))
       include $fullPath;
       $css = ob_get_contents();
       ob_flush();
+      $cache .= "/* file:{$file} */\n";
       if(getConfig()->get('assets')->minify)
       {
-        $cache .= "{$file}\n" . CssMin::minify($css, array(
+        $cache .=  CssMin::minify($css, array(
                       'remove-empty-blocks'           => true,
                       'remove-empty-rulesets'         => true,
                       'remove-last-semicolons'        => true,
