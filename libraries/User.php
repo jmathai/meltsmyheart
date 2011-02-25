@@ -12,9 +12,25 @@ class User
       VALUES(:key, :email, :password, :accountType, :prefs, :dateCreated)', $params);
   }
 
+  public static function checkToken($userId, $token)
+  {
+    $result = getDatabase()->one('SELECT * FROM user_token WHERE ut_u_id=:userId AND ut_token=:token',
+      array(':userId' => $userId, ':token' => $token));
+    return !empty($result);
+  }
+
   public static function endSession()
   {
     getSession()->end();
+  }
+
+  public static function generateToken($userId, $device)
+  {
+    $token = sha1(uniqid(true));
+    getDatabase()->execute('INSERT INTO user_token(ut_u_id, ut_token, ut_device, ut_dateCreated)
+      VALUES(:userId, :token, :device, :dateCreated)',
+      array(':userId' => $userId, ':token' => $token, ':device' => $device, ':dateCreated' => time()));
+    return $token;
   }
 
   public static function getById($userId)

@@ -5,6 +5,7 @@ try
 
   getRoute()->load('shared-routes.ini');
   include getConfig()->get('paths')->controllers . '/Site.php';
+  include getConfig()->get('paths')->controllers . '/Api.php';
 
   $isMobile = isMobile();
   if($isMobile)
@@ -14,7 +15,6 @@ try
   }
   else
   {
-    include getConfig()->get('paths')->controllers . '/Api.php';
     include getConfig()->get('paths')->controllers . '/Partner.php';
     include getConfig()->get('paths')->controllers . '/Simple.php';
     getRoute()->load('routes.ini');
@@ -25,7 +25,7 @@ try
     if(!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')
       getRoute()->run("/child/page/{$matches[1]}"); 
     else
-      getRoute()->run($_SERVER['REQUEST_URI']);
+      getRoute()->run($_SERVER['REQUEST_URI']); // TODO: can this be removed?
   }
   else
   {

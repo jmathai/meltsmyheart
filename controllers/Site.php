@@ -372,12 +372,6 @@ class Site
     getTemplate()->display('template.php', array('body' => 'login.php', 'js' => $js, 'r' => $r));
   }
 
-  public static function logout()
-  {
-    User::endSession();
-    getRoute()->redirect('/');
-  }
-
   public static function loginPost()
   {
     $redirectUrl = '/login?e=loginFailed&r=' . quoteDecode($_POST['r']);
@@ -388,6 +382,12 @@ class Site
       $redirectUrl = quoteDecode($_POST['r']);
     }
     getRoute()->redirect($redirectUrl);
+  }
+
+  public static function logout()
+  {
+    User::endSession();
+    getRoute()->redirect('/');
   }
 
   public static function photoCustom($datePart, $fileName)
