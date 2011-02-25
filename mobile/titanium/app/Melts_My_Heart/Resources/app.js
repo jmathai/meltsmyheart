@@ -1,26 +1,24 @@
-Ti.include('mmh.js');
-Ti.include('views.js');
+Ti.include('libs/mmh.js');
+Ti.include('libs/db.js');
+Ti.include('libs/http.js');
+Ti.include('libs/camera.js');
 
-Ti.include('db.js');
-Ti.include('http.js');
-Ti.include('camera.js');
+Ti.include('views/signin.js');
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 
-// Defaults
-Ti.UI.setBackgroundColor('#000');
+Ti.API.info(Ti.Platform.id);
+Ti.API.info(Ti.Platform.model);
+Ti.API.info(Ti.Platform.name);
+Ti.API.info(Ti.Platform.osname);
+Ti.API.info(Ti.Platform.username);
+Ti.API.info(Ti.Platform.version);
 
-// TODO use only one window and call mmh.switchView by passing different views
-var winMain;
+// Defaults
+Ti.UI.setBackgroundColor('#fff');
 
 // check if email and hashed password are stored
 userId = mmh.user.getId();
 Ti.API.info(userId);
-
-// home window
-var winMain = Ti.UI.createWindow({  
-    title: mmh.constant('siteName'),
-    backgroundColor: '#fff'
-});
 
 /*btnStartCamera = mmh.ui.button.create('Start Camera', {width: 150});
 btnStartCamera.addEventListener('click', function() { 
@@ -30,7 +28,8 @@ btnStartCamera.addEventListener('click', function() {
   });
 });
 winHome.add(btnStartCamera);*/
-
-winMain.open();
-mmh.switchView('One', Ti.UI.createView());
-mmh.switchView('Two', Ti.UI.createView());
+if(userId === null) {
+  winSignIn.open();
+} else {
+  winHome.open();
+}

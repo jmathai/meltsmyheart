@@ -27,7 +27,7 @@ var db = (function() {
     },
     execute: function(sql) {
       db.open();
-      db.execute(sql);
+      dbHandle.execute(sql);
     }
   };
 })();
