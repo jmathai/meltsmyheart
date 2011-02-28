@@ -496,8 +496,18 @@ class Site
   {
     // swfupload doesn't send proper cookies
     // self::requireLogin();
-    $userId = User::postHash($_POST['usrhsh']);
-    if(!$userId)
+    if(isset($_POST['usrhsh']))
+    {
+      $userId = User::postHash($_POST['usrhsh']);
+    }
+    elseif(isset($_POST['userId']) && isset($_POST['userToken']))
+    {
+      $userToken = User::checkToken($_POST['userId'], $_POST['userToken']);
+      if($userToken)
+        $userId = $_POST['userId'];
+    }
+    
+    if(!isset($userId) || empty($userId))
     {
       header("HTTP/1.0 404 Not Found");
       Api::forbidden('Could not authenticate user');
