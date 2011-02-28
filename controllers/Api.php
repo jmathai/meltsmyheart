@@ -6,6 +6,22 @@ class Api
   const statusNotFound = 404;
   const statusError = 500;
 
+  public static function children()
+  {
+    $userToken = User::checkToken($_POST['userId'], $_POST['userToken']);
+    if(!$userToken)
+      self::forbidden('Sorry, you do not seem to have permissions for this page');
+    $children = Child::getByUserId($_POST['userId']);
+    foreach($children as $key => $child)
+    {
+      $photoRow = Photo::getByChild($_POST['userId'], $child['c_id']);
+      $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::greyscale,Photo::square));
+      $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
+      //$children[$key]['thumb'] = $photoUrl;
+    }
+    self::success('Successful request', array('children' => $children));
+  }
+
   public static function loginTokenPost()
   {
     $user = User::getByEmailAndPassword($_POST['email'], $_POST['password']);
