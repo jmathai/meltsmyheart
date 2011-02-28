@@ -17,6 +17,11 @@ var mmh = (function() {
       activityIndicator;
 
   return  {
+    ajax: {
+      isSuccess: function(response) {
+        return response.status >= 200 && response.status <= 299;
+      }
+    },
     camera: {
       callback: {
         success: function(ev) {
