@@ -14,6 +14,9 @@ var mmh = (function() {
         viewContainer: {top:48},
         viewContent: {width:'100%',backgroundImage:'images/stripes_diagonal.png'}
       },
+      currentChildId = null,
+      userId = null,
+      userToken = null,
       activityIndicator;
 
   return  {
@@ -23,6 +26,10 @@ var mmh = (function() {
       }
     },
     camera: {
+      start: function(childId) {
+        mmh.user.setCurrentChildId(childId);
+        camera.start(mmh.camera.callback);
+      },
       callback: {
         success: function(ev) {
           var image = ev.media;
@@ -106,36 +113,67 @@ var mmh = (function() {
     },
     upload: {
       post: function(image) {
-        mmh.ui.loader.show();
+        mmh.ui.loader.show('Uploading photo...');
+        var postbody = mmh.user.getRequestCredentials();
+        postbody.photo = image;
         httpClient.initAndSend({
-          url: mmh.constant('siteUrl') + '/upload.php',
+          url: mmh.constant('siteUrl') + '/photos/add/'+mmh.user.getCurrentChildId(),
           method: 'POST',
-          postbody: { 'file':image, 'bar':"hello" },
+          postbody: postbody,
           success: mmh.upload.callback.success,
           failure: mmh.upload.callback.failure
         });
       },
       callback: {
         success: function(ev) {
+          Ti.UI.createAlertDialog({
+              title: 'Photo posted',
+              message: 'Your photo was posted successfully.'
+          }).show();
           Titanium.API.info('Upload posted successfully.');
           mmh.ui.loader.hide();
         },
         failure: function(ev) {
           mmh.ui.loader.hide();
-          Titanium.API.info('Upload post encountered an error.');
-          if (xhr.status == 200) {
+          Ti.UI.createAlertDialog({
+              title: 'Photo upload failed',
+              message: 'Sorry, could not upload your photo.'
+          }).show();
+          Ti.API.info('Upload post encountered an error.');
+          /*if (xhr.status == 200) {
               xhr.onload(e);
               return;
-          }
+          }*/
         }
       }
     },
     user: {
+      clearCredentials: function() {
+        db.execute('DELETE FROM prefs');
+      },
+      getCurrentChildId: function() {
+        return currentChildId;
+      },
       getId: function() {
-        return db.queryForKey('userId');
+        if(userId !== null) {
+          return userId;
+        }
+        userId = db.queryForKey('userId');
+        return userId;
+      },
+      getRequestCredentials: function (){
+        return {userId: mmh.user.getId(), userToken: mmh.user.getToken()};
       },
       getToken: function() {
-        return db.queryForKey('token');
+        if(userToken !== null) {
+          return userToken;
+        }
+        userToken = db.queryForKey('userToken');
+        return userToken;
+      },
+      setCurrentChildId: function(childId) {
+        Ti.API.info('setting childId to ' + childId);
+        currentChildId = childId;
       }
     },
     util: {
@@ -151,3 +189,11 @@ var mmh = (function() {
     }
   };
 })();
+
+Function.prototype.bind = function(scope) {
+  var _function = this;
+  
+  return function() {
+    return _function.apply(scope, arguments);
+  };
+};

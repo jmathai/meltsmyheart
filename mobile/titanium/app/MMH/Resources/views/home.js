@@ -37,19 +37,18 @@ winHome.addEventListener('open', function() {
       } else {
         var children = json.params.children, child, i;
         if(children.length > 0) {
-          var image, button, childViewHeight = 125, spacer = 15, currentPosition = 0, 
-              childView = Ti.UI.createView({height:childViewHeight,width:'90%',borderColor:'#fff',borderWidth:1,borderRadius:10,backgroundColor:'#ddd'}),
-              cameraCallback = function() { camera.start(mmh.camera.callback); };
+          var image, button, childViewHeight = 125, spacer = 15, currentPosition = 0, thisView;
           for(i in children) {
             if(children.hasOwnProperty(i)) {
               child = children[i];
-              thisView = childView;
+              thisView = Ti.UI.createView({height:childViewHeight,width:'90%',borderColor:'#fff',borderWidth:1,borderRadius:10,backgroundColor:'#ddd'});
               thisView.top = currentPosition+spacer;
               image = Ti.UI.createImageView({width:100,height:100,image:child.thumb,borderRadius:5,left:12});
               button = mmh.ui.button.create('Take a photo');
               button.left = 120;
-              button.addEventListener('click', cameraCallback);
+              button.addEventListener('click', function(){ mmh.camera.start(this.c_id); }.bind(child));
               thisView.add(image);
+
               thisView.add(button);
               viewHome.add(thisView);
               currentPosition += (childViewHeight+spacer);
