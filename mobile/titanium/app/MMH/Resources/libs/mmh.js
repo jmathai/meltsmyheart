@@ -26,9 +26,9 @@ var mmh = (function() {
       }
     },
     camera: {
-      start: function(childId) {
+      start: function(childId, callback) {
         mmh.user.setCurrentChildId(childId);
-        camera.start(mmh.camera.callback);
+        camera.start(callback);
       },
       callback: {
         success: function(ev) {
@@ -94,6 +94,13 @@ var mmh = (function() {
           win.add(hdr);
           win.add(view);
           return win;
+        },
+        animateTo: function(from, to) {
+          /*var t = Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT;
+          from.animate({view:to,transition:t});*/
+          from.hide();
+          to.open();
+          to.show();
         }
       },
       loader: {
@@ -112,10 +119,10 @@ var mmh = (function() {
       }
     },
     upload: {
-      post: function(image) {
+      post: function() {
         mmh.ui.loader.show('Uploading photo...');
         var postbody = mmh.user.getRequestCredentials();
-        postbody.photo = image;
+        postbody.photo = jsShare.getImage();
         httpClient.initAndSend({
           url: mmh.constant('siteUrl') + '/photos/add/'+mmh.user.getCurrentChildId(),
           method: 'POST',
@@ -132,6 +139,7 @@ var mmh = (function() {
           }).show();
           Titanium.API.info('Upload posted successfully.');
           mmh.ui.loader.hide();
+          mmh.ui.window.animateTo(winShare, winHome);
         },
         failure: function(ev) {
           mmh.ui.loader.hide();
@@ -177,6 +185,12 @@ var mmh = (function() {
       }
     },
     util: {
+      log: function(msg) {
+        if(typeof msg !== 'string') {
+          msg = JSON.stringify(msg);
+        }
+        Ti.API.info('[MMH] ' + msg);
+      },
       merge: function(obj1, obj2) {
         var i;
         for(i in obj2) {

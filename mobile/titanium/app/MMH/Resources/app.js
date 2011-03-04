@@ -5,6 +5,7 @@ Ti.include('libs/camera.js');
 
 Ti.include('views/signin.js');
 Ti.include('views/home.js');
+Ti.include('views/share.js');
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 
 /*Ti.API.info(Ti.Platform.id);
