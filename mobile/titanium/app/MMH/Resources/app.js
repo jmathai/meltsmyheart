@@ -15,6 +15,7 @@ Ti.API.info(Ti.Platform.osname);
 Ti.API.info(Ti.Platform.username);
 Ti.API.info(Ti.Platform.version);*/
 Ti.API.info(JSON.stringify(Ti.Platform));
+Ti.API.info(mmh.util.device.display.width);
 
 // Defaults
 Ti.UI.setBackgroundColor('#fff');

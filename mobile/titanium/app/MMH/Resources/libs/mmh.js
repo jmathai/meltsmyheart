@@ -11,6 +11,7 @@ var mmh = (function() {
         hr: {width:'90%',height:2,backgroundColor:'#ddd',bottom:5},
         labelForm: {fontSize:18,height:25,left:10,right:10},
         textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:30},
+        textAreaFont: {fontSize:18},
         viewContainer: {top:48},
         viewContent: {width:'100%',backgroundImage:'images/stripes_diagonal.png'}
       },
@@ -46,6 +47,12 @@ var mmh = (function() {
     constant: function(name) {
       return constants[name];
     },
+    image: {
+      getDimensions: function(imageView) {
+        var blob = imageView.toBlob();
+        return {width: blob.width, height:blob.height};
+      }
+    },
     ui: {
       button: {
         create: function(title) {
@@ -67,6 +74,26 @@ var mmh = (function() {
           return Ti.UI.createLabel(params);
         }
       },
+      loader: {
+        show: function(/*message*/) {
+          var params = {height:50, width:10};
+          if(arguments[0]) {
+            params.message = arguments[0];
+          }
+
+          activityIndicator = Titanium.UI.createActivityIndicator(params);
+          activityIndicator.show();
+        },
+        hide: function(loader) {
+          activityIndicator.hide();
+        }
+      },
+      textArea: {
+        create: function() {
+          var params = arguments[0] ? arguments[0] : {};
+          return Ti.UI.createTextArea(params);
+        }
+      },
       textField: {
         create: function() {
           var params = arguments[0] ? arguments[0] : {};
@@ -78,6 +105,13 @@ var mmh = (function() {
           var view, params;
           params = arguments[0] ? arguments[0] : {};
           return Ti.UI.createView(params);
+        }
+      },
+      scrollView: {
+        create: function() {
+          var view, params;
+          params = arguments[0] ? arguments[0] : {};
+          return Ti.UI.createScrollView(params);
         }
       },
       window: {
@@ -102,27 +136,14 @@ var mmh = (function() {
           to.open();
           to.show();
         }
-      },
-      loader: {
-        show: function(/*message*/) {
-          var params = {height:50, width:10};
-          if(arguments[0]) {
-            params.message = arguments[0];
-          }
-
-          activityIndicator = Titanium.UI.createActivityIndicator(params);
-          activityIndicator.show();
-        },
-        hide: function(loader) {
-          activityIndicator.hide();
-        }
       }
     },
     upload: {
       post: function() {
         mmh.ui.loader.show('Uploading photo...');
-        var postbody = mmh.user.getRequestCredentials();
+        var postbody = mmh.user.getRequestCredentials(), image;
         postbody.photo = jsShare.getImage();
+        postbody.message = jsShare.getTextArea().value;
         httpClient.initAndSend({
           url: mmh.constant('siteUrl') + '/photos/add/'+mmh.user.getCurrentChildId(),
           method: 'POST',
@@ -185,6 +206,12 @@ var mmh = (function() {
       }
     },
     util: {
+      device: {
+        display: {
+          width: Ti.Platform.displayCaps.platformWidth,
+          height: Ti.Platform.displayCaps.platformHeight
+        }
+      },
       log: function(msg) {
         if(typeof msg !== 'string') {
           msg = JSON.stringify(msg);
