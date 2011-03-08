@@ -10,10 +10,10 @@ var mmh = (function() {
         headerFontColor: '#fff',
         hr: {width:'90%',height:2,backgroundColor:'#ddd',bottom:5},
         labelForm: {fontSize:18,height:25,left:10,right:10},
-        textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:30},
+        textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:60},
         textAreaFont: {fontSize:18},
         viewContainer: {top:48},
-        viewContent: {width:'100%',backgroundImage:'images/stripes_diagonal.png'}
+        viewContent: {width:'100%',backgroundColor:'#000'/*backgroundImage:'images/stripes_diagonal.png'*/}
       },
       currentChildId = null,
       userId = null,
@@ -56,7 +56,8 @@ var mmh = (function() {
     ui: {
       button: {
         create: function(title) {
-          var params = {left:10,right:10, height:40, style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN, borderRadius:10, font:{fontSize:16,fontWeight:'bold'}, backgroundGradient:{type:'linear', colors:['#000001','#666666'], startPoint:{x:0,y:0}, endPoint:{x:2,y:50}, backFillStart:false}, borderWidth:1, borderColor:'#666', buttonBackgroundColor: '#f2db33', buttonBorderColor: '#000', buttonWidth: '80%', buttonHeight: 40, buttonBorderRadius: 10};
+          //var params = {left:10,right:10, height:40, style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN, borderRadius:10, font:{fontSize:16,fontWeight:'bold'}, backgroundGradient:{type:'linear', colors:['#000001','#666666'], startPoint:{x:0,y:0}, endPoint:{x:2,y:50}, backFillStart:false}, borderWidth:1, borderColor:'#666', buttonBackgroundColor: '#f2db33', buttonBorderColor: '#000', buttonWidth: '80%', buttonHeight: 40, buttonBorderRadius: 10};
+          var params = {image:'images/button-yellow.png',width:160,height:40};
           params.title = title;
           return Ti.UI.createButton(params);
         }

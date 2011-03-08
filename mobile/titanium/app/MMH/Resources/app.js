@@ -6,7 +6,6 @@ Ti.include('libs/camera.js');
 Ti.include('views/signin.js');
 Ti.include('views/home.js');
 Ti.include('views/share.js');
-// this sets the background color of the master UIView (when there are no windows/tab groups on it)
 
 /*Ti.API.info(Ti.Platform.id);
 Ti.API.info(Ti.Platform.model);
@@ -24,14 +23,6 @@ Ti.UI.setBackgroundColor('#fff');
 userId = mmh.user.getId();
 Ti.API.info(userId);
 
-/*btnStartCamera = mmh.ui.button.create('Start Camera', {width: 150});
-btnStartCamera.addEventListener('click', function() { 
-  camera.start({
-    success: mmh.camera.callback.success,
-    failure: mmh.camera.callback.failure
-  });
-});
-winHome.add(btnStartCamera);*/
 if(userId === null) {
   mmh.user.clearCredentials();
   winSignIn.open();

@@ -53,7 +53,10 @@ jsHome = (function() {
         winSignIn.open();
       } else {
         var children = json.params.children, child, i;
-        if(children.length > 0) {
+        if(children.length == 1) {
+          child = children[0];
+          mmh.camera.start(child.c_id, jsShare.camera);
+        } else if(children.length > 1) {
           var image, button, childViewHeight = 125, spacer = 15, currentPosition = 0, thisView;
           for(i in children) {
             if(children.hasOwnProperty(i)) {
