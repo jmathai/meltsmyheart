@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
 <id>com.meltsmyheart</id>
-<name>Mobile Baby</name>
+<name>Melts My Heart</name>
 <version>1.0</version>
 <publisher>jmathai</publisher>
 <url>http://meltsmyheart.com</url>
 <description>No description provided</description>
 <copyright>2011 by jmathai</copyright>
-<icon>default_app_logo.png</icon>
-    <persistent-wifi>false</persistent-wifi>
-    <prerendered-icon>false</prerendered-icon>
-    <statusbar-style>default</statusbar-style>
-    <statusbar-hidden>false</statusbar-hidden>
-    <fullscreen>false</fullscreen>
-    <navbar-hidden>false</navbar-hidden>
-    <analytics>true</analytics>
+<icon>mmh_logo.png</icon>
+<persistent-wifi>false</persistent-wifi>
+<prerendered-icon>false</prerendered-icon>
+<statusbar-style>default</statusbar-style>
+<statusbar-hidden>false</statusbar-hidden>
+<fullscreen>false</fullscreen>
+<navbar-hidden>false</navbar-hidden>
+<analytics>true</analytics>
 <guid>942abc6d-175a-4ad0-bd87-06cd2e9ae7b3</guid>
 	<iphone>
 		<orientations device="iphone">

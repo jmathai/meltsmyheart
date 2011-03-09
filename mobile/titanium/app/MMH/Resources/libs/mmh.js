@@ -11,9 +11,13 @@ var mmh = (function() {
         hr: {width:'90%',height:2,backgroundColor:'#ddd',bottom:5},
         labelForm: {fontSize:18,height:25,left:10,right:10},
         textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:30},
+        textAreaFont: {fontSize:18},
         viewContainer: {top:48},
         viewContent: {width:'100%',backgroundImage:'images/stripes_diagonal.png'}
       },
+      currentChildId = null,
+      userId = null,
+      userToken = null,
       activityIndicator;
 
   return  {
@@ -23,6 +27,10 @@ var mmh = (function() {
       }
     },
     camera: {
+      start: function(childId, callback) {
+        mmh.user.setCurrentChildId(childId);
+        camera.start(callback);
+      },
       callback: {
         success: function(ev) {
           var image = ev.media;
@@ -38,6 +46,12 @@ var mmh = (function() {
     },
     constant: function(name) {
       return constants[name];
+    },
+    image: {
+      getDimensions: function(imageView) {
+        var blob = imageView.toBlob();
+        return {width: blob.width, height:blob.height};
+      }
     },
     ui: {
       button: {
@@ -60,6 +74,26 @@ var mmh = (function() {
           return Ti.UI.createLabel(params);
         }
       },
+      loader: {
+        show: function(/*message*/) {
+          var params = {height:50, width:10};
+          if(arguments[0]) {
+            params.message = arguments[0];
+          }
+
+          activityIndicator = Titanium.UI.createActivityIndicator(params);
+          activityIndicator.show();
+        },
+        hide: function(loader) {
+          activityIndicator.hide();
+        }
+      },
+      textArea: {
+        create: function() {
+          var params = arguments[0] ? arguments[0] : {};
+          return Ti.UI.createTextArea(params);
+        }
+      },
       textField: {
         create: function() {
           var params = arguments[0] ? arguments[0] : {};
@@ -71,6 +105,13 @@ var mmh = (function() {
           var view, params;
           params = arguments[0] ? arguments[0] : {};
           return Ti.UI.createView(params);
+        }
+      },
+      scrollView: {
+        create: function() {
+          var view, params;
+          params = arguments[0] ? arguments[0] : {};
+          return Ti.UI.createScrollView(params);
         }
       },
       window: {
@@ -87,58 +128,96 @@ var mmh = (function() {
           win.add(hdr);
           win.add(view);
           return win;
-        }
-      },
-      loader: {
-        show: function(/*message*/) {
-          var params = {height:50, width:10};
-          if(arguments[0]) {
-            params.message = arguments[0];
-          }
-
-          activityIndicator = Titanium.UI.createActivityIndicator(params);
-          activityIndicator.show();
         },
-        hide: function(loader) {
-          activityIndicator.hide();
+        animateTo: function(from, to) {
+          /*var t = Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT;
+          from.animate({view:to,transition:t});*/
+          from.hide();
+          to.open();
+          to.show();
         }
       }
     },
     upload: {
-      post: function(image) {
-        mmh.ui.loader.show();
+      post: function() {
+        mmh.ui.loader.show('Uploading photo...');
+        var postbody = mmh.user.getRequestCredentials(), image;
+        postbody.photo = jsShare.getImage();
+        postbody.message = jsShare.getTextArea().value;
         httpClient.initAndSend({
-          url: mmh.constant('siteUrl') + '/upload.php',
+          url: mmh.constant('siteUrl') + '/photos/add/'+mmh.user.getCurrentChildId(),
           method: 'POST',
-          postbody: { 'file':image, 'bar':"hello" },
+          postbody: postbody,
           success: mmh.upload.callback.success,
           failure: mmh.upload.callback.failure
         });
       },
       callback: {
         success: function(ev) {
+          Ti.UI.createAlertDialog({
+              title: 'Photo posted',
+              message: 'Your photo was posted successfully.'
+          }).show();
           Titanium.API.info('Upload posted successfully.');
           mmh.ui.loader.hide();
+          mmh.ui.window.animateTo(winShare, winHome);
         },
         failure: function(ev) {
           mmh.ui.loader.hide();
-          Titanium.API.info('Upload post encountered an error.');
-          if (xhr.status == 200) {
+          Ti.UI.createAlertDialog({
+              title: 'Photo upload failed',
+              message: 'Sorry, could not upload your photo.'
+          }).show();
+          Ti.API.info('Upload post encountered an error.');
+          /*if (xhr.status == 200) {
               xhr.onload(e);
               return;
-          }
+          }*/
         }
       }
     },
     user: {
+      clearCredentials: function() {
+        db.execute('DELETE FROM prefs');
+      },
+      getCurrentChildId: function() {
+        return currentChildId;
+      },
       getId: function() {
-        return db.queryForKey('userId');
+        if(userId !== null) {
+          return userId;
+        }
+        userId = db.queryForKey('userId');
+        return userId;
+      },
+      getRequestCredentials: function (){
+        return {userId: mmh.user.getId(), userToken: mmh.user.getToken()};
       },
       getToken: function() {
-        return db.queryForKey('token');
+        if(userToken !== null) {
+          return userToken;
+        }
+        userToken = db.queryForKey('userToken');
+        return userToken;
+      },
+      setCurrentChildId: function(childId) {
+        Ti.API.info('setting childId to ' + childId);
+        currentChildId = childId;
       }
     },
     util: {
+      device: {
+        display: {
+          width: Ti.Platform.displayCaps.platformWidth,
+          height: Ti.Platform.displayCaps.platformHeight
+        }
+      },
+      log: function(msg) {
+        if(typeof msg !== 'string') {
+          msg = JSON.stringify(msg);
+        }
+        Ti.API.info('[MMH] ' + msg);
+      },
       merge: function(obj1, obj2) {
         var i;
         for(i in obj2) {
@@ -151,3 +230,11 @@ var mmh = (function() {
     }
   };
 })();
+
+Function.prototype.bind = function(scope) {
+  var _function = this;
+  
+  return function() {
+    return _function.apply(scope, arguments);
+  };
+};
