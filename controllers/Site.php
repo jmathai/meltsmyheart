@@ -495,6 +495,7 @@ class Site
   public static function photosAddPost($childId)
   {
     // swfupload doesn't send proper cookies
+    // mobile doesn't send cookies either
     // self::requireLogin();
     if(isset($_POST['usrhsh']))
     {
