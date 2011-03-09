@@ -15,7 +15,7 @@ class Api
     foreach($children as $key => $child)
     {
       $photoRow = Photo::getByChild($_POST['userId'], $child['c_id']);
-      $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::greyscale,Photo::square));
+      $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::contrast,Photo::square));
       $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
       //$children[$key]['thumb'] = $photoUrl;
     }
