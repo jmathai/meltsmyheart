@@ -520,6 +520,18 @@ class Site
     {
       $args = array('userId' => $userId, 'childId' => $childId, 'photoPath' => "{$destPath}/{$destName}");
       Resque::enqueue('mmh_fetch', 'Uploader', $args);
+      $user = User::getById($userId);
+      $child = Child::getById($userId, $childId);
+      $notify = User::getContacts($userId);
+      $baseName = str_replace('/original/','/base/',"{$destPath}/{$destName}");
+      $attachment = array('source' => $baseName, 'name' => $_FILES['photo']['name'], 'type' => 'image/jpeg');
+      foreach($notify as $email)
+      {
+        $childName = ucwords(strtolower($child['c_name']));
+        $template = getTemplate()->get('email/photo-posted.php', array('childName' => $childName));
+        Resque::enqueue('mmh_email', 'Email', array('subject' => sprintf('A new photo of %s', $childName), 
+          'email' => $email, 'from' => $user['u_email'], 'attachment' => $attachment, 'template' => $template));
+      }
       Api::success('Photo uploaded successfully', $args);
     }
     else
@@ -676,7 +688,7 @@ class Site
           error_log(var_export($affiliate, 1));
           error_log(var_export($_aff, 1));
           $_affUser = User::getById($_aff['a_u_id']);
-          Resque::enqueue('mmh_email', 'Email', array('subject' => 'One of your referrals upgraded!', 
+         Resque::enqueue('mmh_email', 'Email', array('subject' => 'One of your referrals upgraded!', 
             'email' => $_affUser['u_email'], 'template' => getTemplate()->get('email/affiliate-upgrade.php')));
         }
         // upgrade welcome email
