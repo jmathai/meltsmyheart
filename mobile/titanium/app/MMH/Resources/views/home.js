@@ -14,6 +14,7 @@ jsHome = (function() {
         return;
       }
       var params, postbody;
+      mmh.ui.loader.show('Loading...');
       postbody = mmh.user.getRequestCredentials();
       if(postbody.userId === null || postbody.userToken === null) {
         Ti.UI.createAlertDialog({
@@ -36,6 +37,7 @@ jsHome = (function() {
       winHomeOpened = true;
     },
     failure: function() {
+      mmh.ui.loader.hide();
       Ti.UI.createAlertDialog({
           title: 'Problem retrieving account',
           message: 'Sorry, we could not get your information.'
@@ -44,6 +46,7 @@ jsHome = (function() {
     },
     success: function() {
       var json;
+      mmh.ui.loader.hide();
       json = JSON.parse(this.responseText);
       if(!mmh.ajax.isSuccess(json)) {
         Ti.UI.createAlertDialog({
@@ -77,6 +80,10 @@ jsHome = (function() {
         } else {
           // TODO no children view
           Titanium.API.info('this user has no children');
+          Ti.UI.createAlertDialog({
+              title: 'No Children',
+              message: 'You have not added any children yet.'
+          }).show();
         }
       }
     }

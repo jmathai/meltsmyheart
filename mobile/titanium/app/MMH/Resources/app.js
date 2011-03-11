@@ -1,3 +1,5 @@
+var userId;
+
 Ti.include('libs/mmh.js');
 Ti.include('libs/db.js');
 Ti.include('libs/http.js');
@@ -5,6 +7,7 @@ Ti.include('libs/camera.js');
 
 Ti.include('views/signin.js');
 Ti.include('views/home.js');
+Ti.include('views/contacts.js');
 Ti.include('views/share.js');
 
 /*Ti.API.info(Ti.Platform.id);
@@ -17,7 +20,7 @@ Ti.API.info(JSON.stringify(Ti.Platform));
 Ti.API.info(mmh.util.device.display.width);
 
 // Defaults
-Ti.UI.setBackgroundColor('#fff');
+Ti.UI.setBackgroundColor('#000');
 
 // check if email and hashed password are stored
 userId = mmh.user.getId();

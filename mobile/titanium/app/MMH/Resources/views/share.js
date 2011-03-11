@@ -9,29 +9,34 @@ winShare = mmh.ui.window.create('Share This Photo', viewShareContainer);
 jsShare = (function() {
   var image, textArea;
   var fitToScreen = function(imageView) {
-    mmh.util.log(imageView);
     var percentShrink, imageDimensions = mmh.image.getDimensions(imageView);
-    percentShrink = parseInt((imageDimensions.width / mmh.util.device.display.width), 10);
+    mmh.util.log('dims');
+    mmh.util.log(imageDimensions);
+    percentageShrink = parseInt((imageDimensions.width - 200) / imageDimensions.width);
+    mmh.util.log(percentShrink);
     imageView.width = parseInt((percentShrink * imageDimensions.width), 10);
     imageView.height = parseInt((percentShrink * imageDimensions.height), 10);
-    //left:10,right:10,image:image,top:125,
-    imageView.top = 125;
+    mmh.util.log(imageView.width);
+    mmh.util.log(imageView.height);
     mmh.util.log(imageView);
     return imageView;
   };
   return {
     open: function () {
+    //if(!mmh.user.hasContacts()) {
+    //  winContacts.open();
+    //  return;
+    //}
       var hr, imageView, hintText, btnCancel, btnShare;
       mmh.util.log('opening share window');
       //image = 'http://s3.photos.jaisenmathai.com/original/201102/1298858393_IMAG0015.jpg';
+      //imageView = fitToScreen(Ti.UI.createImageView({borderRadius:5,image:image,top:205}));
       imageView = Ti.UI.createImageView({left:10,right:10,borderRadius:5,image:image,top:205});
       //imageView.width = mmh.util.device.display.width - 20;
 
       /*btnCancel = mmh.ui.button.create('Cancel');
       btnCancel.addEventListener('click', function(){ mmh.util.log('opening home'); mmh.ui.window.animateTo(winShare, winHome); });
       btnCancel.top = 15;*/
-
-      hr = mmh.ui.hr.create();
 
       // TODO font size does not match
       textArea = mmh.ui.textArea.create({backgroundColor:'#fff',borderRadius:5,height:100, width:300, top:10,zIndex:998});
@@ -44,7 +49,6 @@ jsShare = (function() {
       btnShare.top = 135;
 
       //viewShare.add(btnCancel);
-      viewShare.add(hr);
       viewShare.add(textArea);
       viewShare.add(hintText);
       viewShare.add(btnShare);

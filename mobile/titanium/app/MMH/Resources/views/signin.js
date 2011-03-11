@@ -27,13 +27,14 @@ winSignIn.addEventListener('open', function() {
   // Submit
   btnSignIn = mmh.ui.button.create('Sign In');
   btnSignIn.addEventListener('click', function(ev) {
-    Ti.API.info('Firing');
     var params;
+    mmh.ui.loader.show('Logging in...');
     params = {
       url: mmh.constant('siteUrl') + '/api/login/token',
       method:'POST',
       postbody: {email:txtSignInEmail.value,password:txtSignInPassword.value,device:Ti.Platform.osname+' '+Ti.Platform.version+' ('+Ti.Platform.id+')'},
       success: function(e) {
+        mmh.ui.loader.hide();
         Ti.API.info(this.responseText);
         var json = JSON.parse(this.responseText);
         if(!mmh.ajax.isSuccess(json) || json.params === false || json.params.userId.length === 0 || json.params.userToken.length === 0) {
@@ -56,6 +57,7 @@ winSignIn.addEventListener('open', function() {
         }
       },
       failure: function(e) {
+        mmh.ui.loader.hide();
         Ti.API.info(this.responseText);
         Ti.UI.createAlertDialog({
             title: 'Unexpected error',

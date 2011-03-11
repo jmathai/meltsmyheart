@@ -16,9 +16,21 @@ var mmh = (function() {
         viewContent: {width:'100%',backgroundColor:'#000'/*backgroundImage:'images/stripes_diagonal.png'*/}
       },
       currentChildId = null,
+      hasContacts = null,
       userId = null,
       userToken = null,
-      activityIndicator;
+      activityIndicator,
+      resize;
+  resize = function(image) {
+    return image;
+    /*var imageView, imageToResize, imageOut;
+    imageView = Ti.UI.createImageView({image:image});
+    imageToResize = imageView.toImage();
+    imageToResize.width = 300;//parseInt(imageToResize.width * .5);
+    imageToResize.height = 400;//parseInt(imageToResize.height * .5);
+    imageOut = Ti.UI.createImageView({image:imageToResize});
+    return imageOut.toBlob();*/
+  };
 
   return  {
     ajax: {
@@ -33,10 +45,10 @@ var mmh = (function() {
       },
       callback: {
         success: function(ev) {
-          var image = ev.media;
+          /*var image = ev.media;
           Titanium.API.info('image is ' + image);
           // TODO loader
-          mmh.upload.post(image);
+          mmh.upload.post(image);*/
         },
         failure: function(ev) {
           msg = Titanium.UI.createAlertDialog({message: 'Something went wrong.'});
@@ -119,7 +131,7 @@ var mmh = (function() {
         create: function(title, view) {
           var win, hdr, lbl;
           win = Ti.UI.createWindow({  
-              backgroundColor: '#fff',
+              backgroundColor: '#000',
               width:'100%',
               size:{width:'100%'}
           });
@@ -143,7 +155,7 @@ var mmh = (function() {
       post: function() {
         mmh.ui.loader.show('Uploading photo...');
         var postbody = mmh.user.getRequestCredentials(), image;
-        postbody.photo = jsShare.getImage();
+        postbody.photo = resize(jsShare.getImage());
         postbody.message = jsShare.getTextArea().value;
         httpClient.initAndSend({
           url: mmh.constant('siteUrl') + '/photos/add/'+mmh.user.getCurrentChildId(),
@@ -200,6 +212,14 @@ var mmh = (function() {
         }
         userToken = db.queryForKey('userToken');
         return userToken;
+      },
+      hasContacts: function() {
+        // TODO: replace with ajax call or set on login
+        if(hasContacts !== null) {
+          return hasContacts;
+        }
+        hasContacts = db.queryForKey('hasContacts');
+        return hasContacts;
       },
       setCurrentChildId: function(childId) {
         Ti.API.info('setting childId to ' + childId);
