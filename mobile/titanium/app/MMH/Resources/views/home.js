@@ -31,8 +31,6 @@ jsHome = (function() {
         success: jsHome.success,
         failure: jsHome.failure
       };
-      Ti.API.info('sending children request');
-      Ti.API.info(JSON.stringify(postbody));
       httpClient.initAndSend(params);
       winHomeOpened = true;
     },

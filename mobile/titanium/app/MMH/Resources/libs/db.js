@@ -1,6 +1,16 @@
 var db = (function() {
-  var dbHandle = null;
+  var dbHandle = null, safe;
+  safe = function(string) {
+    // TODO properly escape here
+    return string;
+    //return string.replace(/'/,"\'");
+  };
+
   return {
+    insertKey: function(name, value) {
+      db.open();
+      db.execute("REPLACE INTO prefs(name, value) VALUES('"+safe(name)+"','"+safe(value)+"');");
+    },
     open: function() {
       if(dbHandle === null) {
         dbHandle = Titanium.Database.open(mmh.constant('databaseName'));
@@ -9,17 +19,6 @@ var db = (function() {
         if(!dbHandle) {
           Ti.API.info('COULD NOT CREATE DB HANDLE');
         }
-//      rs = db.query('SELECT * FROM prefs');
-//      var debug = '';
-//      while(rs.isValidRow()) {
-//        debug += '{';
-//        for(var i=0; i<rs.fieldCount; i++) {
-//          debug += rs.field(i) + ',';
-//        }
-//        debug += '},';
-//        rs.next();
-//      }
-//      Ti.API.info(debug);
       }
     },
     query: function(sql) {
@@ -34,12 +33,13 @@ var db = (function() {
     },
     queryForKey: function(key) {
       db.open();
-      var value = null, rs, sql = "SELECT value FROM prefs WHERE name='"+key+"';";
+      var value = null, rs, sql = "SELECT value FROM prefs WHERE name='"+safe(key)+"';";
       rs = db.query(sql);
       if(rs !== null) {
         value = rs.fieldByName('value');
         Ti.API.info('Value ' + key + ' was found');
       }
+      
       return value;
     },
     execute: function(sql) {

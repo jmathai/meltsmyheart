@@ -16,9 +16,14 @@ var mmh = (function() {
         viewContent: {width:'100%',backgroundColor:'#000'/*backgroundImage:'images/stripes_diagonal.png'*/}
       },
       currentChildId = null,
+      currentWindow = null,
+      previousWindow = null,
       hasContacts = null,
+      hasChildren = null,
       userId = null,
       userToken = null,
+      userInitSuccess,
+      userInitFailure,
       activityIndicator,
       resize;
   resize = function(image) {
@@ -32,10 +37,43 @@ var mmh = (function() {
     return imageOut.toBlob();*/
   };
 
+  userInitSuccess = function(e) {
+    var json = JSON.parse(this.responseText), hasContacts;
+    recipientCount = json.params.recipientCount;
+    childrenCount = json.params.childrenCount;
+    mmh.util.log('setting recipientCount ' + recipientCount);
+    db.insertKey('hasContacts', recipientCount);
+    db.insertKey('hasChildren', childrenCount);
+    mmh.ui.window.openAndShow(winHome);
+    mmh.ui.loader.hide();
+  };
+  userInitFailure = function(e) {
+    var dialog = Ti.UI.createAlertDialog({
+        title: 'Could not log in',
+        message: 'Sorry, we could not get your information.',
+        buttons: ['Ok']
+    });
+    dialog.addEventListener('click', function(e) {
+      mmh.user.clearCredentials();
+      winSignIn.open();
+    });
+    mmh.ui.loader.hide();
+    dialog.show();
+  }
+
   return  {
     ajax: {
       isSuccess: function(response) {
         return response.status >= 200 && response.status <= 299;
+      }
+    },
+    app: {
+      setCurrentWindow: function(win) {
+        previousWindow = currentWindow;
+        currentWindow = win;
+      },
+      getPreviousWindow: function() {
+        return previousWindow;
       }
     },
     camera: {
@@ -59,19 +97,13 @@ var mmh = (function() {
     constant: function(name) {
       return constants[name];
     },
-    image: {
-      getDimensions: function(imageView) {
-        var blob = imageView.toBlob();
-        return {width: blob.width, height:blob.height};
-      }
-    },
     ui: {
       button: {
-        create: function(title) {
+        create: function(title/*, params*/) {
           //var params = {left:10,right:10, height:40, style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN, borderRadius:10, font:{fontSize:16,fontWeight:'bold'}, backgroundGradient:{type:'linear', colors:['#000001','#666666'], startPoint:{x:0,y:0}, endPoint:{x:2,y:50}, backFillStart:false}, borderWidth:1, borderColor:'#666', buttonBackgroundColor: '#f2db33', buttonBorderColor: '#000', buttonWidth: '80%', buttonHeight: 40, buttonBorderRadius: 10};
-          var params = {image:'images/button-yellow.png',width:160,height:40};
-          params.title = title;
-          return Ti.UI.createButton(params);
+          var def = {title:title,image:'images/button-yellow.png',width:160,height:40},
+            params = arguments.length > 1 ? arguments[1] : {};
+          return Ti.UI.createButton(mmh.util.merge(def, params));
         }
       },
       hr: {
@@ -146,8 +178,11 @@ var mmh = (function() {
           /*var t = Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT;
           from.animate({view:to,transition:t});*/
           from.hide();
-          to.open();
-          to.show();
+          mmh.ui.window.openAndShow(to);
+        },
+        openAndShow: function(win) {
+          win.open();
+          win.show();
         }
       }
     },
@@ -213,6 +248,14 @@ var mmh = (function() {
         userToken = db.queryForKey('userToken');
         return userToken;
       },
+      hasChildren: function() {
+        // TODO: replace with ajax call or set on login
+        if(hasChildren !== null) {
+          return hasChildren;
+        }
+        hasContacts = db.queryForKey('hasChildren');
+        return hasChildren;
+      },
       hasContacts: function() {
         // TODO: replace with ajax call or set on login
         if(hasContacts !== null) {
@@ -221,10 +264,33 @@ var mmh = (function() {
         hasContacts = db.queryForKey('hasContacts');
         return hasContacts;
       },
+      init: function() {
+        userId = mmh.user.getId();
+        if(userId === null) {
+          mmh.util.log('No user Id found');
+          mmh.user.clearCredentials();
+          mmh.ui.window.openAndShow(winSignIn);
+        } else {
+          mmh.util.log('Found user Id ' + userId);
+          mmh.ui.loader.show('Loading Melts My Heart');
+          httpClient.initAndSend({
+            url: mmh.constant('siteUrl') + '/mobile/init',
+            method: 'POST',
+            postbody: mmh.user.getRequestCredentials(),
+            success: userInitSuccess,
+            failure: userInitFailure
+          });
+        }
+      },
       setCurrentChildId: function(childId) {
         Ti.API.info('setting childId to ' + childId);
         currentChildId = childId;
-      }
+      },
+      setRequestCredentials: function(uId, uToken) {
+        rs = db.execute("INSERT INTO prefs(name, value) VALUES('userId', '"+uId+"');");
+        rs = db.execute("INSERT INTO prefs(name, value) VALUES('userToken', '"+uToken+"');");
+        userId = uId;
+      },
     },
     util: {
       device: {
