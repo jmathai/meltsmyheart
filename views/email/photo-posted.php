@@ -1,1 +1,7 @@
-A new photo of <?php echo $childName; ?> for you to see.
+<em>A new photo of <?php echo $childName; ?> was posted.</em>
+
+<p>
+  <?php if(!empty($message)) { ?>
+    <?php echo $message; ?>
+  <?php } ?>
+</p>

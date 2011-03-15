@@ -497,16 +497,7 @@ class Site
     // swfupload doesn't send proper cookies
     // mobile doesn't send cookies either
     // self::requireLogin();
-    if(isset($_POST['usrhsh']))
-    {
-      $userId = User::postHash($_POST['usrhsh']);
-    }
-    elseif(isset($_POST['userId']) && isset($_POST['userToken']))
-    {
-      $userToken = User::checkToken($_POST['userId'], $_POST['userToken']);
-      if($userToken)
-        $userId = $_POST['userId'];
-    }
+    $userId = self::requireUserCredentials($_POST);
     
     if(!isset($userId) || empty($userId))
     {
@@ -522,13 +513,14 @@ class Site
       Resque::enqueue('mmh_fetch', 'Uploader', $args);
       $user = User::getById($userId);
       $child = Child::getById($userId, $childId);
-      $notify = User::getContacts($userId);
+      $recipients = Recipient::getByUserId($userId);
       $baseName = str_replace('/original/','/base/',"{$destPath}/{$destName}");
       $attachment = array('source' => $baseName, 'name' => $_FILES['photo']['name'], 'type' => 'image/jpeg');
-      foreach($notify as $email)
+      foreach($recipients as $recipient)
       {
+        $email = $recipient['r_email'];
         $childName = ucwords(strtolower($child['c_name']));
-        $template = getTemplate()->get('email/photo-posted.php', array('childName' => $childName));
+        $template = getTemplate()->get('email/photo-posted.php', array('message' => $_POST['message'], 'childName' => $childName));
         Resque::enqueue('mmh_email', 'Email', array('subject' => sprintf('A new photo of %s', $childName), 
           'email' => $email, 'from' => $user['u_email'], 'attachment' => $attachment, 'template' => $template));
       }
@@ -723,5 +715,22 @@ class Site
       getRoute()->run('/upgrade');
       die();
     }
+  }
+
+  public static function requireUserCredentials($post)
+  {
+    $userId = null;
+    if(isset($post['usrhsh']))
+    {
+      $userId = User::postHash($post['usrhsh']);
+    }
+    elseif(isset($post['userId']) && isset($post['userToken']))
+    {
+      $userToken = User::checkToken($post['userId'], $post['userToken']);
+      if($userToken)
+        $userId = $post['userId'];
+    }
+    
+    return $userId;
   }
 }

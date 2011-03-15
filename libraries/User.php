@@ -56,11 +56,6 @@ class User
     return $retval;
   }
 
-  public static function getContacts($userId)
-  {
-    return array('jaisen@jmathai.com');
-  }
-
   public static function isLoggedIn()
   {
     $userId = getSession()->get('userId');

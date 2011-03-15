@@ -8,13 +8,13 @@ class Api
 
   public static function children()
   {
-    $userToken = User::checkToken($_POST['userId'], $_POST['userToken']);
-    if(!$userToken)
+    $userId = Site::requireUserCredentials($_POST);
+    if(!$userId)
       self::forbidden('Sorry, you do not seem to have permissions for this page');
-    $children = Child::getByUserId($_POST['userId']);
+    $children = Child::getByUserId($userId);
     foreach($children as $key => $child)
     {
-      $photoRow = Photo::getByChild($_POST['userId'], $child['c_id']);
+      $photoRow = Photo::getByChild($userId, $child['c_id']);
       $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::contrast,Photo::square));
       $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
       //$children[$key]['thumb'] = $photoUrl;
@@ -32,6 +32,45 @@ class Api
         self::success('Login was successful', array('userId' => $user['u_id'], 'userToken' => $token));
     }
     self::error('Could not login', false);
+  }
+
+  public static function mobileInitPost()
+  {
+    $userId = Site::requireUserCredentials($_POST);
+    if(!$userId)
+      self::forbidden('Sorry, you do not seem to have permissions for this page');
+
+    $recipients = Recipient::getByUserId($userId);
+    $children = Child::getByUserId($userId);
+    self::success('Init success', array('recipientCount' => count($recipients), 'childrenCount' => count($children)));
+  }
+
+  public static function recipientModifyPost()
+  {
+    $userId = Site::requireUserCredentials($_POST);
+    if(!$userId)
+      self::forbidden('Sorry, you do not seem to have permissions for this page');
+
+    $recipient = Recipient::getByEmail($userId, $_POST['email']);
+    if($recipient)
+    {
+      Recipient::delete($userId, $recipient['r_id']);
+      $action = 'removed';
+    } else {
+      Recipient::add($userId, $_POST['name'], $_POST['email'], $_POST['mobile']);
+      $action = 'added';
+    }
+    self::success("Recipient {$action}", array('action' => $action, 'rowIndex' => intval($_POST['rowIndex']), 'name' => $_POST['name'], 'email' => $_POST['email'], 'mobile' => $_POST['mobile']));
+  }
+
+  public static function recipients()
+  {
+    $userId = Site::requireUserCredentials($_POST);
+    if(!$userId)
+      self::forbidden('Sorry, you do not seem to have permissions for this page');
+
+    $recipients = Recipient::getByUserId($userId);
+    self::success('Recipients', array('recipients' => $recipients));
   }
 
   // response handlers
