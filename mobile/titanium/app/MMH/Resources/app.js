@@ -1,6 +1,7 @@
 var userId;
 
 // libraries
+Ti.include('libs/user.js');
 Ti.include('libs/mmh.js');
 Ti.include('libs/db.js');
 Ti.include('libs/http.js');
@@ -19,4 +20,4 @@ mmh.util.log(mmh.util.device.display.width);
 Ti.UI.setBackgroundColor('#000');
 
 // checks if userId is set and loads proper screen
-mmh.user.init();
+mmh.init();

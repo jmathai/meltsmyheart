@@ -20,10 +20,6 @@ var mmh = (function() {
       previousWindow = null,
       hasContacts = null,
       hasChildren = null,
-      userId = null,
-      userToken = null,
-      userInitSuccess,
-      userInitFailure,
       activityIndicator,
       resize;
   resize = function(image) {
@@ -36,30 +32,6 @@ var mmh = (function() {
     imageOut = Ti.UI.createImageView({image:imageToResize});
     return imageOut.toBlob();*/
   };
-
-  userInitSuccess = function(e) {
-    var json = JSON.parse(this.responseText), hasContacts;
-    recipientCount = json.params.recipientCount;
-    childrenCount = json.params.childrenCount;
-    mmh.util.log('setting recipientCount ' + recipientCount);
-    db.insertKey('hasContacts', recipientCount);
-    db.insertKey('hasChildren', childrenCount);
-    mmh.ui.window.openAndShow(winHome);
-    mmh.ui.loader.hide();
-  };
-  userInitFailure = function(e) {
-    var dialog = Ti.UI.createAlertDialog({
-        title: 'Could not log in',
-        message: 'Sorry, we could not get your information.',
-        buttons: ['Ok']
-    });
-    dialog.addEventListener('click', function(e) {
-      mmh.user.clearCredentials();
-      winSignIn.open();
-    });
-    mmh.ui.loader.hide();
-    dialog.show();
-  }
 
   return  {
     ajax: {
@@ -78,7 +50,7 @@ var mmh = (function() {
     },
     camera: {
       start: function(childId, callback) {
-        mmh.user.setCurrentChildId(childId);
+        user.setCurrentChildId(childId);
         camera.start(callback);
       },
       callback: {
@@ -96,6 +68,24 @@ var mmh = (function() {
     },
     constant: function(name) {
       return constants[name];
+    },
+    init: function() {
+      userId = user.getId();
+      if(userId === null) {
+        mmh.util.log('No user Id found');
+        user.clearCredentials();
+        mmh.ui.window.openAndShow(winSignIn);
+      } else {
+        mmh.util.log('Found user Id ' + userId);
+        mmh.ui.loader.show('Loading Melts My Heart');
+        httpClient.initAndSend({
+          url: mmh.constant('siteUrl') + '/mobile/init',
+          method: 'POST',
+          postbody: user.getRequestCredentials(),
+          success: user.callback.initSuccess,
+          failure: user.callback.initFailure
+        });
+      }
     },
     ui: {
       button: {
@@ -189,11 +179,11 @@ var mmh = (function() {
     upload: {
       post: function() {
         mmh.ui.loader.show('Uploading photo...');
-        var postbody = mmh.user.getRequestCredentials(), image;
+        var postbody = user.getRequestCredentials(), image;
         postbody.photo = resize(jsShare.getImage());
         postbody.message = jsShare.getTextArea().value;
         httpClient.initAndSend({
-          url: mmh.constant('siteUrl') + '/photos/add/'+mmh.user.getCurrentChildId(),
+          url: mmh.constant('siteUrl') + '/photos/add/'+user.getCurrentChildId(),
           method: 'POST',
           postbody: postbody,
           success: mmh.upload.callback.success,
@@ -223,74 +213,6 @@ var mmh = (function() {
           }*/
         }
       }
-    },
-    user: {
-      clearCredentials: function() {
-        db.execute('DELETE FROM prefs');
-      },
-      getCurrentChildId: function() {
-        return currentChildId;
-      },
-      getId: function() {
-        if(userId !== null) {
-          return userId;
-        }
-        userId = db.queryForKey('userId');
-        return userId;
-      },
-      getRequestCredentials: function (){
-        return {userId: mmh.user.getId(), userToken: mmh.user.getToken()};
-      },
-      getToken: function() {
-        if(userToken !== null) {
-          return userToken;
-        }
-        userToken = db.queryForKey('userToken');
-        return userToken;
-      },
-      hasChildren: function() {
-        // TODO: replace with ajax call or set on login
-        if(hasChildren !== null) {
-          return hasChildren;
-        }
-        hasContacts = db.queryForKey('hasChildren');
-        return hasChildren;
-      },
-      hasContacts: function() {
-        // TODO: replace with ajax call or set on login
-        if(hasContacts !== null) {
-          return hasContacts;
-        }
-        hasContacts = db.queryForKey('hasContacts');
-        return hasContacts;
-      },
-      init: function() {
-        userId = mmh.user.getId();
-        if(userId === null) {
-          mmh.util.log('No user Id found');
-          mmh.user.clearCredentials();
-          mmh.ui.window.openAndShow(winSignIn);
-        } else {
-          mmh.util.log('Found user Id ' + userId);
-          mmh.ui.loader.show('Loading Melts My Heart');
-          httpClient.initAndSend({
-            url: mmh.constant('siteUrl') + '/mobile/init',
-            method: 'POST',
-            postbody: mmh.user.getRequestCredentials(),
-            success: userInitSuccess,
-            failure: userInitFailure
-          });
-        }
-      },
-      setCurrentChildId: function(childId) {
-        Ti.API.info('setting childId to ' + childId);
-        currentChildId = childId;
-      },
-      setRequestCredentials: function(uId, uToken) {
-        rs = db.execute("INSERT INTO prefs(name, value) VALUES('userId', '"+uId+"');");
-        rs = db.execute("INSERT INTO prefs(name, value) VALUES('userToken', '"+uToken+"');");
-        userId = uId;
-      },
     },
     util: {
       device: {

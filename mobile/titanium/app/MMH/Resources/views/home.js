@@ -15,7 +15,7 @@ jsHome = (function() {
       }
       var params, postbody;
       mmh.ui.loader.show('Loading...');
-      postbody = mmh.user.getRequestCredentials();
+      postbody = user.getRequestCredentials();
       if(postbody.userId === null || postbody.userToken === null) {
         Ti.UI.createAlertDialog({
             title: 'Not signed in',
@@ -54,27 +54,37 @@ jsHome = (function() {
         winSignIn.open();
       } else {
         var children = json.params.children, child, i;
-        if(children.length == 1) {
+        if(false && children.length == 1) {
           child = children[0];
           mmh.camera.start(child.c_id, jsShare.camera);
         } else if(children.length > 1) {
-          var image, button, childViewHeight = 125, spacer = 15, currentPosition = 0, thisView;
+          var table, row, rowHeight = 130, rows = [], view, button, label;
           for(i in children) {
             if(children.hasOwnProperty(i)) {
               child = children[i];
-              thisView = Ti.UI.createView({height:childViewHeight,width:'90%',borderColor:'#fff',borderWidth:1,borderRadius:10,backgroundColor:'#ddd'});
-              thisView.top = currentPosition+spacer;
-              image = Ti.UI.createImageView({width:100,height:100,image:child.thumb,borderRadius:5,left:12});
-              button = mmh.ui.button.create('Take a photo');
+              //button = mmh.ui.button.create('Take a photo');
+              //button.addEventListener('click', function(){ mmh.camera.start(this.c_id, jsShare.camera); }.bind(child));
+              label = mmh.ui.label.create(child.c_name, {left:70});
+              label.font = {fontSize:20};
+              view = mmh.ui.view.create();
+              view.add(label);
+              //view.add(button);
+              row = Ti.UI.createTableViewRow({ className:'childRow', leftImage: child.thumb, height: rowHeight, hasDetail: true});
+              row.add(view);
+              row.addEventListener('click', function(){ mmh.camera.start(this.c_id, jsShare.camera); }.bind(child));
+              rows.push(row);
+              /*button = mmh.ui.button.create('Take a photo');
               button.left = 120;
               button.addEventListener('click', function(){ mmh.camera.start(this.c_id, jsShare.camera); }.bind(child));
               thisView.add(image);
 
               thisView.add(button);
               viewHome.add(thisView);
-              currentPosition += (childViewHeight+spacer);
+              currentPosition += (childViewHeight+spacer);*/
             }
           }
+          table = Ti.UI.createTableView({data: rows});
+          viewHome.add(table);
         } else {
           // TODO no children view
           Titanium.API.info('this user has no children');

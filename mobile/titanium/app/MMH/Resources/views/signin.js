@@ -48,8 +48,8 @@ jsSignIn = function() {
               var userId, userToken, rs;
               userId = json.params.userId;
               userToken = json.params.userToken;
-              mmh.user.setRequestCredentials(userId, userToken);
-              mmh.user.init();
+              user.setRequestCredentials(userId, userToken);
+              user.init();
             }
           },
           failure: function(e) {

@@ -6,7 +6,7 @@ var contactList = function(_view, _tableParams) {
     httpClient.initAndSend({
       method:'POST',
       url: mmh.constant('siteUrl') + '/api/recipients',
-      postbody: mmh.user.getRequestCredentials(),
+      postbody: user.getRequestCredentials(),
       success: callSuccess,
       failure: callFailure
     });
@@ -90,7 +90,7 @@ var contactList = function(_view, _tableParams) {
     mmh.util.log(instTblContacts);
     mmh.util.log(JSON.stringify(data));
     source = e.source
-    postbody = mmh.util.merge(mmh.user.getRequestCredentials(), {name: data.fullName, email: data.email, mobile: data.phone, rowIndex: data.idx});
+    postbody = mmh.util.merge(user.getRequestCredentials(), {name: data.fullName, email: data.email, mobile: data.phone, rowIndex: data.idx});
     httpClient.initAndSend({
       method: 'POST',
       url: mmh.constant('siteUrl') + '/api/recipient/modify',
