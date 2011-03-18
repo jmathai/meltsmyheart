@@ -14,7 +14,7 @@ var db = (function() {
     open: function() {
       if(dbHandle === null) {
         dbHandle = Titanium.Database.open(mmh.constant('databaseName'));
-        //dbHandle.execute('DROP TABLE prefs;');
+        dbHandle.execute('DROP TABLE prefs;');
         dbHandle.execute('CREATE TABLE IF NOT EXISTS prefs(name TEXT, value TEXT, PRIMARY KEY(name, value));');
         if(!dbHandle) {
           Ti.API.info('COULD NOT CREATE DB HANDLE');

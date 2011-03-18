@@ -10,7 +10,7 @@ var mmh = (function() {
         headerFontColor: '#fff',
         hr: {width:'90%',height:2,backgroundColor:'#ddd',bottom:5},
         labelForm: {fontSize:18,height:25,left:10,right:10},
-        textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:60},
+        textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:60,font:{fontSize:20}},
         textAreaFont: {fontSize:18},
         viewContainer: {top:48},
         viewContent: {width:'100%',backgroundColor:'#000'/*backgroundImage:'images/stripes_diagonal.png'*/}
@@ -121,6 +121,12 @@ var mmh = (function() {
         },
         hide: function(loader) {
           activityIndicator.hide();
+        }
+      },
+      logo: {
+        create: function() {
+          var params = arguments[0] ? arguments[0] : {};
+          return Ti.UI.createImageView(mmh.util.merge({image:'images/logo.png', width:166, height:83}, params));
         }
       },
       textArea: {

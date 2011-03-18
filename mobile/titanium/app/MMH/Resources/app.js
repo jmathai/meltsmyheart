@@ -10,6 +10,7 @@ Ti.include('libs/contactList.js');
 
 // views
 Ti.include('views/signin.js');
+Ti.include('views/create.js');
 Ti.include('views/home.js');
 Ti.include('views/share.js');
 

@@ -6,28 +6,26 @@ viewSignInContainer.add(mmh.ui.view.create({height:50}));
 viewSignInContainer.add(viewSignIn);
 winSignIn = mmh.ui.window.create('Sign In', viewSignInContainer);
 
-jsSignIn = function() {
+jsSignIn = (function() {
   return {
-    open: function(e) {
+    open: function() {
       if(winSignInOpened) {
         winSignIn.show();
         return;
       }
-      
+      var imgLogo = mmh.ui.logo.create({top:25}), txtSignInEmail, txtSignInPassword, btnSignIn, lnkCreateAccount;
+
+      viewSignIn.add(imgLogo);
       // Email
-      lblSignInEmail = mmh.ui.label.create('Email Address', mmh.util.merge(mmh.constant('labelForm'), {top:20}));
-      txtSignInEmail = mmh.ui.textField.create(mmh.util.merge(mmh.constant('textField'), {top:50}));
-      viewSignIn.add(lblSignInEmail);
+      txtSignInEmail = mmh.ui.textField.create(mmh.util.merge(mmh.constant('textField'), {top:120, hintText:'Email address', passwordMask:false, keyboardType: Ti.UI.KEYBOARD_EMAIL, autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE}));
       viewSignIn.add(txtSignInEmail);
 
       // Password
-      lblSignInPassword = mmh.ui.label.create('Password', mmh.util.merge(mmh.constant('labelForm'), {top:100}));
-      txtSignInPassword = mmh.ui.textField.create(mmh.util.merge(mmh.constant('textField'), {top:130,passwordMask:true}));
-      viewSignIn.add(lblSignInPassword);
+      txtSignInPassword = mmh.ui.textField.create(mmh.util.merge(mmh.constant('textField'), {top:195, hintText:'Password', passwordMask:true, autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE}));
       viewSignIn.add(txtSignInPassword);
 
       // Submit
-      btnSignIn = mmh.ui.button.create('Sign In');
+      btnSignIn = mmh.ui.button.create('Sign In', {top:270});
       btnSignIn.addEventListener('click', function(ev) {
         var params;
         mmh.ui.loader.show('Logging in...');
@@ -41,7 +39,8 @@ jsSignIn = function() {
             if(!mmh.ajax.isSuccess(json) || json.params === false || json.params.userId.length === 0 || json.params.userToken.length === 0) {
               Ti.UI.createAlertDialog({
                   title: 'Problem logging in',
-                  message: 'Sorry, we could not log you in.'
+                  message: 'Sorry, we could not log you in.',
+                  buttons: ['Ok']
               }).show();
               winSignIn.open();
             } else {
@@ -49,7 +48,7 @@ jsSignIn = function() {
               userId = json.params.userId;
               userToken = json.params.userToken;
               user.setRequestCredentials(userId, userToken);
-              user.init();
+              mmh.init();
             }
           },
           failure: function(e) {
@@ -65,8 +64,15 @@ jsSignIn = function() {
         httpClient.initAndSend(params);
       });
       viewSignIn.add(btnSignIn);
+
+      // Create
+      lnkCreateAccount = mmh.ui.label.create('Need an account?', {top:320, font:{fontColor:'#ff0'}});
+      lnkCreateAccount.addEventListener('click', function(){ mmh.ui.window.animateTo(winSignIn, winCreate); });
+      viewSignIn.add(lnkCreateAccount);
+
+      mmh.ui.window.openAndShow(winSignIn);
       winSignInOpened = true;
     }
   }
-};
+})();
 winSignIn.addEventListener('open', jsSignIn.open);
