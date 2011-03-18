@@ -15,7 +15,7 @@ class Api
     foreach($children as $key => $child)
     {
       $photoRow = Photo::getByChild($userId, $child['c_id']);
-      $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::contrast,Photo::square));
+      $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::square));
       $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
       //$children[$key]['thumb'] = $photoUrl;
     }
@@ -71,6 +71,29 @@ class Api
 
     $recipients = Recipient::getByUserId($userId);
     self::success('Recipients', array('recipients' => $recipients));
+  }
+
+  public static function userCreate()
+  {
+    $user = User::getByEmailAndPassword($_POST['email'], false);
+    if($user)
+    {
+      self::forbidden('Email exists');
+    }
+
+    // TODO validate password and password confirm match
+    $status = User::add($_POST['email'], $_POST['password']);
+    if($status)
+    {
+      $user = User::getByEmailAndPassword($_POST['email'], $_POST['password']);
+      if($user)
+      {
+        $token = User::generateToken($user['u_id'], $_POST['device']);
+        if($token)
+          self::success('Creation was successful', array('userId' => $user['u_id'], 'userToken' => $token));
+      }
+    }
+    self::error('Could not create account');
   }
 
   // response handlers
