@@ -6,6 +6,27 @@ class Api
   const statusNotFound = 404;
   const statusError = 500;
 
+public static function childNewPost()
+{
+
+    $userId = Site::requireUserCredentials($_POST);
+    if(!$userId)
+      self::forbidden('Sorry, you do not seem to have permissions for this page');
+
+    $date = strtotime(substr($_POST['childBirthDate'], 0, 10)) - 43200;
+    $domain = $_POST['childDomain'];
+    if(preg_match('/^([a-zA-Z0-9-]+)\..*$/', $domain, $matches))
+      $domain = $matches[1];
+
+    if($date === false || empty($_POST['childName']) || empty($domain))
+      self::error('Invalid form fields', array('childBirthDate' => $_POST['childBirthDate'], 'childName' => $_POST['childName'], 'childDomain' => $domain));
+    elseif(Child::getByDomain($domain))
+      self::error('Domain exists', array('domainExists' => true));
+
+    $childId = Child::add($userId, $_POST['childName'], $date, $domain);
+    self::success('Child added', array('childId' => $childId));
+}
+
   public static function children()
   {
     $userId = Site::requireUserCredentials($_POST);
@@ -15,10 +36,14 @@ class Api
     foreach($children as $key => $child)
     {
       $photoRow = Photo::getByChild($userId, $child['c_id']);
-      $photoUrl = Photo::generateUrl($photoRow[count($photoRow)-1]['p_basePath'], 100, 100, array(Photo::square));
-      $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
-      //$children[$key]['thumb'] = $photoUrl;
+      $photo = $photoRow[count($photoRow)-1];
+      $children[$key]['thumb'] = null;
+      if(isset($photo['p_basePath']) && file_exists(getConfig()->get('paths')->photos."/{$photo['p_basePath']}")) {
+        $photoUrl = Photo::generateUrl($photo['p_basePath'], 100, 100, array(Photo::square));
+        $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
+      }
     }
+error_log(var_export($children, 1));
     self::success('Successful request', array('children' => $children));
   }
 
@@ -80,8 +105,11 @@ class Api
     {
       self::forbidden('Email exists');
     }
+    elseif(empty($_POST['email']) || empty($_POST['password']) || $_POST['password'] !== $_POST['passwordConfirm'])
+    {
+      self::forbidden('Invalid parameters', array('email' => $_POST['email'], 'password' => $_POST['password'], 'passwordConfirm' => $_POST['passwordConfirm']));
+    }
 
-    // TODO validate password and password confirm match
     $status = User::add($_POST['email'], $_POST['password']);
     if($status)
     {
