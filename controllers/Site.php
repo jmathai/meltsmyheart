@@ -315,6 +315,8 @@ class Site
 
   public static function home()
   {
+    getTemplate()->display('mobile-only.php');
+    die();
     $template = 'splash.php';
     $children = $js = null;
     if(User::isLoggedIn())
