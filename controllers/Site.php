@@ -503,7 +503,7 @@ class Site
     
     if(!isset($userId) || empty($userId))
     {
-      header("HTTP/1.0 404 Not Found");
+      header("HTTP/1.0 403 Forbidden");
       Api::forbidden('Could not authenticate user');
     }
     $destPath = getConfig()->get('paths')->photos.'/original/'.date('Ym');
@@ -518,12 +518,13 @@ class Site
       $recipients = Recipient::getByUserId($userId);
       $baseName = str_replace('/original/','/base/',"{$destPath}/{$destName}");
       $attachment = array('source' => $baseName, 'name' => $_FILES['photo']['name'], 'type' => 'image/jpeg');
+      $subject = !empty($_POST['message']) ? $_POST['message'] : sprintf('A new photo of %s', $childName);
+      $template = getTemplate()->get('email/photo-posted.php', array('age' => $age));
       foreach($recipients as $recipient)
       {
         $email = $recipient['r_email'];
         $childName = ucwords(strtolower($child['c_name']));
-        $template = getTemplate()->get('email/photo-posted.php', array('message' => $_POST['message'], 'childName' => $childName));
-        Resque::enqueue('mmh_email', 'Email', array('subject' => sprintf('A new photo of %s', $childName), 
+        Resque::enqueue('mmh_email', 'EmailPhoto', array('subject' => $subject, 'userId' => $userId, 'childId' => $child['c_id'], 
           'email' => $email, 'from' => $user['u_email'], 'attachment' => $attachment, 'template' => $template));
       }
       Api::success('Photo uploaded successfully', $args);

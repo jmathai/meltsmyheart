@@ -56,6 +56,11 @@ class Child
       return "/child/page/{$child['c_domain']}";
   }
 
+  public static function getPhotoUrl($child, $photo)
+  {
+    return self::getPageUrl($child) . '/photo/' . $photo['p_id'];
+  }
+
   public static function getTheme($child)
   {
     $theme = array('css' => array('plugins/jquery.lightbox-0.5.css','shared.css','theme-default.css'));

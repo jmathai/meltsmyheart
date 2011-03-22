@@ -118,7 +118,11 @@ error_log(var_export($children, 1));
       {
         $token = User::generateToken($user['u_id'], $_POST['device']);
         if($token)
+        {
+          $args = array('subject' => 'Welcome to '.getConfig()->get('site')->name, 'email' => $user['u_email'], 'template' => getTemplate()->get('email/join.php', array('email' => $user['u_email'])));
+          Resque::enqueue('mmh_email', 'Email', $args);
           self::success('Creation was successful', array('userId' => $user['u_id'], 'userToken' => $token));
+        }
       }
     }
     self::error('Could not create account');

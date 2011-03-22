@@ -1,7 +1,5 @@
-<em>A new photo of <?php echo $childName; ?> was posted.</em>
+<p>{AGE}<p>
 
-<p>
-  <?php if(!empty($message)) { ?>
-    <?php echo $message; ?>
-  <?php } ?>
+<p style="color:#bbb; font-size:smaller;">
+-- View this photo online at {URL}
 </p>
