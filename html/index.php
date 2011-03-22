@@ -22,10 +22,17 @@ try
 
   if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyheart\.com$/', $_SERVER['HTTP_HOST'], $matches))
   {
-    if(!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')
-      getRoute()->run("/child/page/{$matches[1]}"); 
+    if(true || !isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')
+    {
+      if(empty($_GET['__route__']))
+        getRoute()->run("/child/page/{$matches[1]}"); 
+      else
+        getRoute()->run("/child/page/{$matches[1]}{$_GET['__route__']}");
+    }
     else
+    {
       getRoute()->run($_SERVER['REQUEST_URI']); // TODO: can this be removed?
+    }
   }
   else
   {

@@ -24,7 +24,11 @@
   </div>
   <div class="container">
     <div id="content">
-      <?php getTemplate()->display('childPage.php', array('child' => $child, 'photos' => $photos)); ?>
+      <?php if(isset($photos)) { ?>
+        <?php getTemplate()->display('childPage.php', array('child' => $child, 'photos' => $photos)); ?>
+      <?php } else { ?>
+        <?php getTemplate()->display('childPagePhoto.php', array('child' => $child, 'photo' => $photo)); ?>
+      <?php } ?>
     </div>
   </div>
   <div id="footer">

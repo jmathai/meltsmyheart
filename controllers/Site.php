@@ -177,6 +177,20 @@ class Site
     getRoute()->redirect($redirectUrl, null, true);
   }
 
+  public static function childPagePhoto($name, $photoId)
+  {
+    $child = Child::getByDomain($name);
+    $isOwner = getSession()->get('userId') == $child['c_u_id'];
+    if(!$child)
+      getRoute()->run('/error/404');
+
+    $theme = Child::getTheme($child);
+    $photo = Photo::getById($child['c_u_id'], $photoId);
+
+    $params = array('theme' => $theme, 'child' => $child, 'photo' => $photo, 'isOwner' => $isOwner);
+    getTemplate()->display('page.php', $params);
+  }
+
   public static function childNewPost()
   {
     self::requireLogin();
