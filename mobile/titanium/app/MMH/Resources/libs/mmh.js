@@ -10,6 +10,7 @@ var mmh = (function() {
         headerFontColor: '#fff',
         hr: {width:'90%',height:2,backgroundColor:'#ddd',bottom:5},
         labelForm: {fontSize:18,height:25,left:10,right:10},
+        selectedColor: '#f2db33',
         textField: {left:10,right:10,borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,height:60,font:{fontSize:20}},
         textAreaFont: {fontSize:18},
         viewContainer: {top:48},
@@ -61,8 +62,7 @@ var mmh = (function() {
           mmh.upload.post(image);*/
         },
         failure: function(ev) {
-          msg = Titanium.UI.createAlertDialog({message: 'Something went wrong.'});
-          msg.show();
+          mmh.ui.alert.create('Unexpected error', 'Sorry, something went wrong.');
         }
       }
     },
@@ -88,12 +88,26 @@ var mmh = (function() {
       }
     },
     ui: {
+      alert: {
+        create: function(title, message) {
+          var params = arguments.length > 2 ? arguments[2] : {};
+          params = mmh.util.merge(params, {title: title, message: message, buttonNames: ['Ok']});
+          Ti.UI.createAlertDialog(params).show();
+        }
+      },
       button: {
         create: function(title/*, params*/) {
           //var params = {left:10,right:10, height:40, style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN, borderRadius:10, font:{fontSize:16,fontWeight:'bold'}, backgroundGradient:{type:'linear', colors:['#000001','#666666'], startPoint:{x:0,y:0}, endPoint:{x:2,y:50}, backFillStart:false}, borderWidth:1, borderColor:'#666', buttonBackgroundColor: '#f2db33', buttonBorderColor: '#000', buttonWidth: '80%', buttonHeight: 40, buttonBorderRadius: 10};
           var def = {title:title,image:'images/button-yellow.png',width:160,height:40},
             params = arguments.length > 1 ? arguments[1] : {};
           return Ti.UI.createButton(mmh.util.merge(def, params));
+        }
+      },
+      dateTime: {
+        create: function() {
+          var params = arguments.length > 0 ? arguments[0] : {};
+          params = mmh.util.merge(params, {type:Ti.UI.PICKER_TYPE_DATE});
+          return Ti.UI.createPicker(params);
         }
       },
       hr: {
@@ -138,7 +152,7 @@ var mmh = (function() {
       textField: {
         create: function() {
           var params = arguments[0] ? arguments[0] : {};
-          return Ti.UI.createTextField(params);
+          return Ti.UI.createTextField(mmh.util.merge({passwordMask: false, keyboardType: Ti.UI.KEYBOARD_DEFAULT, autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_SENTENCES}, params));
         }
       },
       view: {
@@ -184,10 +198,11 @@ var mmh = (function() {
     },
     upload: {
       post: function() {
-        mmh.ui.loader.show('Uploading photo...');
-        var postbody = user.getRequestCredentials(), image;
+        mmh.ui.loader.show('Sharing photo...');
+        var postbody = user.getRequestCredentials(), image, textArea;
+        textArea = jsShare.getTextArea();
         postbody.photo = resize(jsShare.getImage());
-        postbody.message = jsShare.getTextArea().value;
+        postbody.message = (textArea.value === undefined ? '' : textArea.value);
         httpClient.initAndSend({
           url: mmh.constant('siteUrl') + '/photos/add/'+user.getCurrentChildId(),
           method: 'POST',
@@ -198,20 +213,13 @@ var mmh = (function() {
       },
       callback: {
         success: function(ev) {
-          Ti.UI.createAlertDialog({
-              title: 'Photo posted',
-              message: 'Your photo was posted successfully.'
-          }).show();
-          Titanium.API.info('Upload posted successfully.');
+          mmh.ui.alert.create('Photo shared', 'Your photo was shared successfully.');
           mmh.ui.loader.hide();
-          mmh.ui.window.animateTo(winShare, winHome);
+          mmh.ui.window.animateTo(winShare, winConfirm);
         },
         failure: function(ev) {
           mmh.ui.loader.hide();
-          Ti.UI.createAlertDialog({
-              title: 'Photo upload failed',
-              message: 'Sorry, could not upload your photo.'
-          }).show();
+          mmh.ui.alert.create('Photo sharing failed', 'Sorry, we could not share your photo. Please try again.');
           Ti.API.info('Upload post encountered an error.');
           /*if (xhr.status == 200) {
               xhr.onload(e);

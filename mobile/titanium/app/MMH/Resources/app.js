@@ -1,4 +1,4 @@
-var userId;
+var userId = null;
 
 // libraries
 Ti.include('libs/user.js');
@@ -11,11 +11,10 @@ Ti.include('libs/contactList.js');
 // views
 Ti.include('views/signin.js');
 Ti.include('views/create.js');
+Ti.include('views/addchild.js');
 Ti.include('views/home.js');
 Ti.include('views/share.js');
-
-mmh.util.log(JSON.stringify(Ti.Platform));
-mmh.util.log(mmh.util.device.display.width);
+Ti.include('views/confirm.js');
 
 // Defaults
 Ti.UI.setBackgroundColor('#000');

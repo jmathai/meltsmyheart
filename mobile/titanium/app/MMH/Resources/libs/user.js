@@ -47,24 +47,16 @@ var user = (function() {
         var json = JSON.parse(this.responseText), hasContacts;
         recipientCount = json.params.recipientCount;
         childrenCount = json.params.childrenCount;
-        mmh.util.log('setting recipientCount ' + recipientCount);
         db.insertKey('hasContacts', recipientCount);
         db.insertKey('hasChildren', childrenCount);
-        mmh.ui.window.openAndShow(winHome);
         mmh.ui.loader.hide();
+        mmh.ui.window.openAndShow(winHome);
       },
       initFailure: function(e) {
-        var dialog = Ti.UI.createAlertDialog({
-            title: 'Could not log in',
-            message: 'Sorry, we could not get your information.',
-            buttons: ['Ok']
-        });
-        dialog.addEventListener('click', function(e) {
-          user.clearCredentials();
-          winSignIn.open();
-        });
         mmh.ui.loader.hide();
-        dialog.show();
+        mmh.ui.alert.create('Could not log in', 'Sorry, we could not get your information.');
+        user.clearCredentials();
+        mmh.ui.window.openAndShow(winCreate);
       }
     },
     setCurrentChildId: function(childId) {

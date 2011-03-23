@@ -17,7 +17,7 @@ jsSignIn = (function() {
 
       viewSignIn.add(imgLogo);
       // Email
-      txtSignInEmail = mmh.ui.textField.create(mmh.util.merge(mmh.constant('textField'), {top:120, hintText:'Email address', passwordMask:false, keyboardType: Ti.UI.KEYBOARD_EMAIL, autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE}));
+      txtSignInEmail = mmh.ui.textField.create(mmh.util.merge(mmh.constant('textField'), {top:120, hintText:'Email address', keyboardType: Ti.UI.KEYBOARD_EMAIL, autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE}));
       viewSignIn.add(txtSignInEmail);
 
       // Password
@@ -28,6 +28,11 @@ jsSignIn = (function() {
       btnSignIn = mmh.ui.button.create('Sign In', {top:270});
       btnSignIn.addEventListener('click', function(ev) {
         var params;
+        if(txtSignInEmail.value === undefined || txtSignInPassword.value === undefined) {
+          var title = 'Required form fields', message = 'Please fill in all form fields.';
+          mmh.ui.alert.create(title, message);
+          return;
+        }
         mmh.ui.loader.show('Logging in...');
         params = {
           url: mmh.constant('siteUrl') + '/api/login/token',
@@ -37,11 +42,7 @@ jsSignIn = (function() {
             mmh.ui.loader.hide();
             var json = JSON.parse(this.responseText);
             if(!mmh.ajax.isSuccess(json) || json.params === false || json.params.userId.length === 0 || json.params.userToken.length === 0) {
-              Ti.UI.createAlertDialog({
-                  title: 'Problem logging in',
-                  message: 'Sorry, we could not log you in.',
-                  buttons: ['Ok']
-              }).show();
+              mmh.ui.alert.create('Problem logging in', 'Sorry, we could not log you in.');
               winSignIn.open();
             } else {
               var userId, userToken, rs;
@@ -54,10 +55,7 @@ jsSignIn = (function() {
           failure: function(e) {
             mmh.ui.loader.hide();
             Ti.API.info(this.responseText);
-            Ti.UI.createAlertDialog({
-                title: 'Unexpected error',
-                message: 'Sorry, an unexpected error occured.'
-            }).show();
+            mmh.ui.alert.create('Unexpected error', 'Sorry, an unexpected error occured.');
             winSignIn.open();
           }
         };

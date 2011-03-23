@@ -9,19 +9,17 @@ winHome = mmh.ui.window.create('Your Children', viewHomeContainer);
 jsHome = (function() {
   return {
     open: function () {
-      if(winHomeOpened) {
+      var forceReload = arguments.length > 0 ? arguments[0] : false;
+      if(!forceReload && winHomeOpened) {
         winHome.show();
         return;
       }
       var params, postbody;
-      mmh.ui.loader.show('Loading...');
+      mmh.ui.loader.show('Loading children...');
       postbody = user.getRequestCredentials();
       if(postbody.userId === null || postbody.userToken === null) {
-        Ti.UI.createAlertDialog({
-            title: 'Not signed in',
-            message: 'Sorry, you don\'t appear to be signed in.'
-        }).show();
-        winSignIn.open();
+        mmh.ui.alert.create('Not signed in', 'Sorry, you don\'t appear to be signed in.');
+        mmh.ui.window.openAndShow(jsWinSignIn.getWindow());
         return;
       }
       params = {
@@ -36,62 +34,45 @@ jsHome = (function() {
     },
     failure: function() {
       mmh.ui.loader.hide();
-      Ti.UI.createAlertDialog({
-          title: 'Problem retrieving account',
-          message: 'Sorry, we could not get your information.'
-      }).show();
-      winSignIn.open();
+      mmh.ui.alert.create('Problem retrieving account', 'Sorry we could not get your information.');
+      mmh.ui.window.openAndShow(winSignIn);
     },
     success: function() {
       var json;
       mmh.ui.loader.hide();
       json = JSON.parse(this.responseText);
       if(!mmh.ajax.isSuccess(json)) {
-        Ti.UI.createAlertDialog({
-            title: 'Problem logging in',
-            message: 'Sorry, we could not log you in.'
-        }).show();
-        winSignIn.open();
+        mmh.ui.alert.create('Problem logging in', 'Sorry we could not log you in.');
+        mmh.ui.window.openAndShow(winSignIn);
       } else {
         var children = json.params.children, child, i;
-        if(false && children.length == 1) {
+        /*if(children.length == 1) {
           child = children[0];
           mmh.camera.start(child.c_id, jsShare.camera);
-        } else if(children.length > 1) {
+        } else */if(children.length > 0) {
           var table, row, rowHeight = 130, rows = [], view, button, label;
+          row = Ti.UI.createTableViewRow({className:'addChildRow', height: 50});
+          label = mmh.ui.label.create('Add another child', {right:10});
+          row.add(label);
+          row.addEventListener('click', function() { mmh.ui.window.openAndShow(winAddChild); });
+          rows.push(row);
           for(i in children) {
             if(children.hasOwnProperty(i)) {
               child = children[i];
-              //button = mmh.ui.button.create('Take a photo');
-              //button.addEventListener('click', function(){ mmh.camera.start(this.c_id, jsShare.camera); }.bind(child));
               label = mmh.ui.label.create(child.c_name, {left:70});
               label.font = {fontSize:20};
               view = mmh.ui.view.create();
               view.add(label);
-              //view.add(button);
-              row = Ti.UI.createTableViewRow({ className:'childRow', leftImage: child.thumb, height: rowHeight, hasDetail: true});
+              row = Ti.UI.createTableViewRow({className:'childRow', leftImage: (child.thumb === null ? 'images/profile-icon.png' : child.thumb), height: rowHeight, hasDetail: true});
               row.add(view);
               row.addEventListener('click', function(){ mmh.camera.start(this.c_id, jsShare.camera); }.bind(child));
               rows.push(row);
-              /*button = mmh.ui.button.create('Take a photo');
-              button.left = 120;
-              button.addEventListener('click', function(){ mmh.camera.start(this.c_id, jsShare.camera); }.bind(child));
-              thisView.add(image);
-
-              thisView.add(button);
-              viewHome.add(thisView);
-              currentPosition += (childViewHeight+spacer);*/
             }
           }
           table = Ti.UI.createTableView({data: rows});
           viewHome.add(table);
         } else {
-          // TODO no children view
-          Titanium.API.info('this user has no children');
-          Ti.UI.createAlertDialog({
-              title: 'No Children',
-              message: 'You have not added any children yet.'
-          }).show();
+          mmh.ui.window.openAndShow(winAddChild);
         }
       }
     }

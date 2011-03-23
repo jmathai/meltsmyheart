@@ -29,10 +29,7 @@ var contactList = function(_view, _tableParams) {
   callFailure = function() {
     // just in case
     mmh.ui.loader.hide();
-    Ti.UI.createAlertDialog({
-        title: 'Problem loading contacts',
-        message: 'Sorry, we could not load your contacts.'
-    }).show();
+    mmh.ui.alert.create('Problem loading contacts', 'Sorry we could not load your contacts.');
     mmh.util.log('opening contacts failed');
   };
 
@@ -74,7 +71,7 @@ var contactList = function(_view, _tableParams) {
       if(cont) {
         icon = emails[email] === undefined ? 'images/add-24.png' : 'images/remove-24.png';
         title = p.fullName + '\n' + email;
-        row = Ti.UI.createTableViewRow({ className:'contactRow',title: title, /*leftImage: p.image.toBlob(),*/ rightImage: icon, fullName: p.fullName, email: email, phone: phone, idx: rows.length });
+        row = Ti.UI.createTableViewRow({ className:'contactRow',title: title, rightImage: icon, fullName: p.fullName, email: email, phone: phone, backgroundSelectedColor: mmh.constant('selectedColor'), idx: rows.length });
         row.addEventListener('click', rowClickCallback);
         rows.push(row);
       }

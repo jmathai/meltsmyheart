@@ -32,15 +32,16 @@ jsCreate = (function() {
       btnCreate = mmh.ui.button.create('Create Account', {top:345});
       btnCreate.addEventListener('click', function(ev) {
         var params;
-        if(txtCreatePassword.value.length == 0 || txtCreatePassword.value != txtCreatePasswordConfirm.value) {
-          Ti.UI.createAlertDialog({
-              title: 'Passwords did not match',
-              message: 'Please make sure that your passwords match.',
-              buttons: ['Ok']
-          }).show();
+        if(txtCreateEmail.value === undefined || txtCreatePassword.value === undefined || txtCreatePassword.value != txtCreatePasswordConfirm.value) {
+          var title = 'Required form fields', message = 'Please fill in all form fields.';
+          if(txtCreatePassword.value != txtCreatePasswordConfirm.value) {
+            title = 'Passwords did not match';
+            message = 'Please make sure that your passwords match.';
+          }
+          mmh.ui.alert.create(title, message);
           return;
         }
-        mmh.ui.loader.show('Logging in...');
+        mmh.ui.loader.show('Creating account...');
         params = {
           url: mmh.constant('siteUrl') + '/api/user/create',
           method:'POST',
@@ -49,11 +50,7 @@ jsCreate = (function() {
             mmh.ui.loader.hide();
             var json = JSON.parse(this.responseText);
             if(!mmh.ajax.isSuccess(json) || json.params === false || json.params.userId.length === 0 || json.params.userToken.length === 0) {
-              Ti.UI.createAlertDialog({
-                  title: 'Problem creating account',
-                  message: 'Sorry, we could not create an account for you. Please try again.',
-                  buttons: ['Ok']
-              }).show();
+              mmh.ui.alert.create('Problem creating account', 'Sorry, we could not create an account for you. Please try again.');
               winCreate.open();
             } else {
               var userId, userToken, rs;
@@ -66,10 +63,7 @@ jsCreate = (function() {
           failure: function(e) {
             mmh.ui.loader.hide();
             Ti.API.info(this.responseText);
-            Ti.UI.createAlertDialog({
-                title: 'Unexpected error',
-                message: 'Sorry, an unexpected error occured.'
-            }).show();
+            mmh.ui.alert.create('Unexpected error', 'Sorry, an unexpected error occurred.');
             winCreate.open();
           }
         };
