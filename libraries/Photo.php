@@ -178,6 +178,14 @@ class Photo
     return $retval;
   }
 
+  public static function getByIdNoUserId($photoId)
+  {
+    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_id=:photoId', array(':photoId' => $photoId));
+    $retval['p_exif'] = json_decode($retval['p_exif'], 1);
+    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    return $retval;
+  }
+
   public static function getByKey($userId, $childId, $key)
   {
     $retval = getDatabase()->one('SELECT * FROM photo WHERE p_c_id=:childId AND p_key=:key AND p_u_id=:userId', 
