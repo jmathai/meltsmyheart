@@ -194,6 +194,7 @@ class Site
   public static function childNewPost()
   {
     self::requireLogin();
+    $userId = getSession()->get('userId');
     $date = strtotime(preg_replace('/(\d)(am|pm|AM|PM)/', '${1} ${2}', $_POST['childBirthDate']));
     $domain = $_POST['childDomain'];
     if(preg_match('/^([a-zA-Z0-9-]+)$/', $domain, $matches))
@@ -202,7 +203,8 @@ class Site
     if($date === false || empty($_POST['childName']) || empty($domain))
       getRoute()->redirect('/child/new?e=invalidFields');
 
-    $childId = Child::add(getSession()->get('userId'), $_POST['childName'], $date, $_POST['childDomain']);
+    $childId = Child::add($userId, $_POST['childName'], $date, $_POST['childDomain']);
+    Resque::enqueue('mmh_badge', 'Badger', array('childId' => $childId, 'userId' => $userId, 'badgeId' => Badge::getIdByTag('imnew')));
     $r = isset($_POST['r']) ? $_POST['r'] : '/photos/source';
     getRoute()->redirect("{$r}/{$childId}");
   }
@@ -543,6 +545,35 @@ class Site
         Resque::enqueue('mmh_email', 'EmailPhoto', array('subject' => $subject, 'userId' => $userId, 'childId' => $child['c_id'], 
           'entryId' => $photoId, 'email' => $email, 'from' => $user['u_email'], 'attachment' => $attachment, 'template' => $template));
       }
+
+      $badgeId = Badge::getIdByTag('imnew');
+      $doesUserHaveBadge = Badge::doesChildHave($badgeId, $child['c_id']);
+      if(!$doesUserHaveBadge)
+      {
+        Resque::enqueue('mmh_badge', 'Badger', array('childId' => $child['c_id'], 'userId' => $userId, 'badgeId' => Badge::getIdByTag('imnew')));
+      }
+      elseif($userId && isset($_POST['userToken']) && rand(0,10) == 5) // mobile upload
+      {
+        $tokenInfo = User::getToken($userId, $_POST['userToken']);
+        if(isAndroid($tokenInfo['ut_device']))
+        {
+          $badgeId = Badge::getIdByTag('android');
+          $doesUserHaveBadge = Badge::doesChildHave($badgeId, $child['c_id']);
+          if($doesUserHaveBadge)
+            $badgeId = null;
+        }
+        elseif(isIos($tokenInfo['ut_device']))
+        {
+          $badgeId = Badge::getIdByTag('ios');
+          $doesUserHaveBadge = Badge::doesChildHave($badgeId, $child['c_id']);
+          if($doesUserHaveBadge)
+            $badgeId = null;
+
+        }
+        if($badgeId !== null)
+          Resque::enqueue('mmh_badge', 'Badger', array('childId' => $child['c_id'], 'userId' => $userId, 'badgeId' => $badgeId));
+      }
+
       Api::success('Photo uploaded successfully', $args);
     }
     else

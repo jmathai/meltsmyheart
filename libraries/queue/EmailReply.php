@@ -3,6 +3,8 @@ class EmailReply extends Email
 {
   private $userId;
   private $childId;
+  private $photoId;
+
   public function setUp()
   {
     parent::setUp();
@@ -11,6 +13,7 @@ class EmailReply extends Email
 
     $this->from = array($this->args['fromEmail'] => $this->args['fromName']);
     $child = Child::getById($this->userId, $this->childId);
-    $this->template = getTemplate()->get('email/reply.php', array('msg' => $this->template, 'url' => Child::getPageUrl($child)));
+    $photo = Photo::getById($this->userId, $this->photoId);
+    $this->template = getTemplate()->get('email/reply.php', array('msg' => $this->template, 'url' => Child::getPhotoUrl($child, $photo)));
   }
 }

@@ -12,6 +12,7 @@ if(count($emails) == 0)
   exit;
 }
 
+$badgeId = Badge::getIdByTag('talker');
 $mail->expunge();
 foreach($emails as $email)
 {
@@ -36,11 +37,18 @@ foreach($emails as $email)
     {
       $photo = Photo::getByIdNoUserId($decodedTo['eh_itemId']);
       getLogger()->info("New email from {$email['fromaddress']} to {$decodedTo['eh_email']}");
-      // TODO put queue classes in subdir
       $queueMessage = array('commentEmailId' => $commentEmailId, 'email' => $decodedTo['eh_email'], 'fromEmail' => $newFromEmailEncoded, 
         'fromName' => $newFromEmail, 'subject' => $email['subject'], 'template' => $response, 'date' => $email['date'], 
-        'childId' => $photo['p_c_id'], 'userId' => $photo['p_u_id']);
+        'childId' => $photo['p_c_id'], 'userId' => $photo['p_u_id'], 'photoId' => $photo['p_id']);
       Resque::enqueue('mmh_reply', 'EmailReply', $queueMessage);
+
+      // Since we're not storing comments yet we have to check if this badge was given
+      $doesUserHaveBadge = Badge::doesChildHave($badgeId, $photo['p_c_id']);
+      if(!$doesUserHaveBadge)
+      {
+        Resque::enqueue('mmh_badge', 'Badger', array('childId' => $photo['p_c_id'], 'userId' => $photo['p_u_id'], 'badgeId' => $badgeId));
+      }
+
       $mail->delete($email['messageid']);
     }
   }
