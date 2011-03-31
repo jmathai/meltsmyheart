@@ -19,8 +19,6 @@ class Uploader
     $this->photoFile = $this->args['photoPath'];
     // this is already safe'd in Site
     $this->photoSafeName = basename($this->photoFile);
-    $key = Credential::serviceSelf . '-' . uniqid();
-    $this->args['entryId'] = Photo::add($this->args['userId'], $this->args['childId'], $key);
     $this->processPhoto();
     Photo::setUse($this->args['userId'], $this->args['entryId'], 1);
   }

@@ -14,8 +14,7 @@ class User
 
   public static function checkToken($userId, $token)
   {
-    $result = getDatabase()->one('SELECT * FROM user_token WHERE ut_u_id=:userId AND ut_token=:token',
-      array(':userId' => $userId, ':token' => $token));
+    $result = self::getToken($userId, $token);
     return !empty($result);
   }
 
@@ -54,6 +53,12 @@ class User
 
     $retval['u_prefs'] = json_decode($retval['u_prefs'], true);
     return $retval;
+  }
+
+  public static function getToken($userId, $token)
+  {
+    return getDatabase()->one('SELECT * FROM user_token WHERE ut_u_id=:userId AND ut_token=:token',
+      array(':userId' => $userId, ':token' => $token));
   }
 
   public static function isLoggedIn()

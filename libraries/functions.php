@@ -14,6 +14,8 @@ function __autoload($className)
   {
     if(file_exists($filename = getConfig()->get('paths')->libraries . "/{$className}.php"))
       include $filename;
+    elseif(file_exists($filename = getConfig()->get('paths')->libraries . "/queue/{$className}.php"))
+      include $filename;
   }
 }
 

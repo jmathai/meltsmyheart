@@ -135,7 +135,7 @@ class Photo
 
   public static function generateUrl($basePath, $width, $height, $options = array())
   {
-    $prefix = getConfig()->get('urls')->base;
+    $prefix = getConfig()->get('urls')->photo_base;
     $customPath = preg_replace('#^/base/#', '/custom/', $basePath);
     $params = '{'.intval($width).','.intval($height); // {1,2
     if(!empty($options))
@@ -146,7 +146,7 @@ class Photo
     $hash = self::generateHash(array_merge(array($width, $height), $options));
     $params .= ",{$hash}}";
     $fileParts = pathinfo($customPath);
-    return "{$prefix}/photos{$fileParts['dirname']}/{$fileParts['filename']}{$params}.{$fileParts['extension']}";
+    return "{$prefix}{$fileParts['dirname']}/{$fileParts['filename']}{$params}.{$fileParts['extension']}";
   }
 
   public static function getByBasePath($basePath)
@@ -173,6 +173,14 @@ class Photo
   public static function getById($userId, $photoId)
   {
     $retval = getDatabase()->one('SELECT * FROM photo WHERE p_id=:photoId AND p_u_id=:userId', array(':photoId' => $photoId, ':userId' => $userId));
+    $retval['p_exif'] = json_decode($retval['p_exif'], 1);
+    $retval['p_meta'] = json_decode($retval['p_meta'], 1);
+    return $retval;
+  }
+
+  public static function getByIdNoUserId($photoId)
+  {
+    $retval = getDatabase()->one('SELECT * FROM photo WHERE p_id=:photoId', array(':photoId' => $photoId));
     $retval['p_exif'] = json_decode($retval['p_exif'], 1);
     $retval['p_meta'] = json_decode($retval['p_meta'], 1);
     return $retval;

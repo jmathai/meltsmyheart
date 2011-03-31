@@ -24,6 +24,7 @@ public static function childNewPost()
       self::error('Domain exists', array('domainExists' => true));
 
     $childId = Child::add($userId, $_POST['childName'], $date, $domain);
+    Resque::enqueue('mmh_badge', 'Badger', array('childId' => $childId, 'userId' => $userId, 'badgeId' => Badge::getIdByTag('imnew')));
     self::success('Child added', array('childId' => $childId));
 }
 
@@ -43,7 +44,6 @@ public static function childNewPost()
         $children[$key]['thumb'] = str_replace(array('{','}'), array('%7B','%7D'), $photoUrl);
       }
     }
-error_log(var_export($children, 1));
     self::success('Successful request', array('children' => $children));
   }
 

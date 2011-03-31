@@ -22,7 +22,7 @@ try
 
   if(preg_match('/^([a-zA-Z0-9-]+)\.meltsmyheart\.com$/', $_SERVER['HTTP_HOST'], $matches))
   {
-    if(true || !isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')
+    if(!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/')
     {
       if(empty($_GET['__route__']))
         getRoute()->run("/child/page/{$matches[1]}"); 
